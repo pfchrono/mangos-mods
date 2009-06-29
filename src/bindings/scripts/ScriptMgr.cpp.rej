@@ -1,0 +1,10 @@
+--- ScriptMgr.cpp
++++ ScriptMgr.cpp
+@@ -6,6 +6,7 @@
+ #include "Config/Config.h"
+ #include "Database/DatabaseEnv.h"
+ #include "Database/DBCStores.h"
++#include "sc_npc_teleport.h"
+ #include "ObjectMgr.h"
+ #include "ProgressBar.h"
+ #include "scripts/creature/mob_event_ai.h"

@@ -1,0 +1,10 @@
+--- CMakeLists.txt
++++ CMakeLists.txt
+@@ -23,6 +25,7 @@
+    scripts/custom/custom_example.cpp
+    scripts/custom/custom_gossip_codebox.cpp
+    scripts/custom/test.cpp
++   scripts/custom/npc_teleport.cpp
+    scripts/go/go_scripts.cpp
+    scripts/guard/guard_ai.cpp
+    scripts/guard/guard_ai.h
