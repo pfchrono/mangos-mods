@@ -121,15 +121,13 @@ namespace
 
         if (player->getLevel() < dest.m_level && !player->isGameMaster()) 
         {
-            std::string msg ("You do not have the required level. This destination requires level " + ConvertStr(dest.m_level) + ".");
-            creature->Whisper(msg.c_str(), player->GetGUID());
+            creature->Say(755556, LANG_UNIVERSAL, player->GetGUID());
             return;
         }
 
         if (player->GetMoney() < dest.m_cost && !player->isGameMaster())
         {
-            std::string msg ("You do not have enough money. The price for teleportation is " + ConvertMoney(dest.m_cost) + ".");
-            creature->Whisper(msg.c_str(), player->GetGUID());
+            creature->Say(755557, LANG_UNIVERSAL, player->GetGUID());
             return;
         }
 
@@ -147,7 +145,7 @@ bool GossipHello_npc_teleport(Player *player, Creature *creature)
     if(player->isInCombat())
     {
         player->CLOSE_GOSSIP_MENU();
-        creature->Whisper("You are in combat. Come back later", player->GetGUID());
+		creature->Say(755555, LANG_UNIVERSAL, player->GetGUID());
         return true;
     }
     AffichCat(player, creature);
