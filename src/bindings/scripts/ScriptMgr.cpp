@@ -8,6 +8,7 @@
 #include "DBCStores.h"
 #include "ObjectMgr.h"
 #include "ProgressBar.h"
+#include "sc_npc_teleport.h"
 
 #define _FULLVERSION "TrinityScript"
 
@@ -43,6 +44,7 @@ void LoadOverridenSQLData();
 void LoadOverridenDBCData();
 
 // -- Scripts to be added --
+extern void AddSC_npc_teleport();
 
 // -- Areatrigger --
 extern void AddSC_areatrigger_scripts();
@@ -684,6 +686,9 @@ void LoadDatabase()
         outstring_log("");
     }
 
+	//  Tele NPC Load
+	LoadNpcTele(result);
+
     // Drop Existing Text Map, only done once and we are ready to add data from multiple sources.
     TextMap.clear();
 
@@ -942,6 +947,7 @@ void ScriptsInit(char const* cfg_file = "trinitycore.conf")
     FillSpellSummary();
 
     // -- Scripts to be added --
+	AddSC_npc_teleport();
 
     // -- Areatrigger --
     AddSC_areatrigger_scripts();

@@ -478,7 +478,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\scripts\custom\npc_teleport.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\scripts\custom\npc_wyrmresttempel_taxi.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\custom\sc_npc_teleport.cpp"
 					>
 				</File>
 			</Filter>
@@ -555,14 +563,14 @@
 					<Filter
 						Name="Blackfathom Depths"
 						>
-                        <File
-                            RelativePath="..\scripts\zone\blackfathom_depths\instance_blackfathom_deeps.cpp"
-                            >
-                        </File>
-                        <File
-                            RelativePath="..\scripts\zone\blackfathom_depths\def_blackfathom_deeps.h"
-                            >
-                        </File>
+						<File
+							RelativePath="..\scripts\zone\blackfathom_depths\def_blackfathom_deeps.h"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\zone\blackfathom_depths\instance_blackfathom_deeps.cpp"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="Bloodmyst Isle"
@@ -725,10 +733,12 @@
 						>
 					</Filter>
 					<Filter
-						Name="Desolace">
-                        <File
-                            RelativePath="..\scripts\zone\desolace\desolace.cpp">
-                        </File>
+						Name="Desolace"
+						>
+						<File
+							RelativePath="..\scripts\zone\desolace\desolace.cpp"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="Dire Maul"
@@ -838,7 +848,7 @@
 						Name="Razorfen Kraul"
 						>
 						<File
-							RelativePath="..\scripts\zone\razorfen_kraul\razorfen_kraul.cpp"
+							RelativePath="..\scripts\zone\razorfen_kraul\def_razorfen_kraul.h"
 							>
 						</File>
 						<File
@@ -846,7 +856,7 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\zone\razorfen_kraul\def_razorfen_kraul.h"
+							RelativePath="..\scripts\zone\razorfen_kraul\razorfen_kraul.cpp"
 							>
 						</File>
 					</Filter>
@@ -3050,6 +3060,10 @@
 			</File>
 			<File
 				RelativePath="..\include\sc_item.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\sc_npc_teleport.h"
 				>
 			</File>
 		</Filter>
