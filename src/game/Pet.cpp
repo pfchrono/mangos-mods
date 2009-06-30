@@ -848,12 +848,18 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
         //SetCreateHealth(uint32(((float(cinfo->maxhealth) / cinfo->maxlevel) / (1 + 2 * cinfo->rank)) * petlevel) );
         //SetCreateMana(  uint32(((float(cinfo->maxmana)   / cinfo->maxlevel) / (1 + 2 * cinfo->rank)) * petlevel) );
 
-		uint32 bonusstat = irand(20,30);
-        SetCreateStat(STAT_STRENGTH, 22 + bonusstat);
-        SetCreateStat(STAT_AGILITY, 22 + bonusstat);
-        SetCreateStat(STAT_STAMINA, 25 + bonusstat);
-        SetCreateStat(STAT_INTELLECT, 28 + bonusstat);
-        SetCreateStat(STAT_SPIRIT, 27 + bonusstat);
+		int32 bonusstat = irand(5,15);
+		int32 s_strength = 22 + bonusstat;
+		int32 s_agility = 22 + bonusstat;
+		int32 s_stamina = 25 + bonusstat;
+		int32 s_intellect = 28 + bonusstat;
+		int32 s_spirit = 27 + bonusstat;
+
+        SetCreateStat(STAT_STRENGTH, s_strength);
+        SetCreateStat(STAT_AGILITY, s_agility);
+        SetCreateStat(STAT_STAMINA, s_stamina);
+        SetCreateStat(STAT_INTELLECT, s_intellect);
+        SetCreateStat(STAT_SPIRIT, s_spirit);
     }
 
     m_bonusdamage = 0;
