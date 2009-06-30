@@ -848,11 +848,12 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
         //SetCreateHealth(uint32(((float(cinfo->maxhealth) / cinfo->maxlevel) / (1 + 2 * cinfo->rank)) * petlevel) );
         //SetCreateMana(  uint32(((float(cinfo->maxmana)   / cinfo->maxlevel) / (1 + 2 * cinfo->rank)) * petlevel) );
 
-        SetCreateStat(STAT_STRENGTH, 22);
-        SetCreateStat(STAT_AGILITY, 22);
-        SetCreateStat(STAT_STAMINA, 25);
-        SetCreateStat(STAT_INTELLECT, 28);
-        SetCreateStat(STAT_SPIRIT, 27);
+		uint32 bonusstat = irand(20,30);
+        SetCreateStat(STAT_STRENGTH, 22 + bonusstat);
+        SetCreateStat(STAT_AGILITY, 22 + bonusstat);
+        SetCreateStat(STAT_STAMINA, 25 + bonusstat);
+        SetCreateStat(STAT_INTELLECT, 28 + bonusstat);
+        SetCreateStat(STAT_SPIRIT, 27 + bonusstat);
     }
 
     m_bonusdamage = 0;
@@ -875,12 +876,14 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
         }
         case HUNTER_PET:
         {
+			uint32 val = (irand(75,185));
             SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, objmgr.GetXPForLevel(petlevel)*PET_XP_FACTOR);
             //these formula may not be correct; however, it is designed to be close to what it should be
             //this makes dps 0.5 of pets level
-            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel - (petlevel / 4)) );
+			uint32 bonusd = (petlevel * 0.15f + irand(75,150));
+			SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel - (petlevel / 4) + bonusd) );
             //damage range is then petlevel / 2
-            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel + (petlevel / 4)) );
+			SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel + (petlevel / 4) + bonusd) );
             //damage is increased afterwards as strength and pet scaling modify attack power
             break;
         }
