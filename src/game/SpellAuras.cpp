@@ -1473,7 +1473,13 @@ void AuraEffect::HandleShapeshiftBoosts(bool apply)
 
     if(apply)
     {
+        // Remove cooldown of spells triggered on stance change - they may share cooldown with stance spell
+        if(m_target->GetTypeId() == TYPEID_PLAYER)
+            ((Player *)m_target)->RemoveSpellCooldown(spellId);
         if (spellId) m_target->CastSpell(m_target, spellId, true, NULL, this );
+
+        if(m_target->GetTypeId() == TYPEID_PLAYER)
+            ((Player *)m_target)->RemoveSpellCooldown(spellId2);
         if (spellId2) m_target->CastSpell(m_target, spellId2, true, NULL, this);
 
         if(m_target->GetTypeId() == TYPEID_PLAYER)
@@ -7227,6 +7233,9 @@ void AuraEffect::HandleModPossess(bool apply, bool Real, bool /*changeAmount*/)
     if(!Real)
         return;
 
+    if(m_target->getLevel() > m_amount)
+        return;
+
     Unit* caster = GetCaster();
     if(caster && caster->GetTypeId() == TYPEID_UNIT)
     {
@@ -7235,12 +7244,7 @@ void AuraEffect::HandleModPossess(bool apply, bool Real, bool /*changeAmount*/)
     }
 
     if(apply)
-    {
-        if(m_target->getLevel() > m_amount)
-            return;
-
         m_target->SetCharmedBy(caster, CHARM_TYPE_POSSESS);
-    }
     else
         m_target->RemoveCharmedBy(caster);
 }
@@ -7258,7 +7262,6 @@ void AuraEffect::HandleModPossessPet(bool apply, bool Real, bool /*changeAmount*
     {
         if(caster->GetGuardianPet() != m_target)
             return;
-
         m_target->SetCharmedBy(caster, CHARM_TYPE_POSSESS);
     }
     else
@@ -7282,13 +7285,11 @@ void AuraEffect::HandleModCharm(bool apply, bool Real, bool /*changeAmount*/)
 
     Unit* caster = GetCaster();
 
-    if(apply)
-    {
-        if(m_amount && int32(m_target->getLevel()) > m_amount)
-            return;
+    if(m_amount && int32(m_target->getLevel()) > m_amount)
+        return;
 
+    if(apply)
         m_target->SetCharmedBy(caster, CHARM_TYPE_CHARM);
-    }
     else
         m_target->RemoveCharmedBy(caster);
 }
@@ -7298,15 +7299,13 @@ void AuraEffect::HandleCharmConvert(bool apply, bool Real, bool /*changeAmount*/
     if(!Real)
         return;
 
+    if(m_amount && int32(m_target->getLevel()) > m_amount)
+        return;
+
     Unit* caster = GetCaster();
 
     if(apply)
-    {
-        if(m_amount && int32(m_target->getLevel()) > m_amount)
-            return;
-
         m_target->SetCharmedBy(caster, CHARM_TYPE_CONVERT);
-    }
     else
         m_target->RemoveCharmedBy(caster);
 }

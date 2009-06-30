@@ -825,7 +825,7 @@ void Spell::prepareDataForTriggerSystem(AuraEffect * triggeredByAura)
             Effects which are result of aura proc from triggered spell cannot proc
             to prevent chain proc of these spells
         */
-        if ((triggeredByAura && !triggeredByAura->GetParentAura()->GetTarget()->CanProc()) || !m_caster->CanProc())
+        if ((triggeredByAura && !triggeredByAura->GetParentAura()->GetTarget()->CanProc()))
         {
             m_canTrigger=false;
         }
@@ -833,6 +833,8 @@ void Spell::prepareDataForTriggerSystem(AuraEffect * triggeredByAura)
         if (m_IsTriggeredSpell && 
             (m_spellInfo->AttributesEx2 & SPELL_ATTR_EX2_TRIGGERED_CAN_TRIGGER ||
             m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_TRIGGERED_CAN_TRIGGER_2))
+            m_procEx |= PROC_EX_INTERNAL_CANT_PROC;
+        else if (m_IsTriggeredSpell)
             m_procEx |= PROC_EX_INTERNAL_TRIGGERED;
 
         // Totem casts require spellfamilymask defined in spell_proc_event to proc
@@ -850,8 +852,6 @@ void Spell::prepareDataForTriggerSystem(AuraEffect * triggeredByAura)
                 m_canTrigger=false;
         }
     }
-    if (m_IsTriggeredSpell || triggeredByAura)
-        m_procEx |= PROC_EX_INTERNAL_CANT_PROC;
 }
 
 void Spell::CleanupTargetList()
@@ -1401,7 +1401,7 @@ void Spell::DoTriggersOnSpellHit(Unit *unit)
             if(roll_chance_i(i->second))
             {
                 m_caster->CastSpell(unit, i->first, true);
-                sLog.outDebug("Spell %d triggered spell %d by SPELL_AURA_ADD_TARGET_TRIGGER aura", m_spellInfo->Id, i->first);
+                sLog.outDebug("Spell %d triggered spell %d by SPELL_AURA_ADD_TARGET_TRIGGER aura", m_spellInfo->Id, i->first->Id);
             }
             if (GetSpellDuration(i->first)==-1)
             {
@@ -2260,7 +2260,7 @@ void Spell::SetTargetMap(uint32 i, uint32 cur)
                         break;
                     }
                     // Corpse Explosion
-                    case 53717:
+                    case 49158:
                     case 51325:
                     case 51326:
                     case 51327:
@@ -4196,15 +4196,19 @@ void Spell::TriggerSpell()
 SpellCastResult Spell::CheckCast(bool strict)
 {
     // check cooldowns to prevent cheating
-    if(m_caster->GetTypeId()==TYPEID_PLAYER && ((Player*)m_caster)->HasSpellCooldown(m_spellInfo->Id))
+    if(m_caster->GetTypeId()==TYPEID_PLAYER)
     {
         //can cast triggered (by aura only?) spells while have this flag
         if (!m_IsTriggeredSpell && ((Player*)m_caster)->HasFlag(PLAYER_FLAGS, PLAYER_ALLOW_ONLY_ABILITY))
             return SPELL_FAILED_SPELL_IN_PROGRESS;
-        if(m_triggeredByAuraSpell)
-            return SPELL_FAILED_DONT_REPORT;
-        else
-            return SPELL_FAILED_NOT_READY;
+
+        if  (((Player*)m_caster)->HasSpellCooldown(m_spellInfo->Id))
+        {
+            if(m_triggeredByAuraSpell)
+                return SPELL_FAILED_DONT_REPORT;
+            else
+                return SPELL_FAILED_NOT_READY;
+        }
     }
 
     // only allow triggered spells if at an ended battleground

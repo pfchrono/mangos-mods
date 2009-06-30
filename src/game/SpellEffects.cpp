@@ -315,6 +315,8 @@ void Spell::EffectSchoolDMG(uint32 effect_idx)
 
 void Spell::SpellDamageSchoolDmg(uint32 effect_idx)
 {
+    bool apply_direct_bonus=true;
+
     if( unitTarget && unitTarget->isAlive())
     {
         switch(m_spellInfo->SpellFamilyName)
@@ -486,6 +488,7 @@ void Spell::SpellDamageSchoolDmg(uint32 effect_idx)
                             uint32 pdamage = (*i)->GetAmount() > 0 ? (*i)->GetAmount() : 0;
                             pdamage = m_caster->SpellDamageBonus(unitTarget, (*i)->GetSpellProto(), pdamage, DOT, (*i)->GetParentAura()->GetStackAmount());
                             damage += pdamage * 4; // 4 ticks of 3 seconds = 12 secs
+                            apply_direct_bonus = false;
                             // Glyph of Conflagrate
                             if (!m_caster->HasAura(56235))
                                 unitTarget->RemoveAurasDueToSpell((*i)->GetId(), m_caster->GetGUID());
@@ -679,7 +682,7 @@ void Spell::SpellDamageSchoolDmg(uint32 effect_idx)
             }
         }
 
-        if(m_originalCaster && damage > 0)
+        if(m_originalCaster && damage > 0 && apply_direct_bonus)
             damage = m_originalCaster->SpellDamageBonus(unitTarget, m_spellInfo, (uint32)damage, SPELL_DIRECT_DAMAGE);
 
         m_damage += damage;
@@ -1395,6 +1398,35 @@ void Spell::EffectDummy(uint32 i)
             if(m_spellInfo->SpellFamilyFlags[0] & 0x4000000)
             {
                 m_damage+= uint32(damage * m_caster->GetTotalAttackPowerValue(BASE_ATTACK) / 100);
+                return;
+            }
+            // Overpower
+            if(m_spellInfo->SpellFamilyFlags[0] & 0x4)
+            {
+                // Must be casting target
+                if (!unitTarget->IsNonMeleeSpellCasted(false))
+                    return;
+                // Find Unrelenting Assault
+                Unit::AuraEffectList const& modifierAuras = m_caster->GetAurasByType(SPELL_AURA_ADD_FLAT_MODIFIER);
+                for(Unit::AuraEffectList::const_iterator itr = modifierAuras.begin(); itr != modifierAuras.end(); ++itr)
+                {
+                    if((*itr)->GetSpellProto()->SpellFamilyName==SPELLFAMILY_WARRIOR && (*itr)->GetSpellProto()->SpellIconID == 2775)
+                    {
+                        switch ((*itr)->GetSpellProto()->Id)
+                        {
+                            // Unrelenting Assault, rank 1
+                            case 46859:
+                                m_caster->CastSpell(unitTarget,64849,true,0,(*itr));
+                                break;
+                            // Unrelenting Assault, rank 2
+                            case 46860:
+                                m_caster->CastSpell(unitTarget,64850,true,0,(*itr));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
                 return;
             }
             switch(m_spellInfo->Id)
@@ -6727,6 +6759,7 @@ void Spell::SummonGuardian(uint32 entry, SummonPropertiesEntry const *properties
     switch(m_spellInfo->Id)
     {
         case 1122: // Inferno
+            amount = 1;
             break;
     }
     int32 duration = GetSpellDuration(m_spellInfo);
