@@ -10,7 +10,12 @@
 #include "Opcodes.h"
 #include "SharedDefines.h"
 
+#define FASTBUILD 1
 #ifdef FASTBUILD
 //add additional headers here to speed up compilation in release builds even more
 #include "ObjectMgr.h"
+#include "Cell.h"
+#include "CellImpl.h"
+#include "Map.h"
+#include "World.h"
 #endif
