@@ -4338,6 +4338,11 @@ void AuraEffect::HandleModMechanicImmunity(bool apply, bool Real, bool /*changeA
     //immune movement impairment and loss of control
     if(GetId()==42292 || GetId()==59752)
         mechanic=IMMUNE_TO_MOVEMENT_IMPAIRMENT_AND_LOSS_CONTROL_MASK;
+    // Forbearance
+    // in DBC wrong mechanic immune since 3.0.x
+    else if (GetId() == 25771)   
+        mechanic = 1 << MECHANIC_IMMUNE_SHIELD;
+
     if (!mechanic)
         return;
 
@@ -7233,9 +7238,6 @@ void AuraEffect::HandleModPossess(bool apply, bool Real, bool /*changeAmount*/)
     if(!Real)
         return;
 
-    if(m_target->getLevel() > m_amount)
-        return;
-
     Unit* caster = GetCaster();
     if(caster && caster->GetTypeId() == TYPEID_UNIT)
     {
@@ -7285,9 +7287,6 @@ void AuraEffect::HandleModCharm(bool apply, bool Real, bool /*changeAmount*/)
 
     Unit* caster = GetCaster();
 
-    if(m_amount && int32(m_target->getLevel()) > m_amount)
-        return;
-
     if(apply)
         m_target->SetCharmedBy(caster, CHARM_TYPE_CHARM);
     else
@@ -7297,9 +7296,6 @@ void AuraEffect::HandleModCharm(bool apply, bool Real, bool /*changeAmount*/)
 void AuraEffect::HandleCharmConvert(bool apply, bool Real, bool /*changeAmount*/)
 {
     if(!Real)
-        return;
-
-    if(m_amount && int32(m_target->getLevel()) > m_amount)
         return;
 
     Unit* caster = GetCaster();
