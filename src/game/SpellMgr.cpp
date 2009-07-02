@@ -633,6 +633,7 @@ bool IsPositiveEffect(uint32 spellId, uint32 effIndex, bool deep)
                         case 38637:                         // Nether Exhaustion (red)
                         case 38638:                         // Nether Exhaustion (green)
                         case 38639:                         // Nether Exhaustion (blue)
+                        case 11196:                         // Recently Bandaged
                             return false;
                         // some spells have unclear target modes for selection, so just make effect positive
                         case 27184:                         
@@ -1092,7 +1093,7 @@ void SpellMgr::LoadSpellAffects()
 
         bar.step();
 
-        uint16 entry = fields[0].GetUInt16();
+        uint32 entry = fields[0].GetUInt32();
         uint8 effectId = fields[1].GetUInt8();
 
         SpellEntry const* spellInfo = sSpellStore.LookupEntry(entry);
@@ -1267,7 +1268,7 @@ void SpellMgr::LoadSpellBonusess()
     sLog.outString( ">> Loaded %u extra spell bonus data",  count);
 }
 
-bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const* spellProcEvent, uint32 EventProcFlag, SpellEntry const * procSpell, uint32 procFlags, uint32 procExtra)
+bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const* spellProcEvent, uint32 EventProcFlag, SpellEntry const * procSpell, uint32 procFlags, uint32 procExtra, bool active)
 {
     // No extra req need
     uint32 procEvent_procEx = PROC_EX_NONE;
@@ -1355,6 +1356,7 @@ bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const* spellPr
                 if ((spellProcEvent->spellFamilyMask & procSpell->SpellFamilyFlags ) == 0)
                     return false;
                 hasFamilyMask = true;
+                active = true;
             }
         }
     }
@@ -1368,8 +1370,8 @@ bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const* spellPr
     // Check for extra req (if none) and hit/crit
     if (procEvent_procEx == PROC_EX_NONE)
     {
-        // No extra req, so can trigger only for hit/crit
-        if((procExtra & (PROC_EX_NORMAL_HIT|PROC_EX_CRITICAL_HIT)))
+        // No extra req, so can trigger only for hit/crit - spell has to be active or to have PROC_FLAG_TAKEN_NEGATIVE_SPELL_HIT
+        if((procExtra & (PROC_EX_NORMAL_HIT|PROC_EX_CRITICAL_HIT)) && (active || procFlags & PROC_FLAG_TAKEN_NEGATIVE_SPELL_HIT))
             return true;
     }
     else // Passive spells hits here only if resist/reflect/immune/evade
@@ -1412,7 +1414,7 @@ void SpellMgr::LoadSpellElixirs()
 
         bar.step();
 
-        uint16 entry = fields[0].GetUInt16();
+        uint32 entry = fields[0].GetUInt32();
         uint8 mask = fields[1].GetUInt8();
 
         SpellEntry const* spellInfo = sSpellStore.LookupEntry(entry);
@@ -1679,7 +1681,13 @@ void SpellMgr::LoadSpellLearnSpells()
 
         if(!sSpellStore.LookupEntry(node.spell))
         {
-            sLog.outErrorDb("Spell %u listed in `spell_learn_spell` does not exist",node.spell);
+            sLog.outErrorDb("Spell %u listed in `spell_learn_spell` learning not existed spell %u",spell_id,node.spell);
+            continue;
+        }
+
+        if(GetTalentSpellCost(node.spell))
+        {
+            sLog.outErrorDb("Spell %u listed in `spell_learn_spell` attempt learning talent spell %u, skipped",spell_id,node.spell);
             continue;
         }
 
@@ -1927,10 +1935,10 @@ void SpellMgr::LoadSpellPetAuras()
 
         bar.step();
 
-        uint16 spell = fields[0].GetUInt16();
+        uint32 spell = fields[0].GetUInt32();
         uint8 eff = fields[1].GetUInt8();
-        uint16 pet = fields[2].GetUInt16();
-        uint16 aura = fields[3].GetUInt16();
+        uint32 pet = fields[2].GetUInt32();
+        uint32 aura = fields[3].GetUInt32();
 
         SpellPetAuraMap::iterator itr = mSpellPetAuraMap.find((spell<<8) + eff);
         if(itr != mSpellPetAuraMap.end())

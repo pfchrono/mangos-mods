@@ -23,7 +23,7 @@
 
 DROP TABLE IF EXISTS `character_db_version`;
 CREATE TABLE `character_db_version` (
-  `required_8072_02_characters_characters` bit(1) default NULL
+  `required_8104_01_characters` bit(1) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Last applied sql update to DB';
 
 --
@@ -348,7 +348,7 @@ CREATE TABLE `character_achievement` (
   `achievement` int(11) unsigned  NOT NULL,
   `date` bigint(11) unsigned NOT NULL default '0',
   PRIMARY KEY  (`guid`,`achievement`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `character_achievement`
@@ -370,7 +370,7 @@ CREATE TABLE `character_achievement_progress` (
   `counter` int(11) unsigned NOT NULL,
   `date` bigint(11) unsigned NOT NULL default '0',
   PRIMARY KEY  (`guid`,`criteria`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `character_achievement_progress`
@@ -389,9 +389,8 @@ DROP TABLE IF EXISTS `character_action`;
 CREATE TABLE `character_action` (
   `guid` int(11) unsigned NOT NULL default '0' COMMENT 'Global Unique Identifier',
   `button` tinyint(3) unsigned NOT NULL default '0',
-  `action` smallint(5) unsigned NOT NULL default '0',
+  `action` int(11) unsigned NOT NULL default '0',
   `type` tinyint(3) unsigned NOT NULL default '0',
-  `misc` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`guid`,`button`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
@@ -446,7 +445,7 @@ CREATE TABLE `character_declinedname` (
   `instrumental` varchar(15) NOT NULL default '',
   `prepositional` varchar(15) NOT NULL default '',
   PRIMARY KEY  (`guid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `character_declinedname`
@@ -646,7 +645,7 @@ CREATE TABLE `character_pet_declinedname` (
   `prepositional` varchar(12) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY owner_key (`owner`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `character_pet_declinedname`
@@ -1159,7 +1158,7 @@ CREATE TABLE `guild_eventlog` (
   `PlayerGuid2` int(11) NOT NULL COMMENT 'Player 2',
   `NewRank` tinyint(2) NOT NULL COMMENT 'New rank(in case promotion/demotion)',
   `TimeStamp` bigint(20) NOT NULL COMMENT 'Event UNIX time'
-) ENGINE = InnoDB DEFAULT CHARSET = latin1 COMMENT 'Guild Eventlog';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT 'Guild Eventlog';
 
 --
 -- Dumping data for table `guild_eventlog`

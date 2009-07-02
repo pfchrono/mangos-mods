@@ -393,7 +393,7 @@ enum ProcFlags
    PROC_FLAG_KILLED                        = 0x00000001,    // 00 Killed by agressor
    PROC_FLAG_KILL                          = 0x00000002,    // 01 Kill target (in most cases need XP/Honor reward)
 
-   PROC_FLAG_SUCCESSFUL_MILEE_HIT          = 0x00000004,    // 02 Successful melee auto attack
+   PROC_FLAG_SUCCESSFUL_MELEE_HIT          = 0x00000004,    // 02 Successful melee auto attack
    PROC_FLAG_TAKEN_MELEE_HIT               = 0x00000008,    // 03 Taken damage from melee auto attack hit
 
    PROC_FLAG_SUCCESSFUL_MELEE_SPELL_HIT    = 0x00000010,    // 04 Successful attack by Spell that use melee weapon
@@ -429,7 +429,7 @@ enum ProcFlags
    PROC_FLAG_DEATH                         = 0x01000000     // 24 Died in any way
 };
 
-#define MELEE_BASED_TRIGGER_MASK (PROC_FLAG_SUCCESSFUL_MILEE_HIT        | \
+#define MELEE_BASED_TRIGGER_MASK (PROC_FLAG_SUCCESSFUL_MELEE_HIT        | \
                                   PROC_FLAG_TAKEN_MELEE_HIT             | \
                                   PROC_FLAG_SUCCESSFUL_MELEE_SPELL_HIT  | \
                                   PROC_FLAG_TAKEN_MELEE_SPELL_HIT       | \
@@ -458,9 +458,9 @@ enum ProcFlagsEx
    PROC_EX_AURA_REMOVE_EXPIRE  = 0x0004000,                 // aura remove by default and by cancel
    PROC_EX_EX_TRIGGER_ALWAYS   = 0x0010000,                 // If set trigger always ( no matter another flags) used for drop charges
    PROC_EX_EX_ONE_TIME_TRIGGER = 0x0020000,                 // If set trigger always but only one time (not used)
-   PROC_EX_INTERNAL_CANT_PROC  = 0x0800000,
+   PROC_EX_INTERNAL_CANT_PROC  = 0x0800000,                 // Only for internal use
    PROC_EX_INTERNAL_DOT        = 0x1000000,                 // Only for internal use
-   PROC_EX_INTERNAL_HOT        = 0x2000000,                  // Only for internal use
+   PROC_EX_INTERNAL_HOT        = 0x2000000,                 // Only for internal use
    PROC_EX_INTERNAL_TRIGGERED  = 0x4000000,                 // Only for internal use
    PROC_EX_INTERNAL_REQ_FAMILY = 0x8000000                  // Only for internal use
 };
@@ -552,20 +552,20 @@ class PetAura
             auras.clear();
         }
 
-        PetAura(uint16 petEntry, uint16 aura, bool _removeOnChangePet, int _damage) :
+        PetAura(uint32 petEntry, uint32 aura, bool _removeOnChangePet, int _damage) :
         removeOnChangePet(_removeOnChangePet), damage(_damage)
         {
             auras[petEntry] = aura;
         }
 
-        uint16 GetAura(uint16 petEntry) const
+        uint32 GetAura(uint32 petEntry) const
         {
-            std::map<uint16, uint16>::const_iterator itr = auras.find(petEntry);
+            std::map<uint32, uint32>::const_iterator itr = auras.find(petEntry);
             if(itr != auras.end())
                 return itr->second;
             else
             {
-                std::map<uint16, uint16>::const_iterator itr2 = auras.find(0);
+                std::map<uint32, uint32>::const_iterator itr2 = auras.find(0);
                 if(itr2 != auras.end())
                     return itr2->second;
                 else
@@ -573,7 +573,7 @@ class PetAura
             }
         }
 
-        void AddAura(uint16 petEntry, uint16 aura)
+        void AddAura(uint32 petEntry, uint32 aura)
         {
             auras[petEntry] = aura;
         }
@@ -589,7 +589,7 @@ class PetAura
         }
 
     private:
-        std::map<uint16, uint16> auras;
+        std::map<uint32, uint32> auras;
         bool removeOnChangePet;
         int32 damage;
 };
@@ -726,7 +726,7 @@ class SpellMgr
     // Accessors (const or static functions)
     public:
         // Spell affects
-        flag96 const*GetSpellAffect(uint16 spellId, uint8 effectId) const
+        flag96 const*GetSpellAffect(uint32 spellId, uint8 effectId) const
         {
             SpellAffectMap::const_iterator itr = mSpellAffectMap.find((spellId<<8) + effectId);
             if( itr != mSpellAffectMap.end( ) )
@@ -769,7 +769,7 @@ class SpellMgr
             return NULL;
         }
 
-        bool IsSpellProcEventCanTriggeredBy( SpellProcEventEntry const * spellProcEvent, uint32 EventProcFlag, SpellEntry const * procSpell, uint32 procFlags, uint32 procExtra);
+        bool IsSpellProcEventCanTriggeredBy( SpellProcEventEntry const * spellProcEvent, uint32 EventProcFlag, SpellEntry const * procSpell, uint32 procFlags, uint32 procExtra, bool active);
 
         SpellEnchantProcEntry const* GetSpellEnchantProcEvent(uint32 enchId) const
         {
@@ -965,7 +965,7 @@ class SpellMgr
             return mSkillLineAbilityMap.upper_bound(spell_id);
         }
 
-        PetAura const* GetPetAura(uint16 spell_id, uint8 eff)
+        PetAura const* GetPetAura(uint32 spell_id, uint8 eff)
         {
             SpellPetAuraMap::const_iterator itr = mSpellPetAuraMap.find((spell_id<<8) + eff);
             if(itr != mSpellPetAuraMap.end())
