@@ -213,7 +213,7 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectActivateRune,                             //146 SPELL_EFFECT_ACTIVATE_RUNE
     &Spell::EffectQuestFail,                                //147 SPELL_EFFECT_QUEST_FAIL               quest fail
     &Spell::EffectUnused,                                   //148 SPELL_EFFECT_148                      unused
-    &Spell::EffectNULL,                                     //149 SPELL_EFFECT_149                      swoop
+    &Spell::EffectCharge2,                                  //149 SPELL_EFFECT_CHARGE2                  swoop
     &Spell::EffectUnused,                                   //150 SPELL_EFFECT_150                      unused
     &Spell::EffectTriggerRitualOfSummoning,                 //151 SPELL_EFFECT_TRIGGER_SPELL_2
     &Spell::EffectNULL,                                     //152 SPELL_EFFECT_152                      summon Refer-a-Friend
@@ -6144,6 +6144,28 @@ void Spell::EffectCharge(uint32 /*i*/)
     // not all charge effects used in negative spells
     if ( !IsPositiveSpell(m_spellInfo->Id) && m_caster->GetTypeId() == TYPEID_PLAYER)
         m_caster->Attack(target, true);
+}
+
+void Spell::EffectCharge2(uint32 /*i*/)
+{
+    float x, y, z;
+    if(m_targets.HasDst())
+    {
+        x = m_targets.m_destX;
+        y = m_targets.m_destY;
+        z = m_targets.m_destZ;
+    }
+    else if(Unit *target = m_targets.getUnitTarget())
+    {
+        target->GetContactPoint(m_caster, x, y, z);
+        // not all charge effects used in negative spells
+        if(!IsPositiveSpell(m_spellInfo->Id) && m_caster->GetTypeId() == TYPEID_PLAYER)
+            m_caster->Attack(target, true);
+    }
+    else
+        return;
+
+    m_caster->GetMotionMaster()->MoveCharge(x, y, z);
 }
 
 void Spell::EffectKnockBack(uint32 i)
