@@ -319,7 +319,7 @@ struct CreatureData
 
 struct CreatureDataAddonAura
 {
-    uint16 spell_id;
+    uint32 spell_id;
     uint8 effect_idx;
 };
 
@@ -702,10 +702,10 @@ class TRINITY_DLL_SPEC Creature : public Unit
         virtual uint8 GetPetAutoSpellSize() const { return CREATURE_MAX_SPELLS; }
         virtual uint32 GetPetAutoSpellOnPos(uint8 pos) const
         {
-            if (pos >= CREATURE_MAX_SPELLS || m_charmInfo->GetCharmSpell(pos)->active != ACT_ENABLED)
+            if (pos >= CREATURE_MAX_SPELLS || m_charmInfo->GetCharmSpell(pos)->GetType() != ACT_ENABLED)
                 return 0;
             else
-                return m_charmInfo->GetCharmSpell(pos)->spellId;
+                return m_charmInfo->GetCharmSpell(pos)->GetAction();
         }
 
         void SetHomePosition(float x, float y, float z, float ori) { mHome_X = x; mHome_Y = y; mHome_Z = z; mHome_O = ori;}
@@ -740,6 +740,7 @@ class TRINITY_DLL_SPEC Creature : public Unit
         void SetOriginalEntry(uint32 entry) { m_originalEntry = entry; }
 
         static float _GetDamageMod(int32 Rank);
+
     protected:
         bool CreateFromProto(uint32 guidlow,uint32 Entry,uint32 team, const CreatureData *data = NULL);
         bool InitEntry(uint32 entry, uint32 team=ALLIANCE, const CreatureData* data=NULL);
