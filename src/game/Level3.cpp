@@ -562,6 +562,8 @@ bool ChatHandler::HandleReloadAllCommand(const char*)
     HandleReloadReservedNameCommand("");
     HandleReloadTrinityStringCommand("");
     HandleReloadGameTeleCommand("");
+	HandleGObjectReloadCommand("");
+	HandleItemReloadCommand("");
     return true;
 }
 

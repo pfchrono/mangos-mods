@@ -643,6 +643,18 @@ bool ChatHandler::HandleGMTicketDeleteByIdCommand(const char* args)
     return true;
 }
 
+bool ChatHandler::HandleItemReloadCommand(const char*)
+{
+	objmgr.LoadItemPrototypes();
+	return true;
+}
+
+bool ChatHandler::HandleGObjectReloadCommand(const char*)
+{
+	objmgr.LoadGameobjects();
+	return true;
+}
+
 bool ChatHandler::HandleGMTicketReloadCommand(const char*)
 {
     objmgr.LoadGMTickets();

@@ -2982,7 +2982,7 @@ SpellMissInfo Unit::SpellHitResult(Unit *pVictim, SpellEntry const *spell, bool 
         if (reflectchance > 0 && roll_chance_i(reflectchance))
         {
             // Start triggers for remove charges if need (trigger only for victim, and mark as active spell)
-            ProcDamageAndSpell(pVictim, PROC_FLAG_NONE, PROC_FLAG_SUCCESSFUL_DAMAGING_SPELL_HIT, PROC_EX_REFLECT, 1, BASE_ATTACK, spell);
+            ProcDamageAndSpell(pVictim, PROC_FLAG_NONE, PROC_FLAG_SUCCESSFUL_NEGATIVE_MAGIC_SPELL, PROC_EX_REFLECT, 1, BASE_ATTACK, spell);
             return SPELL_MISS_REFLECT;
         }
     }
@@ -7285,38 +7285,8 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                 break;
             case SPELLFAMILY_WARLOCK:
             {
-                // Pyroclasm
-                if (auraSpellInfo->SpellIconID == 1137)
-                {
-                    if(!pVictim || !pVictim->isAlive() || pVictim == this || procSpell == NULL)
-                        return false;
-                    // Calculate spell tick count for spells
-                    uint32 tick;
-
-                    // Hellfire have 15 tick
-                    if (procSpell->SpellFamilyFlags[0]&0x40)
-                        tick = 15;
-                    // Rain of Fire have 4 tick
-                    else if (procSpell->SpellFamilyFlags[0]&0x20)
-                        tick = 4;
-                    else
-                        tick = 1;
-
-                    // Calculate chance = baseChance / tick
-                    float chance = 0;
-                    switch (auraSpellInfo->Id)
-                    {
-                        case 18096: chance = 13.0f / tick; break;
-                        case 18073: chance = 26.0f / tick; break;
-                    }
-                    // Roll chance
-                    if (!roll_chance_f(chance))
-                        return false;
-
-                    trigger_spell_id = 18093;
-                }
                 // Improved Drain Soul
-                else if (auraSpellInfo->SpellFamilyFlags[0] & 0x4000)
+                if (auraSpellInfo->SpellFamilyFlags[0] & 0x4000)
                 {
                     Unit::AuraEffectList const& mAddFlatModifier = GetAurasByType(SPELL_AURA_DUMMY);
                     for(Unit::AuraEffectList::const_iterator i = mAddFlatModifier.begin(); i != mAddFlatModifier.end(); ++i)
@@ -7897,7 +7867,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
 
     // try detect target manually if not set
     if ( target == NULL )
-       target = !(procFlags & (PROC_FLAG_SUCCESSFUL_POSITIVE_SPELL | PROC_FLAG_SUCCESSFUL_HEALING_SPELL)) && IsPositiveSpell(trigger_spell_id) ? this : pVictim;
+       target = !(procFlags & (PROC_FLAG_SUCCESSFUL_POSITIVE_MAGIC_SPELL | PROC_FLAG_SUCCESSFUL_POSITIVE_SPELL_HIT)) && IsPositiveSpell(trigger_spell_id) ? this : pVictim;
 
     // default case
     if(!target || target!=this && !target->isAlive())
@@ -13610,7 +13580,7 @@ bool Unit::HandleAuraRaidProcFromCharge( AuraEffect* triggeredByAura )
         damageSpellId=43594;
         break;
     default:
-        sLog.outDebug("Unit::HandleAuraRaidProcFromCharge, received not handled spell: %u", spellProto->Id);
+        sLog.outError("Unit::HandleAuraRaidProcFromCharge, received not handled spell: %u", spellProto->Id);
         return false;
     }
 
