@@ -44,12 +44,6 @@
 #include "TargetedMovementGenerator.h"                      // for HandleNpcUnFollowCommand
 #include "CreatureGroups.h"
 
-static uint32 ReputationRankStrIndex[MAX_REPUTATION_RANK] =
-{
-    LANG_REP_HATED,    LANG_REP_HOSTILE, LANG_REP_UNFRIENDLY, LANG_REP_NEUTRAL,
-    LANG_REP_FRIENDLY, LANG_REP_HONORED, LANG_REP_REVERED,    LANG_REP_EXALTED
-};
-
 //mute player for some times
 bool ChatHandler::HandleMuteCommand(const char* args)
 {
@@ -894,98 +888,6 @@ bool ChatHandler::HandleGUIDCommand(const char* /*args*/)
     }
 
     PSendSysMessage(LANG_OBJECT_GUID, GUID_LOPART(guid), GUID_HIPART(guid));
-    return true;
-}
-
-bool ChatHandler::HandleLookupFactionCommand(const char* args)
-{
-    if (!*args)
-        return false;
-
-    // Can be NULL at console call
-    Player *target = getSelectedPlayer ();
-
-    std::string namepart = args;
-    std::wstring wnamepart;
-
-    if (!Utf8toWStr (namepart,wnamepart))
-        return false;
-
-    // converting string that we try to find to lower case
-    wstrToLower (wnamepart);
-
-    uint32 counter = 0;                                     // Counter for figure out that we found smth.
-
-    for (uint32 id = 0; id < sFactionStore.GetNumRows(); ++id)
-    {
-        FactionEntry const *factionEntry = sFactionStore.LookupEntry (id);
-        if (factionEntry)
-        {
-            FactionState const* repState = target ? target->GetReputationMgr().GetState(factionEntry) : NULL;
-
-            int loc = GetSessionDbcLocale();
-            std::string name = factionEntry->name[loc];
-            if(name.empty())
-                continue;
-
-            if (!Utf8FitTo(name, wnamepart))
-            {
-                loc = 0;
-                for(; loc < MAX_LOCALE; ++loc)
-                {
-                    if(loc==GetSessionDbcLocale())
-                        continue;
-
-                    name = factionEntry->name[loc];
-                    if(name.empty())
-                        continue;
-
-                    if (Utf8FitTo(name, wnamepart))
-                        break;
-                }
-            }
-
-            if(loc < MAX_LOCALE)
-            {
-                // send faction in "id - [faction] rank reputation [visible] [at war] [own team] [unknown] [invisible] [inactive]" format
-                // or              "id - [faction] [no reputation]" format
-                std::ostringstream ss;
-                if (m_session)
-                    ss << id << " - |cffffffff|Hfaction:" << id << "|h[" << name << " " << localeNames[loc] << "]|h|r";
-                else
-                    ss << id << " - " << name << " " << localeNames[loc];
-
-                if (repState)                               // and then target!=NULL also
-                {
-                    ReputationRank rank = target->GetReputationMgr().GetRank(factionEntry);
-                    std::string rankName = GetMangosString(ReputationRankStrIndex[rank]);
-
-                    ss << " " << rankName << "|h|r (" << target->GetReputationMgr().GetReputation(factionEntry) << ")";
-
-                    if(repState->Flags & FACTION_FLAG_VISIBLE)
-                        ss << GetTrinityString(LANG_FACTION_VISIBLE);
-                    if(repState->Flags & FACTION_FLAG_AT_WAR)
-                        ss << GetTrinityString(LANG_FACTION_ATWAR);
-                    if(repState->Flags & FACTION_FLAG_PEACE_FORCED)
-                        ss << GetTrinityString(LANG_FACTION_PEACE_FORCED);
-                    if(repState->Flags & FACTION_FLAG_HIDDEN)
-                        ss << GetTrinityString(LANG_FACTION_HIDDEN);
-                    if(repState->Flags & FACTION_FLAG_INVISIBLE_FORCED)
-                        ss << GetTrinityString(LANG_FACTION_INVISIBLE_FORCED);
-                    if(repState->Flags & FACTION_FLAG_INACTIVE)
-                        ss << GetTrinityString(LANG_FACTION_INACTIVE);
-                }
-                else
-                    ss << GetTrinityString(LANG_FACTION_NOREPUTATION);
-
-                SendSysMessage(ss.str().c_str());
-                counter++;
-            }
-        }
-    }
-
-    if (counter == 0)                                       // if counter == 0 then we found nth
-        SendSysMessage(LANG_COMMAND_FACTION_NOTFOUND);
     return true;
 }
 
@@ -2282,21 +2184,26 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     }
 
     std::string username = GetTrinityString(LANG_ERROR);
+    std::string email = GetTrinityString(LANG_ERROR);
     std::string last_ip = GetTrinityString(LANG_ERROR);
     uint32 security = 0;
     std::string last_login = GetTrinityString(LANG_ERROR);
 
-    QueryResult* result = LoginDatabase.PQuery("SELECT username,gmlevel,last_ip,last_login FROM account WHERE id = '%u'",accId);
+    QueryResult* result = LoginDatabase.PQuery("SELECT username,gmlevel,email,last_ip,last_login FROM account WHERE id = '%u'",accId);
     if(result)
     {
         Field* fields = result->Fetch();
         username = fields[0].GetCppString();
         security = fields[1].GetUInt32();
+        email = fields[2].GetCppString();
+
+        if(email.empty())
+            email = "-";
 
         if(!m_session || m_session->GetSecurity() >= security)
         {
-            last_ip = fields[2].GetCppString();
-            last_login = fields[3].GetCppString();
+            last_ip = fields[3].GetCppString();
+            last_login = fields[4].GetCppString();
         }
         else
         {
@@ -2309,7 +2216,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
 
     std::string nameLink = playerLink(target_name);
 
-    PSendSysMessage(LANG_PINFO_ACCOUNT, (target?"":GetMangosString(LANG_OFFLINE)), nameLink.c_str(), GUID_LOPART(target_guid), username.c_str(), accId, security, last_ip.c_str(), last_login.c_str(), latency);
+    PSendSysMessage(LANG_PINFO_ACCOUNT, (target?"":GetTrinityString(LANG_OFFLINE)), nameLink.c_str(), GUID_LOPART(target_guid), username.c_str(), accId, email.c_str(), security, last_ip.c_str(), last_login.c_str(), latency);
 
     std::string timeStr = secsToTimeString(total_player_time,true,true);
     uint32 gold = money /GOLD;
@@ -3672,7 +3579,7 @@ bool ChatHandler::HandleLookupEventCommand(const char* args)
 
     wstrToLower(wnamepart);
 
-    uint32 counter = 0;
+    bool found = false;
 
     GameEventMgr::GameEventDataMap const& events = gameeventmgr.GetEventMap();
     GameEventMgr::ActiveEvents const& activeEvents = gameeventmgr.GetActiveEventList();
@@ -3694,11 +3601,12 @@ bool ChatHandler::HandleLookupEventCommand(const char* args)
             else
                 PSendSysMessage(LANG_EVENT_ENTRY_LIST_CONSOLE,id,eventData.description.c_str(),active );
 
-            ++counter;
+            if(!found)
+                found = true;
         }
     }
 
-    if (counter==0)
+    if (!found)
         SendSysMessage(LANG_NOEVENTFOUND);
 
     return true;

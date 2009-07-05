@@ -864,7 +864,7 @@ bool ChatHandler::HandleNamegoCommand(const char* args)
         if (target->isInFlight())
         {
             target->GetMotionMaster()->MovementExpired();
-            target->m_taxi.ClearTaxiDestinations();
+            target->CleanupAfterTaxiFlight();
         }
         // save only in non-flight case
         else
@@ -1067,7 +1067,7 @@ bool ChatHandler::HandleRecallCommand(const char* args)
     if(target->isInFlight())
     {
         target->GetMotionMaster()->MovementExpired();
-        target->m_taxi.ClearTaxiDestinations();
+        target->CleanupAfterTaxiFlight();
     }
 
     target->TeleportTo(target->m_recallMap, target->m_recallX, target->m_recallY, target->m_recallZ, target->m_recallO);
@@ -2274,7 +2274,7 @@ bool ChatHandler::HandleLookupAreaCommand(const char* args)
     if (!Utf8toWStr (namepart,wnamepart))
         return false;
 
-    uint32 counter = 0;                                     // Counter for figure out that we found smth.
+    bool found = false;
 
     // converting string that we try to find to lower case
     wstrToLower (wnamepart);
@@ -2318,12 +2318,13 @@ bool ChatHandler::HandleLookupAreaCommand(const char* args)
 
                 SendSysMessage (ss.str ().c_str());
 
-                ++counter;
+                if(!found)
+                    found = true;
             }
         }
     }
 
-    if (counter == 0)                                      // if counter == 0 then we found nth
+    if (!found)
         SendSysMessage (LANG_COMMAND_NOAREAFOUND);
 
     return true;
@@ -2516,7 +2517,7 @@ bool ChatHandler::HandleTeleNameCommand(const char * args)
         if(target->isInFlight())
         {
             target->GetMotionMaster()->MovementExpired();
-            target->m_taxi.ClearTaxiDestinations();
+            target->CleanupAfterTaxiFlight();
         }
         // save only in non-flight case
         else
@@ -2612,7 +2613,7 @@ bool ChatHandler::HandleTeleGroupCommand(const char * args)
         if(pl->isInFlight())
         {
             pl->GetMotionMaster()->MovementExpired();
-            pl->m_taxi.ClearTaxiDestinations();
+            pl->CleanupAfterTaxiFlight();
         }
         // save only in non-flight case
         else
@@ -2701,7 +2702,7 @@ bool ChatHandler::HandleGroupgoCommand(const char* args)
         if(pl->isInFlight())
         {
             pl->GetMotionMaster()->MovementExpired();
-            pl->m_taxi.ClearTaxiDestinations();
+            pl->CleanupAfterTaxiFlight();
         }
         // save only in non-flight case
         else
