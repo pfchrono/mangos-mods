@@ -256,7 +256,7 @@ void WorldSession::HandleMoveSplineDoneOpcode(WorldPacket& /*recv_data*/)
         return;
     }
 
-	GetPlayer()->CleanupAfterTaxiFlight();
+    GetPlayer()->CleanupAfterTaxiFlight();
     GetPlayer()->SetFallInformation(0, GetPlayer()->GetPositionZ());
     if(GetPlayer()->pvpInfo.inHostileArea)
         GetPlayer()->CastSpell(GetPlayer(), 2479, true);

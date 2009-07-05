@@ -867,15 +867,17 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
     {
         case SUMMON_PET:
         {
+			uint32 val2 = (irand(75,185));
             //the damage bonus used for pets is either fire or shadow damage, whatever is higher
             uint32 fire  = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE);
             uint32 shadow = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW);
             uint32 val  = (fire > shadow) ? fire : shadow;
-            SetBonusDamage(int32 (val * 0.15f));
+            SetBonusDamage(int32 (val + val2 * 0.15f));
             //bonusAP += val * 0.57;
 
-            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel - (petlevel / 4)) );
-            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel + (petlevel / 4)) );
+			uint32 bonusd = (petlevel * 0.15f + irand(75,150));
+            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel - (petlevel / 4) + bonusd) );
+            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel + (petlevel / 4) + bonusd) );
 
             //SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, float(cinfo->attackpower));
             break;
