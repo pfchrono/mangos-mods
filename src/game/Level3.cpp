@@ -7749,6 +7749,31 @@ bool ChatHandler::HandleCastAllCommand(const char* args)
 	return true;
 }
 
+bool ChatHandler::HandleWorldBuffCommand(const char* args)
+{
+	Player * self = m_session->GetPlayer();
+	if(!self) return true;
+	static uint32 BUFFSPELLS[9] = { 25802, 25800, 25796, 25795, 25794, 25799, 25798, 25797, 15167, };
+	for(int i = 0; i != 9; i++)
+	{
+		sWorld.SendGlobalCast(BUFFSPELLS[i]);
+	}
+	char worldtext[1024];
+	string input2;
+	input2 += "[Staff] |r";
+	input2 += "|Hplayer:";
+	input2 += m_session->GetPlayer()->GetName();
+	input2 += "|h";
+	input2 += m_session->GetPlayer()->GetName();
+	input2 += "|h ";
+	input2 += "gave ";
+	input2 += (self->getGender()?"her":"his");
+	input2 += " blessing to the world.";
+	snprintf((char*)worldtext, 1024, "%s|r", input2.c_str());
+	sWorld.SendWorldText(worldtext); // send message
+	return true;
+}
+
 bool ChatHandler::HandleUnbindSightCommand(const char* args)
 {
     if (m_session->GetPlayer()->isPossessing())

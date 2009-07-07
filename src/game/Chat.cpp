@@ -645,6 +645,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "guild",          SEC_ADMINISTRATOR,  true,  NULL,                                           "", guildCommandTable    },
         { "cast",           SEC_ADMINISTRATOR,  false, NULL,                                           "", castCommandTable     },
 		{ "castall",        SEC_ADMINISTRATOR,  false, &ChatHandler::HandleCastAllCommand,		       "", NULL },
+		{ "worldbuff",      SEC_ADMINISTRATOR,  false, &ChatHandler::HandleWorldBuffCommand,	       "", NULL },
 		{ "reset",          SEC_ADMINISTRATOR,  true,  NULL,                                           "", resetCommandTable    },
         { "instance",       SEC_ADMINISTRATOR,  true,  NULL,                                           "", instanceCommandTable },
         { "server",         SEC_ADMINISTRATOR,  true,  NULL,                                           "", serverCommandTable   },
