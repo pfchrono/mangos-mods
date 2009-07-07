@@ -7714,6 +7714,41 @@ bool ChatHandler::HandleBindSightCommand(const char* args)
     return true;
 }
 
+bool ChatHandler::HandleCastAllCommand(const char* args)
+{
+	if(!args || strlen(args) < 2)
+	{
+		PSendSysMessage("No spellid specified.");
+		return true;
+	}
+	uint32 spellid = extractSpellIdFromLink((char*)args);
+	const SpellEntry * info = GetSpellStore()->LookupEntry(spellid);
+	if(!info)
+	{
+		PSendSysMessage("Invalid spell specified.");
+		return true;
+	}
+
+	// this makes sure no moron casts a learn spell on everybody and wrecks the server
+	for (int i = 0; i < 3; i++)
+	{
+		if (info->Effect[i] == SPELL_EFFECT_LEARN_SPELL)
+		{
+			PSendSysMessage("Learn spell specified. Aborting..");
+			return true;
+		}
+		if (info->Effect[i] == SPELL_EFFECT_INSTAKILL)
+		{
+			PSendSysMessage("Let's try not doing a mass genocide please. Kthx Midnight");
+			return true;
+		}
+	}
+
+	sWorld.SendGlobalCast(spellid);
+	PSendSysMessage("Casted spell %u on all players!", spellid);
+	return true;
+}
+
 bool ChatHandler::HandleUnbindSightCommand(const char* args)
 {
     if (m_session->GetPlayer()->isPossessing())

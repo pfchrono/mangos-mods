@@ -1359,6 +1359,7 @@ class TRINITY_DLL_SPEC Player : public Unit
         time_t m_nextMailDelivereTime;
 
         typedef UNORDERED_MAP<uint32, Item*> ItemMap;
+		typedef UNORDERED_MAP<uint32, WorldSession*> SessionMap2;
 
         ItemMap mMitems;                                    //template defined in objectmgr.cpp
 

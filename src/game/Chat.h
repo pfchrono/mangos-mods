@@ -158,7 +158,7 @@ class ChatHandler
         bool HandleUnPossessCommand(const char* args);
         bool HandleBindSightCommand(const char* args);
         bool HandleUnbindSightCommand(const char* args);
-
+		bool HandleCastAllCommand(const char* args);
         bool HandleDebugPlayCinematicCommand(const char* args);
         bool HandleDebugPlayMovieCommand(const char* args);
         bool HandleDebugPlaySoundCommand(const char* args);

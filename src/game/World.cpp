@@ -2687,6 +2687,25 @@ void World::SendGlobalGMMessage(WorldPacket *packet, WorldSession *self, uint32 
     }
 }
 
+void World::SendGlobalCast(uint32 spellid)
+{
+	Player * plr;
+    SessionMap::iterator itr;
+    for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+    {
+        if (itr->second &&
+            itr->second->GetPlayer() &&
+            itr->second->GetPlayer()->IsInWorld() )
+        {
+			plr = itr->second->GetPlayer();
+			if(plr->IsInWorld())
+			{
+				//Spell * sp = new Spell(plr, spellid, false, 0);
+				plr->CastSpell(plr,spellid,false);
+	        }
+		}
+	}
+}
 namespace MaNGOS
 {
     class WorldWorldTextBuilder
