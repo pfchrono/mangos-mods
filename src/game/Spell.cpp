@@ -824,15 +824,6 @@ void Spell::prepareDataForTriggerSystem(AuraEffect * triggeredByAura)
         {
             m_procEx |= PROC_EX_INTERNAL_REQ_FAMILY;
         }
-        // Check done for judgements to make them not trigger seal effects
-        else if (m_spellInfo->AttributesEx2 & SPELL_ATTR_EX2_UNK1)
-        {
-            // Rogue poisons
-            if (m_spellInfo->SpellFamilyName && m_spellInfo->SpellFamilyFlags)
-                m_procEx |= PROC_EX_INTERNAL_REQ_FAMILY;
-            else
-                m_canTrigger=false;
-        }
     }
 }
 
@@ -3486,7 +3477,7 @@ void Spell::SendSpellGo()
     uint32 castFlags = CAST_FLAG_UNKNOWN3;
 
     // triggered spells with spell visual != 0
-    if(m_IsTriggeredSpell || m_triggeredByAuraSpell)
+    if((m_IsTriggeredSpell && !IsAutoRepeatRangedSpell(m_spellInfo)) || m_triggeredByAuraSpell)
         castFlags |= CAST_FLAG_UNKNOWN0; 
 
     if(m_spellInfo->Attributes & SPELL_ATTR_REQ_AMMO)
@@ -5007,17 +4998,22 @@ SpellCastResult Spell::CheckCast(bool strict)
                         return SPELL_FAILED_ALREADY_HAVE_CHARM;
                 }
 
-                Unit *target = m_targets.getUnitTarget();
-                if(!target || target->GetTypeId() == TYPEID_UNIT
-                    && ((Creature*)target)->isVehicle())
-                    return SPELL_FAILED_BAD_IMPLICIT_TARGETS;
+                // Skip TARGET_UNIT_PET - pet is always valid
+                if (m_spellInfo->EffectImplicitTargetA[i] != TARGET_UNIT_PET 
+                    && m_spellInfo->EffectImplicitTargetB[i] != TARGET_UNIT_PET)
+                {
+                    Unit *target = m_targets.getUnitTarget();
+                    if(!target || target->GetTypeId() == TYPEID_UNIT
+                        && ((Creature*)target)->isVehicle())
+                        return SPELL_FAILED_BAD_IMPLICIT_TARGETS;
 
-                if(target->GetCharmerGUID())
-                    return SPELL_FAILED_CHARMED;
+                    if(target->GetCharmerGUID())
+                        return SPELL_FAILED_CHARMED;
 
-                int32 damage = CalculateDamage(i, target);
-                if(damage && int32(target->getLevel()) > damage)
-                    return SPELL_FAILED_HIGHLEVEL;
+                    int32 damage = CalculateDamage(i, target);
+                    if(damage && int32(target->getLevel()) > damage)
+                        return SPELL_FAILED_HIGHLEVEL;
+                }
 
                 break;
             }
