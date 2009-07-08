@@ -680,6 +680,16 @@ void Spell::SpellDamageSchoolDmg(uint32 effect_idx)
                 }
                 break;
             }
+            case SPELLFAMILY_DEATHKNIGHT:
+            {
+                // Blood Boil - bonus for diseased targets
+                if (m_spellInfo->SpellFamilyFlags[0] & 0x00040000 && unitTarget->GetAura(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DEATHKNIGHT, 0, 0, 0x00000002, m_caster->GetGUID()))
+                {
+                    damage += m_damage / 2;
+                    damage += int32(m_caster->GetTotalAttackPowerValue(RANGED_ATTACK)* 0.035f);
+                }
+                break;
+            }
         }
 
         if(m_originalCaster && damage > 0 && apply_direct_bonus)
@@ -1318,21 +1328,19 @@ void Spell::EffectDummy(uint32 i)
                         return;
 
                     // immediately finishes the cooldown on Frost spells
-                    const PlayerSpellMap& sp_list = ((Player *)m_caster)->GetSpellMap();
-                    for (PlayerSpellMap::const_iterator itr = sp_list.begin(); itr != sp_list.end(); ++itr)
+                    const SpellCooldowns& cm = ((Player *)m_caster)->GetSpellCooldownMap();
+                    for (SpellCooldowns::const_iterator itr = cm.begin(); itr != cm.end();)
                     {
-                        if (itr->second->state == PLAYERSPELL_REMOVED)
-                            continue;
-
-                        uint32 classspell = itr->first;
-                        SpellEntry const *spellInfo = sSpellStore.LookupEntry(classspell);
+                        SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
 
                         if( spellInfo->SpellFamilyName == SPELLFAMILY_MAGE &&
                             (GetSpellSchoolMask(spellInfo) & SPELL_SCHOOL_MASK_FROST) &&
                             spellInfo->Id != 11958 && GetSpellRecoveryTime(spellInfo) > 0 )
                         {
-                            ((Player*)m_caster)->RemoveSpellCooldown(classspell, true);
+                            ((Player*)m_caster)->RemoveSpellCooldown((itr++)->first, true);
                         }
+                        else
+                            ++itr;
                     }
                     return;
                 }
@@ -1609,14 +1617,15 @@ void Spell::EffectDummy(uint32 i)
                         return;
 
                     //immediately finishes the cooldown on certain Rogue abilities
-                    const PlayerSpellMap& sp_list = ((Player *)m_caster)->GetSpellMap();
-                    for (PlayerSpellMap::const_iterator itr = sp_list.begin(); itr != sp_list.end(); ++itr)
+                    const SpellCooldowns& cm = ((Player *)m_caster)->GetSpellCooldownMap();
+                    for (SpellCooldowns::const_iterator itr = cm.begin(); itr != cm.end();)
                     {
-                        uint32 classspell = itr->first;
-                        SpellEntry const *spellInfo = sSpellStore.LookupEntry(classspell);
+                        SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
 
                         if (spellInfo->SpellFamilyName == SPELLFAMILY_ROGUE && (spellInfo->SpellFamilyFlags[1] & 0x00000240 || spellInfo->SpellFamilyFlags[0] & 0x00000860))
-                            ((Player*)m_caster)->RemoveSpellCooldown(classspell,true);
+                            ((Player*)m_caster)->RemoveSpellCooldown((itr++)->first,true);
+                        else
+                            ++itr;
                     }
                     return;
                 }
@@ -1636,14 +1645,15 @@ void Spell::EffectDummy(uint32 i)
                         return;
 
                     //immediately finishes the cooldown for hunter abilities
-                    const PlayerSpellMap& sp_list = ((Player *)m_caster)->GetSpellMap();
-                    for (PlayerSpellMap::const_iterator itr = sp_list.begin(); itr != sp_list.end(); ++itr)
+                    const SpellCooldowns& cm = ((Player*)m_caster)->GetSpellCooldownMap();
+                    for (SpellCooldowns::const_iterator itr = cm.begin(); itr != cm.end();)
                     {
-                        uint32 classspell = itr->first;
-                        SpellEntry const *spellInfo = sSpellStore.LookupEntry(classspell);
+                        SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
 
                         if (spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && spellInfo->Id != 23989 && GetSpellRecoveryTime(spellInfo) > 0 )
-                            ((Player*)m_caster)->RemoveSpellCooldown(classspell,true);
+                            ((Player*)m_caster)->RemoveSpellCooldown((itr++)->first,true);
+                        else
+                            ++itr;
                     }
                     return;
                 }

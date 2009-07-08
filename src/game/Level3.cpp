@@ -1642,6 +1642,9 @@ bool ChatHandler::HandleUnLearnCommand(const char* args)
     else
         SendSysMessage(LANG_FORGET_SPELL);
 
+    if(GetTalentSpellCost(spell_id))
+        target->SendTalentsInfoData(false);
+
     return true;
 }
 
@@ -2583,6 +2586,10 @@ bool ChatHandler::HandleLearnCommand(const char* args)
         targetPlayer->learnSpellHighRank(spell);
     else
         targetPlayer->learnSpell(spell,false);
+
+    uint32 first_spell = spellmgr.GetFirstSpellInChain(spell);
+    if(GetTalentSpellCost(first_spell))
+        targetPlayer->SendTalentsInfoData(false);
 
     return true;
 }
@@ -7759,7 +7766,7 @@ bool ChatHandler::HandleWorldBuffCommand(const char* args)
 		sWorld.SendGlobalCast(BUFFSPELLS[i]);
 	}
 	char worldtext[1024];
-	string input2;
+	std::string input2;
 	input2 += "[Staff] |r";
 	input2 += "|Hplayer:";
 	input2 += m_session->GetPlayer()->GetName();
@@ -7770,7 +7777,7 @@ bool ChatHandler::HandleWorldBuffCommand(const char* args)
 	input2 += (self->getGender()?"her":"his");
 	input2 += " blessing to the world.";
 	snprintf((char*)worldtext, 1024, "%s|r", input2.c_str());
-	sWorld.SendWorldText(worldtext); // send message
+	sWorld.SendWorldText(LANG_SYSTEMMESSAGE,worldtext); // send message
 	return true;
 }
 
