@@ -17,3 +17,5 @@ win/VC100/*Win32*/
 src/bindings/scripts/VC90/*Win32*/
 bin/*
 dep/lib/win32*/
+win/VC90/*.user
+win/*.suo
