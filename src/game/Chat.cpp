@@ -448,6 +448,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "gameobject_questrelation",    SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadGOQuestRelationsCommand,        "", NULL },
         { "gameobject_scripts",          SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadGameObjectScriptsCommand,       "", NULL },
 		{ "item_template",				 SEC_ADMINISTRATOR, true,  &ChatHandler::HandleItemReloadCommand,				     "", NULL },
+		{ "creature_template",			 SEC_ADMINISTRATOR, true,  &ChatHandler::HandleCreatureReloadCommand,				     "", NULL },
         { "item_enchantment_template",   SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadItemEnchantementsCommand,       "", NULL },
         { "item_loot_template",          SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadLootTemplatesItemCommand,       "", NULL },
         { "item_required_target",        SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadItemRequiredTragetCommand,      "", NULL },

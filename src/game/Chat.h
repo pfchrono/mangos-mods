@@ -543,6 +543,7 @@ class ChatHandler
         bool HandleGMTicketReloadCommand(const char*);
 		bool HandleGObjectReloadCommand(const char*);
 		bool HandleItemReloadCommand(const char*);
+		bool HandleCreatureReloadCommand(const char*);
 
         bool HandleMaxSkillCommand(const char* args);
         bool HandleSetSkillCommand(const char* args);

@@ -643,9 +643,17 @@ bool ChatHandler::HandleGMTicketDeleteByIdCommand(const char* args)
     return true;
 }
 
+bool ChatHandler::HandleCreatureReloadCommand(const char*)
+{
+	objmgr.LoadCreatureTemplates();
+	PSendSysMessage("Table: creature_template reloaded sucessfully.");
+	return true;
+}
+
 bool ChatHandler::HandleItemReloadCommand(const char*)
 {
 	objmgr.LoadItemPrototypes();
+	PSendSysMessage("Table: template_template reloaded sucessfully.");
 	return true;
 }
 
