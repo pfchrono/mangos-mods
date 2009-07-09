@@ -5548,7 +5548,9 @@ bool ChatHandler::HandleResetTalentsCommand(const char * args)
 
 bool ChatHandler::HandleResetAllCommand(const char * args)
 {
-    if(!*args)
+	//disable this shit it's not needed and causes char problems. Midnight
+	return false;
+ /*   if(!*args)
         return false;
 
     std::string casename = args;
@@ -5582,7 +5584,7 @@ bool ChatHandler::HandleResetAllCommand(const char * args)
     for(HashMapHolder<Player>::MapType::const_iterator itr = plist.begin(); itr != plist.end(); ++itr)
         itr->second->SetAtLoginFlag(atLogin);
 
-    return true;
+    return true;*/
 }
 
 bool ChatHandler::HandleServerShutDownCancelCommand(const char* /*args*/)
