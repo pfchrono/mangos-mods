@@ -10213,6 +10213,9 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage,WeaponAttackType attT
                 }
             }
         }
+        // This is not a typo - Impurity has SPELLFAMILY_DRUID
+        if (AuraEffect const * aurEff = GetDummyAura(SPELLFAMILY_DRUID, 1986, 0))
+            APbonus *= (100.0f + aurEff->GetAmount()) / 100.0f;
 
         DoneFlatBenefit += int32(APbonus/14.0f * GetAPMultiplier(attType,normalized));
     }
@@ -14137,7 +14140,7 @@ void Unit::RemoveCharmedBy(Unit *charmer)
 
     if(!charmer)
         charmer = GetCharmer();
-    else if(charmer != GetCharmer()) // one aura overrides another?
+    if(charmer != GetCharmer()) // one aura overrides another?
     {
 //        sLog.outCrash("Unit::RemoveCharmedBy: this: " UI64FMTD " true charmer: " UI64FMTD " false charmer: " UI64FMTD,
 //            GetGUID(), GetCharmerGUID(), charmer->GetGUID());
