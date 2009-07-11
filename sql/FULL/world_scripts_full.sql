@@ -109,6 +109,7 @@ UPDATE `creature_template` SET `ScriptName`='npc_kingdom_of_dalaran_quests' WHER
 UPDATE `creature_template` SET `ScriptName`='npc_taxi' WHERE `entry` IN (17435, 23413, 18725, 19401, 19409, 20235, 25059, 25236, 20903, 20162, 29154, 23415, 27575, 26443, 26949, 23816);
 UPDATE `creature_template` SET `ScriptName`='npc_death_knight_initiate' WHERE `entry`=28406;
 UPDATE `creature_template` SET `ScriptName`='npc_salanar_the_horseman' WHERE `entry` IN (28653, 28788);
+UPDATE `creature_template` SET `ScriptName`='npc_dark_rider_of_acherus' WHERE `entry` =28654;
 UPDATE `creature_template` SET `ScriptName`='npc_ros_dark_rider' WHERE `entry`=28768;
 UPDATE `creature_template` SET `ScriptName`='npc_dkc1_gothik' WHERE `entry`=28658;
 
@@ -687,7 +688,7 @@ UPDATE `creature_template` SET `ScriptName`='npc_commander_dawnforge' WHERE `ent
 UPDATE `instance_template` SET `script`='instance_nexus' WHERE `map`=576;
 UPDATE `creature_template` SET `ScriptName`='boss_magus_telestra' WHERE `entry`=26731;
 UPDATE `creature_template` SET `ScriptName`='boss_anomalus' WHERE `entry`=26763;
-UPDATE `creature_template` SET `ScriptName`='mob_chaotic_rift' WHERE `entry`=26918
+UPDATE `creature_template` SET `ScriptName`='mob_chaotic_rift' WHERE `entry`=26918;
 UPDATE `creature_template` SET `ScriptName`='boss_ormorok' WHERE `entry`=26794;
 UPDATE `creature_template` SET `ScriptName`='mob_crystal_spike' WHERE `entry`=27099;
 UPDATE `creature_template` SET `ScriptName`='mob_crystalline_tangler' WHERE `entry`=32665;
@@ -709,8 +710,8 @@ UPDATE `creature_template` SET `ScriptName`='npc_henry_stern' WHERE `entry`=8696
 
 /* RAZORFEN KRAUL */
 UPDATE `creature_template` SET `Scriptname`='npc_willix' WHERE `entry`=4508;
-UPDATE `instance_template` SET `script` = 'instance_razorfen_kraul' WHERE `map` = '47' LIMIT 1;
-UPDATE `creature_template` SET `ScriptName` = 'npc_deaths_head_ward_keeper' WHERE `entry` = '4625' LIMIT 1;
+UPDATE `instance_template` SET `script` = 'instance_razorfen_kraul' WHERE `map`=47;
+UPDATE `creature_template` SET `ScriptName` = 'npc_deaths_head_ward_keeper' WHERE `entry`=4625;
 
 /* REDRIDGE MOUNTAINS */
 

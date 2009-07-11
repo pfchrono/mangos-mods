@@ -499,11 +499,7 @@ class TRINITY_DLL_SPEC GameObject : public WorldObject
 
         bool IsTransport() const;
 
-        void SetOwnerGUID(uint64 owner)
-        {
-            m_spawnedByDefault = false;                     // all object with owner is despawned after delay
-            SetUInt64Value(OBJECT_FIELD_CREATED_BY, owner);
-        }
+        void SetOwnerGUID(uint64 owner);
         uint64 GetOwnerGUID() const { return GetUInt64Value(OBJECT_FIELD_CREATED_BY); }
         Unit* GetOwner() const;
 
