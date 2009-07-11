@@ -4676,10 +4676,11 @@ void Spell::EffectScriptEffect(uint32 effIndex)
                 // Despawn Horse
                 case 52267:
                 {
+					Creature* creatureTarget = (Creature*)unitTarget;
                     if(!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
                         return;
                     
-                    unitTarget->ForcedDespawn();
+					creatureTarget->ForcedDespawn();
                     return;
                 }
                 // PX-238 Winter Wondervolt TRAP
