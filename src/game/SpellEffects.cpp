@@ -743,14 +743,11 @@ void Spell::EffectDummy(uint32 i)
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT || ((Creature*)unitTarget)->isPet()) return;
 
-                    Creature* creatureTarget = (Creature*)unitTarget;
                     GameObject* pGameObj = new GameObject;
 
-                    if (!creatureTarget || !pGameObj) return;
-
-                    if (!pGameObj->Create(objmgr.GenerateLowGuid(HIGHGUID_GAMEOBJECT), 181574, creatureTarget->GetMap(), creatureTarget->GetPhaseMask(),
-                        creatureTarget->GetPositionX(), creatureTarget->GetPositionY(), creatureTarget->GetPositionZ(),
-                        creatureTarget->GetOrientation(), 0, 0, 0, 0, 100, GO_STATE_READY))
+                    if (!pGameObj->Create(objmgr.GenerateLowGuid(HIGHGUID_GAMEOBJECT), 181574, unitTarget->GetMap(), unitTarget->GetPhaseMask(),
+                        unitTarget->GetPositionX(), unitTarget->GetPositionY(), unitTarget->GetPositionZ(),
+                        unitTarget->GetOrientation(), 0, 0, 0, 0, 100, GO_STATE_READY))
                     {
                         delete pGameObj;
                         return;
@@ -761,7 +758,7 @@ void Spell::EffectDummy(uint32 i)
                     //pGameObj->SetUInt32Value(GAMEOBJECT_LEVEL, m_caster->getLevel());
                     pGameObj->SetSpellId(m_spellInfo->Id);
 
-                    MapManager::Instance().GetMap(creatureTarget->GetMapId(), pGameObj)->Add(pGameObj);
+                    MapManager::Instance().GetMap(unitTarget->GetMapId(), pGameObj)->Add(pGameObj);
 
                     WorldPacket data(SMSG_GAMEOBJECT_SPAWN_ANIM_OBSOLETE, 8);
                     data << uint64(pGameObj->GetGUID());
@@ -907,9 +904,7 @@ void Spell::EffectDummy(uint32 i)
                     if(!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
                         return;
 
-                    Creature* creatureTarget = (Creature*)unitTarget;
-
-                    creatureTarget->ForcedDespawn();
+                    ((Creature*)unitTarget)->ForcedDespawn();
                     return;
                 }
                 case 16589:                                 // Noggenfogger Elixir
@@ -961,8 +956,6 @@ void Spell::EffectDummy(uint32 i)
                         return;
 
                     Creature* creatureTarget = (Creature*)unitTarget;
-                    if(creatureTarget->isPet())
-                        return;
 
                     GameObject* Crystal_Prison = m_caster->SummonGameObject(179644, creatureTarget->GetPositionX(), creatureTarget->GetPositionY(), creatureTarget->GetPositionZ(), creatureTarget->GetOrientation(), 0, 0, 0, 0, creatureTarget->GetRespawnTime()-time(NULL));
                     sLog.outDebug("SummonGameObject at SpellEfects.cpp EffectDummy for Spell 23019");
@@ -1183,9 +1176,7 @@ void Spell::EffectDummy(uint32 i)
                     if(!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
                         return;
 
-                    Creature* creatureTarget = (Creature*)unitTarget;
-
-                    creatureTarget->ForcedDespawn();
+                    ((Creature*)unitTarget)->ForcedDespawn();
 
                     //cast spell Raptor Capture Credit
                     m_caster->CastSpell(m_caster, 42337, true, NULL);
@@ -1254,9 +1245,7 @@ void Spell::EffectDummy(uint32 i)
                     if(!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
                         return;
 
-                    Creature* creatureTarget = (Creature*)unitTarget;
-
-                    creatureTarget->ForcedDespawn();
+                    ((Creature*)unitTarget)->ForcedDespawn();
                     return;
 
                 }
@@ -3470,7 +3459,10 @@ void Spell::EffectSummonType(uint32 i)
 
                         TempSummon * summon = m_originalCaster->SummonCreature(entry,px,py,pz,m_caster->GetOrientation(),summonType,duration);
                         if (properties->Category == SUMMON_CATEGORY_ALLY)
-                            summon->setFaction(m_caster->getFaction());
+                        {
+                            summon->SetUInt64Value(UNIT_FIELD_SUMMONEDBY, m_originalCaster->GetGUID());
+                            summon->setFaction(m_originalCaster->getFaction());
+                        }
                     }
                     break;
                 }
@@ -4053,7 +4045,7 @@ void Spell::EffectTameCreature(uint32 /*i*/)
     if(!unitTarget)
         return;
 
-    if(unitTarget->GetTypeId() == TYPEID_PLAYER)
+    if(unitTarget->GetTypeId() != TYPEID_UNIT)
         return;
 
     Creature* creatureTarget = (Creature*)unitTarget;
@@ -4676,11 +4668,10 @@ void Spell::EffectScriptEffect(uint32 effIndex)
                 // Despawn Horse
                 case 52267:
                 {
-					Creature* creatureTarget = (Creature*)unitTarget;
                     if(!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
                         return;
                     
-					creatureTarget->ForcedDespawn();
+                    ((Creature*)unitTarget)->ForcedDespawn();
                     return;
                 }
                 // PX-238 Winter Wondervolt TRAP

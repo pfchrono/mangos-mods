@@ -714,11 +714,11 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 20180, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000043,   0,   0,   0), -- Reckoning (Rank 4)
 ( 20181, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000043,   0,   0,   0), -- Reckoning (Rank 3)
 ( 20182, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000043,   0,   0,   0), -- Reckoning (Rank 5)
-( 20210, 0x00,  10, 0xC0000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Illumination (Rank 1)
-( 20212, 0x00,  10, 0xC0000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Illumination (Rank 2)
-( 20213, 0x00,  10, 0xC0000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Illumination (Rank 3)
-( 20214, 0x00,  10, 0xC0000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Illumination (Rank 4)
-( 20215, 0x00,  10, 0xC0000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Illumination (Rank 5)
+( 20210, 0x00,  10, 0xC0000000, 0x00010000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Illumination (Rank 1)
+( 20212, 0x00,  10, 0xC0000000, 0x00010000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Illumination (Rank 2)
+( 20213, 0x00,  10, 0xC0000000, 0x00010000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Illumination (Rank 3)
+( 20214, 0x00,  10, 0xC0000000, 0x00010000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Illumination (Rank 4)
+( 20215, 0x00,  10, 0xC0000000, 0x00010000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Illumination (Rank 5)
 ( 20234, 0x00,  10, 0x00008000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Improved Lay on Hands (Rank 1)
 ( 20235, 0x00,  10, 0x00008000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Improved Lay on Hands (Rank 2)
 ( 20375, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   7,   0,   1), -- Seal of Command 
@@ -1326,9 +1326,6 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 55776, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,  45), -- Swordguard Embroidery 
 ( 56218, 0x00,   5, 0x00000002, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Glyph of Corruption 
 ( 56249, 0x00,   5, 0x00000000, 0x00000000, 0x00000400, 0x00000000, 0x00000000,   0,   0,   0), -- Glyph of Felhunter 
-( 56342, 0x00,   9, 0x00004000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Lock and Load (Rank 1)
-( 56343, 0x00,   9, 0x00004000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Lock and Load (Rank 2)
-( 56344, 0x00,   9, 0x00004000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Lock and Load (Rank 3)
 ( 56355, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000040,   0,   0,   0), -- Titanium Shield Spike 
 ( 56364, 0x00,   3, 0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Glyph of Remove Curse 
 ( 56372, 0x00,   3, 0x00000000, 0x00000080, 0x00000000, 0x00004000, 0x00000000,   0,   0,   0), -- Glyph of Ice Block 
@@ -1508,7 +1505,12 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 49655, 0x00,  15, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00000000,   0,   0,   1), -- Wandering Plague
 ( 49137, 0x00,  15, 0x00000004, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Endless Winter
 ( 49657, 0x00,  15, 0x00000004, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Endless Winter
-( 58620, 0x00,  15, 0x00000004, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0); -- Glyph of Chains of Ice
+( 58620, 0x00,  15, 0x00000004, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Glyph of Chains of Ice
+( 59725, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000800,   0,   0,   0), -- Improved Spell Reflection 
+( 56342, 0x00,   9, 0x00000018, 0x08000000, 0x00020000, 0x00000000, 0x00000000,   0,   0,   0), -- Lock and Load
+( 56343, 0x00,   9, 0x00000018, 0x08000000, 0x00020000, 0x00000000, 0x00000000,   0,   0,   0), -- Lock and Load
+( 56344, 0x00,   9, 0x00000018, 0x08000000, 0x00020000, 0x00000000, 0x00000000,   0,   0,   0); -- Lock and Load
+
 
 -- --------
 -- ENCHANT PROC
@@ -1608,6 +1610,7 @@ UPDATE creature_template SET `VehicleId`=200 WHERE `entry` IN (28605,28606,28607
 -- Vehicle and summon spell(summon npc 28788) for Acherus Deathcharger
 UPDATE creature_template SET `spell1`=52362, `VehicleId`=200 WHERE `entry`=28782;
 
+-- DK quest data TODO: remove these when DB projects release with proper data
 DELETE FROM `creature_questrelation` WHERE `quest`=12701;
 INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (28377, 12701);
 DELETE FROM `creature_involvedrelation` WHERE `quest`=12701;
@@ -1626,6 +1629,30 @@ DELETE FROM `creature_questrelation` WHERE `quest`=12727;
 INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (28912, 12727);
 DELETE FROM `creature_involvedrelation` WHERE `quest`=12727;
 INSERT INTO `creature_involvedrelation` (`id`, `quest`) VALUES (28913, 12727);
+DELETE FROM `creature_questrelation` WHERE `quest` = 12754; 
+INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (28914, 12754); 
+DELETE FROM `creature_involvedrelation` WHERE `quest` = 12754; 
+INSERT INTO `creature_involvedrelation` (`id`, `quest`) VALUES (28914, 12754); 
+DELETE FROM `creature_questrelation` WHERE `quest` = 12757; 
+INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (28914, 12757); 
+DELETE FROM `creature_questrelation` WHERE `quest` = 12754; 
+INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (28914, 12754); 
+DELETE FROM `creature_involvedrelation` WHERE `quest` = 12754; 
+INSERT INTO `creature_involvedrelation` (`id`, `quest`) VALUES (28914, 12754); 
+DELETE FROM `creature_questrelation` WHERE `quest` = 12755; 
+INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (28914, 12755); 
+DELETE FROM `creature_involvedrelation` WHERE `quest` = 12756; 
+INSERT INTO `creature_involvedrelation` (`id`, `quest`) VALUES (28914, 12756); 
+DELETE FROM `creature_questrelation` WHERE `quest` = 12757; 
+INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (28914, 12757); 
+DELETE FROM `creature_involvedrelation` WHERE `quest` = 12800; 
+INSERT INTO `creature_involvedrelation` (`id`, `quest`) VALUES (31082, 12800); 
+DELETE FROM `creature_questrelation` WHERE `quest` = 12801; 
+INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (31082, 12801); 
+DELETE FROM `creature_involvedrelation` WHERE `quest` = 12801; 
+INSERT INTO `creature_involvedrelation` (`id`, `quest`) VALUES (29173, 12801);
+UPDATE `quest_template` SET `PrevQuestId`=13166 WHERE `entry`=13188;
+UPDATE `quest_template` SET `PrevQuestId`=13166 WHERE `entry`=13189;
 
 DELETE FROM `npc_spellclick_spells` WHERE `spell_id` IN (
 54568, 54575, 52263, 52280, 52447);
@@ -1641,10 +1668,12 @@ INSERT INTO `npc_spellclick_spells` (`npc_entry`, `spell_id`, `quest_start`, `qu
 
 UPDATE creature_template SET spell1=52435,spell2=52576,spell5=52588,VehicleId=68,speed=0 WHERE entry IN (28833,28887);
 UPDATE creature_template SET spell1=52211 WHERE entry=28864;
-
-
+-- Citizen of New Avalon
+UPDATE creature_template SET unit_flags = 537166336, dynamicflags = 0 WHERE entry = 28942;
 -- frostbrood vanquisher
 update creature_template set maxhealth = 133525, minhealth = 133525, maxmana = 51360, minmana = 51360, spell1 = 53114, spell2 = 53112, spell3=53110, VehicleId = 156 where entry = 28670;
+
+UPDATE `creature` SET `phaseMask`=128 WHERE `id` IN (31082,29173,29199,29204,29200);
 
 
 -- --------

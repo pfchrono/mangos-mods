@@ -577,29 +577,6 @@ bool Unit::HasAuraTypeWithFamilyFlags(AuraType auraType, uint32 familyName, uint
     return false;
 }
 
-/* Called by DealDamage for auras that have a chance to be dispelled on damage taken. */
-void Unit::RemoveSpellbyDamageTaken(uint32 damage, uint32 spell)
-{
-    // The chance to dispel an aura depends on the damage taken with respect to the casters level.
-    uint32 max_dmg = getLevel() > 8 ? 25 * getLevel() - 150 : 50;
-    float chance = float(damage) / max_dmg * 100.0f;
-
-    std::queue < std::pair < uint32, uint64 > > remove_list;
-
-    for (AuraList::iterator iter = m_ccAuras.begin(); iter != m_ccAuras.end();++iter)
-    {
-       if((!spell || (*iter)->GetId() != spell) && roll_chance_f(chance))
-       {
-           remove_list.push(std::make_pair((*iter)->GetId(), (*iter)->GetCasterGUID() ) );
-       }
-    }
-
-    for(;remove_list.size();remove_list.pop())
-    {
-        RemoveAura(remove_list.front().first, remove_list.front().second, AURA_REMOVE_BY_ENEMY_SPELL);
-    }
-}
-
 void Unit::DealDamageMods(Unit *pVictim, uint32 &damage, uint32* absorb)
 {
     if (!pVictim->isAlive() || pVictim->hasUnitState(UNIT_STAT_UNATTACKABLE) || pVictim->GetTypeId() == TYPEID_UNIT && ((Creature*)pVictim)->IsInEvadeMode())
@@ -646,7 +623,6 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
     {
         // interrupting auras with AURA_INTERRUPT_FLAG_DAMAGE before checking !damage (absorbed damage breaks that type of auras)
         pVictim->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_TAKE_DAMAGE, spellProto ? spellProto->Id : 0);
-        pVictim->RemoveSpellbyDamageTaken(damage, spellProto ? spellProto->Id : 0);
     }
 
     if(!damage)
@@ -2984,7 +2960,7 @@ SpellMissInfo Unit::SpellHitResult(Unit *pVictim, SpellEntry const *spell, bool 
         if (reflectchance > 0 && roll_chance_i(reflectchance))
         {
             // Start triggers for remove charges if need (trigger only for victim, and mark as active spell)
-            ProcDamageAndSpell(pVictim, PROC_FLAG_NONE, PROC_FLAG_SUCCESSFUL_NEGATIVE_MAGIC_SPELL, PROC_EX_REFLECT, 1, BASE_ATTACK, spell);
+            ProcDamageAndSpell(pVictim, PROC_FLAG_NONE, PROC_FLAG_TAKEN_NEGATIVE_MAGIC_SPELL, PROC_EX_REFLECT , 1, BASE_ATTACK, spell);
             return SPELL_MISS_REFLECT;
         }
     }
@@ -3879,11 +3855,6 @@ bool Unit::AddAura(Aura *Aur, bool handleEffects)
         m_interruptableAuras.push_back(Aur);
         AddInterruptMask(aurSpellInfo->AuraInterruptFlags);
     }
-    if((aurSpellInfo->Attributes & SPELL_ATTR_BREAKABLE_BY_DAMAGE
-        && !Aur->IsAuraType(SPELL_AURA_MOD_POSSESS))) //only dummy aura is breakable
-    {
-        m_ccAuras.push_back(Aur);
-    }
 
     if (handleEffects)
         Aur->HandleEffects(true);
@@ -4196,12 +4167,6 @@ void Unit::RemoveAura(AuraMap::iterator &i, AuraRemoveMode mode)
     {
         m_interruptableAuras.remove(Aur);
         UpdateInterruptMask();
-    }
-
-    if((Aur->GetSpellProto()->Attributes & SPELL_ATTR_BREAKABLE_BY_DAMAGE
-        && !Aur->IsAuraType(SPELL_AURA_MOD_POSSESS))) //only dummy aura is breakable
-    {
-        m_ccAuras.remove(Aur);
     }
 
     Aur->SetRemoveMode(mode);
@@ -7853,7 +7818,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
         case 56453:
         {
             // Proc only from trap activation (from periodic proc another aura of this spell)
-            if (!(procFlags & PROC_FLAG_ON_TRAP_ACTIVATION))
+            if (!(procFlags & PROC_FLAG_ON_TRAP_ACTIVATION) || !roll_chance_i(triggerAmount))
                 return false;
             break;
         }
@@ -12686,6 +12651,7 @@ void Unit::ProcDamageAndSpellFor( bool isVictim, Unit * pTarget, uint32 procFlag
                     DealDamageMods(damageInfo.target,damageInfo.damage,&damageInfo.absorb);
                     SendSpellNonMeleeDamageLog(&damageInfo);
                     DealSpellDamage(&damageInfo, true);
+                    takeCharges=true;
                     break;
                 }
                 case SPELL_AURA_MANA_SHIELD:
@@ -12751,6 +12717,7 @@ void Unit::ProcDamageAndSpellFor( bool isVictim, Unit * pTarget, uint32 procFlag
                         (isVictim?"a victim's":"an attacker's"),triggeredByAura->GetId());
 
                     HandleAuraRaidProcFromChargeWithValue(triggeredByAura);
+                    takeCharges=true;
                     break;
                 }
                 case SPELL_AURA_RAID_PROC_FROM_CHARGE:
@@ -12759,6 +12726,7 @@ void Unit::ProcDamageAndSpellFor( bool isVictim, Unit * pTarget, uint32 procFlag
                         (isVictim?"a victim's":"an attacker's"),triggeredByAura->GetId());
 
                     HandleAuraRaidProcFromCharge(triggeredByAura);
+                    takeCharges=true;
                     break;
                 }
                 case SPELL_AURA_PROC_TRIGGER_SPELL_WITH_VALUE:
@@ -12806,25 +12774,26 @@ void Unit::ProcDamageAndSpellFor( bool isVictim, Unit * pTarget, uint32 procFlag
                     if (procSpell)
                         takeCharges=true;
                     break;
-                // These auras may not have charges - that means they have chance to remove based on dmg
+                // CC Auras which use their amount amount to drop
+                // Are there any more auras which need this?
+                case SPELL_AURA_MOD_CONFUSE:
                 case SPELL_AURA_MOD_FEAR:
                 case SPELL_AURA_MOD_STUN:
                 case SPELL_AURA_MOD_ROOT:
-                    if (!useCharges && isVictim && damage && !i->spellProcEvent)
+                    if (isVictim && damage)
                     {
-                        // The chance to dispel an aura depends on the damage taken with respect to the casters level.
-                        uint32 max_dmg = getLevel() > 8 ? 25 * getLevel() - 150 : 50;
-                        float chance = float(damage) / max_dmg * 100.0f;
-                        if (roll_chance_f(chance))
+                        int32 damageLeft = triggeredByAura->GetAmount();
+                        // No damage left
+                        if (damageLeft < damage )
                             RemoveAura(i->aura);
+                        else
+                            triggeredByAura->SetAmount(damageLeft-damage);
                     }
-                    else
-                        takeCharges=true;
                     break;
-                /*case SPELL_AURA_ADD_FLAT_MODIFIER:
-                case SPELL_AURA_ADD_PCT_MODIFIER:
+                //case SPELL_AURA_ADD_FLAT_MODIFIER:
+                //case SPELL_AURA_ADD_PCT_MODIFIER:
                     // HandleSpellModAuraProc
-                    break;*/
+                    //break;
                 default:
                     // nothing do, just charges counter
                     takeCharges=true;
@@ -13474,8 +13443,8 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Aura * aura, SpellEntry co
     if (!EventProcFlag)
         return false;
 
-    // Additional checks for triggered spells
-    if (procExtra & PROC_EX_INTERNAL_TRIGGERED)
+    // Additional checks for triggered spells (ignore trap casts)
+    if (procExtra & PROC_EX_INTERNAL_TRIGGERED && !(procFlag & PROC_FLAG_ON_TRAP_ACTIVATION))
     {
         if (!(spellProto->AttributesEx3 & SPELL_ATTR_EX3_CAN_PROC_TRIGGERED))
             return false;
@@ -13494,7 +13463,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Aura * aura, SpellEntry co
         if (!allow)
             return false;
     }
-    // Aura added by spell can`t trogger from self (prevent drop charges/do triggers)
+    // Aura added by spell can`t trigger from self (prevent drop charges/do triggers)
     // But except periodic and kill triggers (can triggered from self)
     if(procSpell && procSpell->Id == spellProto->Id 
         && !(spellProto->procFlags&(PROC_FLAG_ON_TAKE_PERIODIC | PROC_FLAG_KILL)))
@@ -13692,6 +13661,9 @@ void Unit::Kill(Unit *pVictim, bool durabilityLoss)
         else
             player->ProcDamageAndSpell(pVictim, PROC_FLAG_NONE, PROC_FLAG_KILLED,PROC_EX_NONE, 0);
     }
+
+    // Proc auras on death - must be before aura/combat remove
+    pVictim->ProcDamageAndSpell(NULL, PROC_FLAG_DEATH, PROC_FLAG_NONE, PROC_EX_NONE, 0, BASE_ATTACK, 0);
 
     // if talent known but not triggered (check priest class for speedup check)
     bool SpiritOfRedemption = false;

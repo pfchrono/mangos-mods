@@ -1324,10 +1324,14 @@ bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const* spellPr
             && !(procExtra & PROC_EX_INTERNAL_HOT))
             return false;
     }
+    // Trap casts are active by default
+    if (procFlags & PROC_FLAG_ON_TRAP_ACTIVATION)
+        active = true;
 
     // Always trigger for this
-    if (procFlags & (PROC_FLAG_KILLED | PROC_FLAG_KILL | PROC_FLAG_ON_TRAP_ACTIVATION))
+    if (procFlags & (PROC_FLAG_KILLED | PROC_FLAG_KILL | PROC_FLAG_DEATH))
         return true;
+
     if (spellProcEvent)     // Exist event data
     {
         // Store extra req
@@ -3568,6 +3572,8 @@ void SpellMgr::LoadSpellCustomAttr()
         case 51904:     // Summon Ghouls On Scarlet Crusade (core does not know the triggered spell is summon spell)
             spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
             break;
+        case 29809:     // Desecration Arm - 36 instead of 37 - typo? :/
+            spellInfo->EffectRadiusIndex[0] = 37;
         default:
             break;
         }
