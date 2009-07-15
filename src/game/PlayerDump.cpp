@@ -671,7 +671,7 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
                 // add it to cache
                 uint32 id= atoi(getnth(line,1).c_str());
                 std::string text = getnth(line,2);
-                objmgr.AddItemText(id,text);
+//                objmgr.AddItemText(id,text);
                 break;
             }
             default:
