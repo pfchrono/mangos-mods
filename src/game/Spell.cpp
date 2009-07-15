@@ -781,7 +781,7 @@ void Spell::prepareDataForTriggerSystem(AuraEffect * triggeredByAura)
             break;
         default:
             if (m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON && 
-                m_spellInfo->EquippedItemSubClassMask & ITEM_SUBCLASS_WEAPON_WAND
+                m_spellInfo->EquippedItemSubClassMask & (1<<ITEM_SUBCLASS_WEAPON_WAND)
                 && m_spellInfo->AttributesEx2 & SPELL_ATTR_EX2_AUTOREPEAT_FLAG) // Wands auto attack
             {
                 m_procAttacker = PROC_FLAG_SUCCESSFUL_RANGED_HIT;
@@ -1192,11 +1192,9 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 
     if( !m_caster->IsFriendlyTo(unit) && !IsPositiveSpell(m_spellInfo->Id))
     {
-        if( !(m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_NO_INITIAL_AGGRO) )
-        {
-            m_caster->CombatStart(unit);
-        }
-        else if(m_customAttr & SPELL_ATTR_CU_AURA_CC)
+        m_caster->CombatStart(unit, !(m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_NO_INITIAL_AGGRO));
+
+        if(m_customAttr & SPELL_ATTR_CU_AURA_CC)
         {
             if(!unit->IsStandState())
                 unit->SetStandState(UNIT_STAND_STATE_STAND);
@@ -4660,6 +4658,12 @@ SpellCastResult Spell::CheckCast(bool strict)
                     if(m_targets.getUnitTarget() && !m_caster->IsFriendlyTo(m_targets.getUnitTarget()) && !m_caster->HasInArc( M_PI, m_targets.getUnitTarget() ))
                         return SPELL_FAILED_UNIT_NOT_INFRONT;
                 }
+                else if (m_spellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && m_spellInfo->SpellFamilyFlags[0] == 0x2000) // Death Coil (DeathKnight)
+                {
+                    Unit* target = m_targets.getUnitTarget();
+                    if (!target || (target->IsFriendlyTo(m_caster) && target->GetCreatureType() != CREATURE_TYPE_UNDEAD))
+                        return SPELL_FAILED_BAD_TARGETS;
+                }
                 else if (m_spellInfo->Id == 19938)          // Awaken Peon
                 {
                     Unit *unit = m_targets.getUnitTarget();
@@ -4760,9 +4764,14 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
             case SPELL_EFFECT_CHARGE:
             {
+                if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARRIOR)
+                {
+                    // Warbringer - can't be handled in proc system - should be done before checkcast root check and charge effect process
+                    if (strict && m_caster->IsScriptOverriden(m_spellInfo, 6953))
+                        m_caster->RemoveMovementImpairingAuras();
+                }
                 if (m_caster->hasUnitState(UNIT_STAT_ROOT))
                     return SPELL_FAILED_ROOTED;
-
                 break;
             }
             case SPELL_EFFECT_SKINNING:
@@ -5008,13 +5017,9 @@ SpellCastResult Spell::CheckCast(bool strict)
                         return SPELL_FAILED_ALREADY_HAVE_CHARM;
                 }
 
-                // Skip TARGET_UNIT_PET - pet is always valid
-                if (m_spellInfo->EffectImplicitTargetA[i] != TARGET_UNIT_PET 
-                    && m_spellInfo->EffectImplicitTargetB[i] != TARGET_UNIT_PET)
+                if(Unit *target = m_targets.getUnitTarget())
                 {
-                    Unit *target = m_targets.getUnitTarget();
-                    if(!target || target->GetTypeId() == TYPEID_UNIT
-                        && ((Creature*)target)->isVehicle())
+                    if(target->GetTypeId() == TYPEID_UNIT && ((Creature*)target)->isVehicle())
                         return SPELL_FAILED_BAD_IMPLICIT_TARGETS;
 
                     if(target->GetCharmerGUID())
@@ -6076,6 +6081,25 @@ bool Spell::CheckTarget(Unit* target, uint32 eff)
 
         if(((Player*)target)->isGameMaster() && !IsPositiveSpell(m_spellInfo->Id))
             return false;
+    }
+
+    switch(m_spellInfo->EffectApplyAuraName[eff])
+    {
+        case SPELL_AURA_NONE:
+        default:
+            break;
+        case SPELL_AURA_MOD_POSSESS:
+        case SPELL_AURA_MOD_CHARM:
+        case SPELL_AURA_MOD_POSSESS_PET:
+        case SPELL_AURA_AOE_CHARM:
+            if(target->GetTypeId() == TYPEID_UNIT && ((Creature*)target)->isVehicle())
+                return false;
+            if(target->GetCharmerGUID())
+                return false;
+            if(int32 damage = CalculateDamage(eff, target))
+                if((int32)target->getLevel() > damage)
+                    return false;
+            break;
     }
 
     //Do not do further checks for triggered spells

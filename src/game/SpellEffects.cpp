@@ -1079,14 +1079,7 @@ void Spell::EffectDummy(uint32 i)
                     else                                    // backfire 20%
                         m_caster->CastSpell(unitTarget, 30504, true, m_CastItem);
                     return;
-                case 55004: //Nitro Boosts
-                    if(!m_CastItem) return;
-                    if(roll_chance_i(95)) //success
-                        m_caster->CastSpell(m_caster, 54861, true, m_CastItem);
-                    else                  //backfire 5%
-                        m_caster->CastSpell(m_caster, 46014, true, m_CastItem);
-                    return;
-                case 33060:                                         // Make a Wish
+                case 33060:                                 // Make a Wish
                 {
                     if(m_caster->GetTypeId()!=TYPEID_PLAYER)
                         return;
@@ -1208,6 +1201,13 @@ void Spell::EffectDummy(uint32 i)
                     m_caster->CastSpell(m_caster, 45088, true);
                     return;
                 }
+                case 55004:                                 // Nitro Boosts 
+                    if(!m_CastItem) return; 
+                    if(roll_chance_i(95))                   //success 
+                        m_caster->CastSpell(m_caster, 54861, true, m_CastItem); 
+                    else                                    //backfire 5% 
+                        m_caster->CastSpell(m_caster, 46014, true, m_CastItem); 
+                    return; 
                 case 50243:                                 // Teach Language
                 {
                     if(m_caster->GetTypeId() != TYPEID_PLAYER)
@@ -1905,9 +1905,6 @@ void Spell::EffectDummy(uint32 i)
             {
                 if(m_caster->IsFriendlyTo(unitTarget))
                 {
-                    if(unitTarget->GetCreatureType() != CREATURE_TYPE_UNDEAD)
-                        return;
-
                     int32 bp = damage * 1.5f;
                     m_caster->CastCustomSpell(unitTarget, 47633, &bp, NULL, NULL, true);
                 }
@@ -2964,6 +2961,12 @@ void Spell::EffectEnergize(uint32 i)
 
     if(unitTarget->GetMaxPower(power) == 0)
         return;
+
+    // Spells which use pct of max mana, but have wrong effect
+    if (m_spellInfo->Id == 48542)
+    {
+        damage = damage * unitTarget->GetMaxPower(power) / 100;
+    }
 
     m_caster->EnergizeBySpell(unitTarget, m_spellInfo->Id, damage, power);
 
@@ -4379,19 +4382,8 @@ void Spell::SpellDamageWeaponDmg(uint32 i)
         {
             // Skyshatter Harness item set bonus
             // Stormstrike
-            if(m_spellInfo->SpellFamilyFlags[1] & 0x0010)
-            {
-                Unit::AuraEffectList const& m_OverrideClassScript = m_caster->GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
-                for(Unit::AuraEffectList::const_iterator citr = m_OverrideClassScript.begin(); citr != m_OverrideClassScript.end(); ++citr)
-                {
-                    // Stormstrike AP Buff
-                    if ( (*citr)->GetMiscValue() == 5634 )
-                    {
-                        m_caster->CastSpell(m_caster, 38430, true, NULL, *citr);
-                        break;
-                    }
-                }
-            }
+            if (AuraEffect * aurEff = m_caster->IsScriptOverriden(m_spellInfo, 5634))
+                m_caster->CastSpell(m_caster, 38430, true, NULL, aurEff);
             break;
         }
         case SPELLFAMILY_DRUID:
@@ -5874,7 +5866,7 @@ void Spell::EffectSummonObject(uint32 i)
             // Recast case - null spell id to make auras not be removed on object remove from world
             if (m_spellInfo->Id == obj->GetSpellId())
                 obj->SetSpellId(0);
-            obj->Delete();
+            m_caster->RemoveGameObject(obj, true);
         }
         m_caster->m_ObjectSlot[slot] = 0;
     }

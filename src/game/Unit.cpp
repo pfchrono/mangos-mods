@@ -4346,6 +4346,18 @@ AuraEffect* Unit::GetAura(AuraType type, uint32 family, uint32 familyFlag1, uint
     return NULL;
 }
 
+AuraEffect * Unit::IsScriptOverriden(SpellEntry const * spell, int32 script) const
+{
+    AuraEffectList const& auras = GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
+    for(AuraEffectList::const_iterator i = auras.begin();i != auras.end(); ++i)
+    {
+        if ((*i)->GetMiscValue() == script)
+            if ((*i)->isAffectedOnSpell(spell))
+                return (*i);
+    }
+    return NULL;
+}
+
 uint32 Unit::GetDiseasesByCaster(uint64 casterGUID, bool remove)
 {
     static const AuraType diseaseAuraTypes[] =
@@ -4772,7 +4784,7 @@ bool Unit::HandleHasteAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 case 33735:
                 {
                     target = SelectNearbyTarget();
-                    if(!target)
+                    if(!target || target == pVictim)
                         return false;
                     basepoints0 = damage;
                     triggered_spell_id = 22482;
@@ -7822,6 +7834,14 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                 return false;
             break;
         }
+        // Glyph of Death's Embrace
+        case 58679:
+        {
+            // Proc only from healing part of Death Coil. Check is essential as all Death Coil spells have 0x2000 mask in SpellFamilyFlags
+            if (!procSpell || !(procSpell->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && procSpell->SpellFamilyFlags[0] == 0x80002000))
+                return false;
+            break;
+        }
         // Glyph of Death Grip
         case 58628:
         {
@@ -7930,6 +7950,21 @@ bool Unit::HandleOverrideClassScriptAuraProc(Unit *pVictim, uint32 damage, AuraE
             int32 basepoints0 = cost * triggeredByAura->GetAmount()/100;
             CastCustomSpell(this, 47762, &basepoints0, 0, 0, true, 0, triggeredByAura);
             return true;
+        }
+        case 7010:  // Revitalize - can proc on full hp target
+        case 7011:
+        case 7012:
+        {
+            if (!roll_chance_i(triggeredByAura->GetAmount()))
+                return false;
+            switch(pVictim->getPowerType())
+            {
+                case POWER_MANA:   triggered_spell_id = 48542; break;
+                case POWER_RAGE:   triggered_spell_id = 48541; break;
+                case POWER_ENERGY: triggered_spell_id = 48540; break;
+                case POWER_RUNIC_POWER: triggered_spell_id = 48543; break;
+            }
+            break;
         }
     }
 
@@ -10455,20 +10490,22 @@ void Unit::SetInCombatWith(Unit* enemy)
     SetInCombatState(false,enemy);
 }
 
-void Unit::CombatStart(Unit* target)
+void Unit::CombatStart(Unit* target, bool initialAggro)
 {
-    if(!target->IsStandState()/* && !target->hasUnitState(UNIT_STAT_STUNNED)*/)
-        target->SetStandState(UNIT_STAND_STATE_STAND);
-
-    if(!target->isInCombat() && target->GetTypeId() != TYPEID_PLAYER
-        && !((Creature*)target)->HasReactState(REACT_PASSIVE) && ((Creature*)target)->IsAIEnabled)
+    if (initialAggro)
     {
-        ((Creature*)target)->AI()->AttackStart(this);
+        if(!target->IsStandState()/* && !target->hasUnitState(UNIT_STAT_STUNNED)*/)
+            target->SetStandState(UNIT_STAND_STATE_STAND);
+
+        if(!target->isInCombat() && target->GetTypeId() != TYPEID_PLAYER
+            && !((Creature*)target)->HasReactState(REACT_PASSIVE) && ((Creature*)target)->IsAIEnabled)
+        {
+            ((Creature*)target)->AI()->AttackStart(this);
+        }
+
+        SetInCombatWith(target);
+        target->SetInCombatWith(this);
     }
-
-    SetInCombatWith(target);
-    target->SetInCombatWith(this);
-
     Unit *who = target->GetCharmerOrOwnerOrSelf();
     if(who->GetTypeId() == TYPEID_PLAYER)
         SetContestedPvP((Player*)who);
@@ -10499,9 +10536,10 @@ void Unit::SetInCombatState(bool PvP, Unit* enemy)
 
     if(GetTypeId() != TYPEID_PLAYER)
     {
-        //if(GetMotionMaster()->GetMotionSlotType(MOTION_SLOT_IDLE) != IDLE_MOTION_TYPE)
-        if (((Creature *)this)->GetMotionMaster()->GetCurrentMovementGeneratorType() == WAYPOINT_MOTION_TYPE)
-            ((Creature*)this)->SetHomePosition(GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+        // Set home position at place of engaging combat for escorted creatures
+        if(((Creature*)this)->IsAIEnabled)
+            if (((Creature *)this)->AI()->IsEscorted())
+                ((Creature*)this)->SetHomePosition(GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
         if(enemy)
         {
             if(((Creature*)this)->IsAIEnabled)
@@ -12782,6 +12820,10 @@ void Unit::ProcDamageAndSpellFor( bool isVictim, Unit * pTarget, uint32 procFlag
                 case SPELL_AURA_MOD_ROOT:
                     if (isVictim && damage)
                     {
+                        // Damage is dealt after proc system - lets ignore auras which wasn't updated yet
+                        // to make spell not remove its own aura
+                        if (i->aura->GetAuraDuration() == i->aura->GetAuraMaxDuration())
+                            break;
                         int32 damageLeft = triggeredByAura->GetAmount();
                         // No damage left
                         if (damageLeft < damage )

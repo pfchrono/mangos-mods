@@ -87,7 +87,7 @@ void GameObject::CleanupsBeforeDelete()
                 owner->RemoveGameObject(this,false);
             else
             {
-                char * ownerType = "creature";
+                const char * ownerType = "creature";
                 if(IS_PLAYER_GUID(owner_guid))
                     ownerType = "player";
                 else if(IS_PET_GUID(owner_guid))
@@ -432,10 +432,11 @@ void GameObject::Update(uint32 /*p_time*/)
             if(GetOwnerGUID())
             {
                 if(Unit* owner = GetOwner())
+                {
                     owner->RemoveGameObject(this, false);
-
-                SetRespawnTime(0);
-                Delete();
+                    SetRespawnTime(0);
+                    Delete();
+                }
                 return;
             }
 
@@ -927,10 +928,7 @@ void GameObject::SetOwnerGUID(uint64 owner)
     // Owner already found and different than expected owner - remove object from old owner
     if (owner && GetOwnerGUID() && GetOwnerGUID() != owner)
     {
-        if (Unit* owner = GetOwner())
-            owner->RemoveGameObject(this, false);
-        else
-            assert(false);
+        assert(false);
     }
     m_spawnedByDefault = false;                     // all object with owner is despawned after delay
     SetUInt64Value(OBJECT_FIELD_CREATED_BY, owner);

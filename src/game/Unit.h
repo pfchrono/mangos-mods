@@ -1275,7 +1275,7 @@ class TRINITY_DLL_SPEC Unit : public WorldObject
         bool isInFlight()  const { return hasUnitState(UNIT_STAT_IN_FLIGHT); }
 
         bool isInCombat()  const { return HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT); }
-        void CombatStart(Unit* target);
+        void CombatStart(Unit* target, bool initialAggro = true);
         void SetInCombatState(bool PvP, Unit* enemy = NULL);
         void SetInCombatWith(Unit* enemy);
         void ClearInCombat();
@@ -1594,7 +1594,8 @@ class TRINITY_DLL_SPEC Unit : public WorldObject
 
         AuraEffect * GetAuraEffect(uint32 spellId, uint8 effIndex, uint64 casterGUID = 0) const;
         Aura * GetAura(uint32 spellId, uint64 casterGUID = 0) const;
-        AuraEffect* GetAura(AuraType type, uint32 family, uint32 familyFlag1 , uint32 familyFlag2=0, uint32 familyFlag3=0, uint64 casterGUID=0);
+        AuraEffect * GetAura(AuraType type, uint32 family, uint32 familyFlag1 , uint32 familyFlag2=0, uint32 familyFlag3=0, uint64 casterGUID=0);
+        AuraEffect * IsScriptOverriden(SpellEntry const * spell, int32 script) const;
         bool HasAuraEffect(uint32 spellId, uint8 effIndex, uint64 caster = 0) const;
         bool HasAura(uint32 spellId, uint64 caster = 0) const;
         bool HasAura(Aura * aur) const;
