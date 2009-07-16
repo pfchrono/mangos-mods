@@ -360,6 +360,7 @@ static void addNewAuctions(Player *AHBplayer, AHBConfig *config)
         uint32 buyoutPrice;
         uint32 bidPrice = 0;
         uint32 stackCount = urand(1, item->GetMaxStackCount());
+		uint32 ilvl = prototype->ItemLevel + 1;
 
         switch (SellMethod)
         {
@@ -381,9 +382,9 @@ static void addNewAuctions(Player *AHBplayer, AHBConfig *config)
             {
                stackCount = urand(1, minValue(item->GetMaxStackCount(), config->GetMaxStack(AHB_GREY)));
             }
-            buyoutPrice = urand(1, 1000) * prototype->ItemLevel;
+            buyoutPrice = urand(1, 1000) * ilvl;
             bidPrice = buyoutPrice;
-            bidPrice /= prototype->ItemLevel;
+            bidPrice /= ilvl;
             break;
 
 		case 1: // White Items
@@ -393,17 +394,17 @@ static void addNewAuctions(Player *AHBplayer, AHBConfig *config)
 			}
 			if (prototype->Class == ITEM_CLASS_TRADE_GOODS)
 			{
-				buyoutPrice = urand(1000, 5000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(1000, 5000) * ilvl * stackCount;
 				buyoutPrice *= 5;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 				bidPrice *= 5;
 			}
 			if (prototype->Class != ITEM_CLASS_TRADE_GOODS)
 			{
-				buyoutPrice = urand(50, 1000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(50, 1000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			break;
          case 2: // Green Items
@@ -413,35 +414,35 @@ static void addNewAuctions(Player *AHBplayer, AHBConfig *config)
             }
 			if (prototype->Class == ITEM_CLASS_TRADE_GOODS)
 			{
-				buyoutPrice = urand(1500, 5500) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(1500, 5500) * ilvl * stackCount;
 				buyoutPrice *= 5;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 				bidPrice *= 5;
 			}
 			else if (prototype->Class == ITEM_CLASS_WEAPON)
 			{
 				buyoutPrice = urand(5000, 10000) * prototype->ItemLevel * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			else if (prototype->Class == ITEM_CLASS_ARMOR)
 			{
-				buyoutPrice = urand(3000, 4000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(3000, 4000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			else if (prototype->Class == ITEM_CLASS_RECIPE)
 			{
-				buyoutPrice = urand(2500, 5000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(2500, 5000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			else
 			{
-				buyoutPrice = urand(25000, 30000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(25000, 30000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			break;
 
@@ -452,35 +453,35 @@ static void addNewAuctions(Player *AHBplayer, AHBConfig *config)
             }
 			if (prototype->Class == ITEM_CLASS_TRADE_GOODS)
 			{
-				buyoutPrice = urand(50000, 100000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(50000, 100000) * ilvl * stackCount;
 				buyoutPrice *= 5;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 				bidPrice *= 5;
 			}
 			else if (prototype->Class == ITEM_CLASS_WEAPON)
 			{
-				buyoutPrice = urand(20000, 25000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(20000, 25000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			else if (prototype->Class == ITEM_CLASS_ARMOR)
 			{
-				buyoutPrice = urand(14000, 18000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(14000, 18000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			else if (prototype->Class == ITEM_CLASS_RECIPE)
 			{
-				buyoutPrice = urand(5000, 10000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(5000, 10000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			else
 			{
-				buyoutPrice = urand(25000, 50000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(25000, 50000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			break;
 
@@ -491,41 +492,41 @@ static void addNewAuctions(Player *AHBplayer, AHBConfig *config)
             }
 			if (prototype->Class == ITEM_CLASS_MISC && prototype->SubClass == ITEM_SUBCLASS_JUNK_MOUNT)
 			{
-				buyoutPrice = urand(1250000, 1870000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(1250000, 1870000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			if (prototype->Class == ITEM_CLASS_TRADE_GOODS)
 			{
-				buyoutPrice = urand(50000, 100000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(50000, 100000) * ilvl * stackCount;
 				buyoutPrice *= 5;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 				bidPrice *= 5;
 			}
 			else if (prototype->Class == ITEM_CLASS_WEAPON)
 			{
-				buyoutPrice = urand(75000, 150000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(75000, 150000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			else if (prototype->Class == ITEM_CLASS_ARMOR)
 			{
-				buyoutPrice = urand(200000, 250000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(200000, 250000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			else if (prototype->Class == ITEM_CLASS_GEM)
 			{
-				buyoutPrice = urand(60000, 70000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(60000, 70000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			else
 			{
-				buyoutPrice = urand(20000, 25000) * prototype->ItemLevel * stackCount;
+				buyoutPrice = urand(20000, 25000) * ilvl * stackCount;
 				bidPrice = buyoutPrice;
-				bidPrice /= prototype->ItemLevel;
+				bidPrice /= ilvl;
 			}
 			break;
          case 5:
