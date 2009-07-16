@@ -4827,7 +4827,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 uint32 lockId = 0;
                 if (GameObject* go = m_targets.getGOTarget())
                 {
-                    lockId = go->GetLockId();
+                    lockId = go->GetGOInfo()->GetLockId();
                     if (!lockId)
                         return SPELL_FAILED_BAD_TARGETS;
                 }
@@ -5556,7 +5556,7 @@ SpellCastResult Spell::CheckItems()
 
         TypeContainerVisitor<Trinity::GameObjectSearcher<Trinity::GameObjectFocusCheck>, GridTypeMapContainer > object_checker(checker);
         CellLock<GridReadGuard> cell_lock(cell, p);
-        cell_lock->Visit(cell_lock, object_checker, *MapManager::Instance().GetMap(m_caster->GetMapId(), m_caster));
+        cell_lock->Visit(cell_lock, object_checker, *m_caster->GetMap());
 
         if(!ok)
             return SPELL_FAILED_REQUIRES_SPELL_FOCUS;
