@@ -19,3 +19,4 @@ bin/*
 dep/lib/win32*/
 win/VC90/*.user
 win/*.suo
+src/bindings/scripts/VC90/*.user
