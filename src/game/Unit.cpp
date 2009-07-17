@@ -2023,11 +2023,6 @@ void Unit::CalcAbsorbResist(Unit *pVictim,SpellSchoolMask schoolMask, DamageEffe
             }
             case SPELLFAMILY_DEATHKNIGHT:
             {
-                // Shadow of Death
-                if (spellProto->Id == 49157)
-                {
-                    continue;
-                }
                 // Anti-Magic Shell (on self)
                 if (spellProto->Id == 48707)
                 {
@@ -5773,22 +5768,6 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                     }
                     break;
                 }
-                // Psychic Horror
-                case 47571:
-                {
-                    if(!pVictim || !pVictim->isAlive())
-                        return false;
-                    pVictim->CastSpell(pVictim, 59980,true, castItem, triggeredByAura);
-                    return true;
-                }
-                // Psychic Horror (Rank 2)
-                case 47572:
-                {
-                    if(!pVictim || !pVictim->isAlive())
-                        return false;
-                    pVictim->CastSpell(pVictim, 59981,true, castItem, triggeredByAura);
-                    return true;
-                }
                 // Glyph of Dispel Magic
                 case 55677:
                 {
@@ -8513,14 +8492,6 @@ void Unit::ModifyAuraState(AuraState flag, bool apply)
                     SpellEntry const* spellProto = (*itr).second->GetSpellProto();
                     if (spellProto->CasterAuraState == flag)
                     {
-                        // exceptions (applied at state but not removed at state change)
-                        // Rampage
-                        if(spellProto->SpellIconID==2006 && spellProto->SpellFamilyName==SPELLFAMILY_WARRIOR && spellProto->SpellFamilyFlags[0]==0x100000)
-                        {
-                            ++itr;
-                            continue;
-                        }
-
                         RemoveAura(itr);
                     }
                     else

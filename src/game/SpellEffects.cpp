@@ -601,7 +601,7 @@ void Spell::SpellDamageSchoolDmg(uint32 effect_idx)
             }
             case SPELLFAMILY_HUNTER:
             {
-                //Gore
+                // Gore
                 if (m_spellInfo->SpellIconID == 1578)
                 {
                     damage+= rand()%2 ? damage : 0;
@@ -5250,16 +5250,6 @@ void Spell::EffectScriptEffect(uint32 effIndex)
                     // Refresh Shadow Word: Pain on target
                     if (AuraEffect * aur = unitTarget->GetAura(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_PRIEST, 0x8000, 0, 0, m_caster->GetGUID()))
                         aur->GetParentAura()->RefreshAura();
-                    return;
-                }
-                // Divine Hymn
-                case 47951:
-                {
-                    if (!unitTarget)
-                        return;
-                    Unit * target=NULL;
-                    unitTarget->CastSpell(target, 59600, false);
-                    unitTarget->CastSpell(target, 47953, false);
                     return;
                 }
                 default:

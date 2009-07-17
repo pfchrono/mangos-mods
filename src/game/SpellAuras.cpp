@@ -1531,32 +1531,62 @@ void AuraEffect::HandleShapeshiftBoosts(bool apply)
                     }
                 }
             }
-            if (GetMiscValue() == FORM_CAT)
+            switch(GetMiscValue())
             {
-                // Nurturing Instinct
-                if (AuraEffect const * aurEff = m_target->GetAuraEffect(SPELL_AURA_MOD_SPELL_HEALING_OF_STAT_PERCENT, SPELLFAMILY_DRUID, 2254,0))
-                {
-                    uint32 spellId = 0;
-                    switch (aurEff->GetId())
+                case FORM_CAT:
+                    // Nurturing Instinct
+                    if (AuraEffect const * aurEff = m_target->GetAuraEffect(SPELL_AURA_MOD_SPELL_HEALING_OF_STAT_PERCENT, SPELLFAMILY_DRUID, 2254,0))
                     {
-                    case 33872:
-                        spellId = 47179;
-                        break;
-                    case 33873:
-                        spellId = 47180;
-                        break;
+                        uint32 spellId = 0;
+                        switch (aurEff->GetId())
+                        {
+                        case 33872:
+                            spellId = 47179;
+                            break;
+                        case 33873:
+                            spellId = 47180;
+                            break;
+                        }
+                        m_target->CastSpell(m_target, spellId, true, NULL, this);
                     }
-                    m_target->CastSpell(m_target, spellId, true, NULL, this);
-                }
-            }
-            // Survival of the Fittest
-            else if (GetMiscValue() == FORM_BEAR || GetMiscValue() == FORM_DIREBEAR)
-            {
-                if (AuraEffect const * aurEff = m_target->GetAuraEffect(SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE,SPELLFAMILY_DRUID, 961, 0))
-                {
-                    int32 bp = m_target->CalculateSpellDamage(aurEff->GetSpellProto(),2,aurEff->GetSpellProto()->EffectBasePoints[2],m_target);
-                    m_target->CastCustomSpell(m_target, 62069,&bp, NULL, NULL, true, 0, this);
-                }
+                    // Master Shapeshifter - Cat
+                    if (AuraEffect const * aurEff = m_target->GetDummyAura(SPELLFAMILY_GENERIC, 2851, 0))
+                    {
+                        int32 bp = aurEff->GetAmount();
+                        m_target->CastCustomSpell(m_target, 48420, &bp, NULL, NULL, true);
+                    }
+                break;
+                case FORM_DIREBEAR:
+                case FORM_BEAR:
+                    // Master Shapeshifter - Bear
+                    if (AuraEffect const * aurEff = m_target->GetDummyAura(SPELLFAMILY_GENERIC, 2851, 0))
+                    {
+                        int32 bp = aurEff->GetAmount();
+                        m_target->CastCustomSpell(m_target, 48418, &bp, NULL, NULL, true);
+                    }
+                    // Survival of the Fittest
+                    if (AuraEffect const * aurEff = m_target->GetAuraEffect(SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE,SPELLFAMILY_DRUID, 961, 0))
+                    {
+                        int32 bp = m_target->CalculateSpellDamage(aurEff->GetSpellProto(),2,aurEff->GetSpellProto()->EffectBasePoints[2],m_target);
+                        m_target->CastCustomSpell(m_target, 62069,&bp, NULL, NULL, true, 0, this);
+                    }
+                break;
+                case FORM_MOONKIN:
+                    // Master Shapeshifter - Moonkin
+                    if (AuraEffect const * aurEff = m_target->GetDummyAura(SPELLFAMILY_GENERIC, 2851, 0))
+                    {
+                        int32 bp = aurEff->GetAmount();
+                        m_target->CastCustomSpell(m_target, 48421, &bp, NULL, NULL, true);
+                    }
+                break;
+                    // Master Shapeshifter - Tree of Life
+                case FORM_TREE:
+                    if (AuraEffect const * aurEff = m_target->GetDummyAura(SPELLFAMILY_GENERIC, 2851, 0))
+                    {
+                        int32 bp = aurEff->GetAmount();
+                        m_target->CastCustomSpell(m_target, 48422, &bp, NULL, NULL, true);
+                    }
+                break;
             }
         }
     }
@@ -2227,8 +2257,6 @@ void AuraEffect::TriggerSpell()
                         return;
                     // Frenzied Regeneration
                     case 22842:
-                    case 22895:
-                    case 22896:
                     case 26999:
                     {
                         int32 LifePerRage = GetAmount();
@@ -2901,60 +2929,8 @@ void AuraEffect::HandleAuraDummy(bool apply, bool Real, bool changeAmount)
             }
             break;
         }
-        case SPELLFAMILY_HUNTER:
-        {
-            if (!Real)
-                break;
-            // Glyph of Aspect of the Monkey
-            if(m_spellProto->Id==56833)
-            {
-                if(apply)
-                {
-                    SpellModifier *mod = new SpellModifier;
-                    mod->op = SPELLMOD_CHANCE_OF_SUCCESS;
-                    mod->value = 100;
-                    mod->type = SPELLMOD_FLAT;
-                    mod->spellId = GetId();
-                    mod->mask[2] = 8192;
-                    mod->mask[1] = 0x00000000;
-                    mod->mask[0] = 524288;
-                    m_spellmod = mod;
-                }
-                ((Player*)m_target)->AddSpellMod(m_spellmod, apply);
-                return;
-            }
-            break;
-        }
         case SPELLFAMILY_SHAMAN:
         {
-            if (!Real && !changeAmount)
-                break;
-            // Improved Weapon Totems
-            if( GetSpellProto()->SpellIconID == 57 && m_target->GetTypeId()==TYPEID_PLAYER )
-            {
-                if(apply)
-                {
-                    SpellModifier *mod = new SpellModifier;
-                    mod->op = SPELLMOD_EFFECT1;
-                    mod->value = m_amount;
-                    mod->type = SPELLMOD_PCT;
-                    mod->spellId = GetId();
-                    switch (m_effIndex)
-                    {
-                        case 0:
-                            mod->mask[1] = 0x002;    // Windfury Totem
-                            break;
-                        case 1:
-                            mod->mask[1] = 0x004;    // Flametongue Totem
-                            break;
-                    }
-
-                    m_spellmod = mod;
-                }
-
-                ((Player*)m_target)->AddSpellMod(m_spellmod, apply);
-                return;
-            }
             if (!Real)
                 break;
             // Sentry Totem
