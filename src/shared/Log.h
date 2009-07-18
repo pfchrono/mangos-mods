@@ -24,6 +24,11 @@
 #include "Common.h"
 #include "Policies/Singleton.h"
 #include "Database/DatabaseEnv.h"
+#include <fstream>
+#include <sstream>
+#include <time.h>
+#include <stdio.h>
+#include <string.h>
 
 class Config;
 
@@ -111,7 +116,6 @@ class Log : public Trinity::Singleton<Log, Trinity::ClassLevelLockable<Log, ACE_
         void outChat( const char * str, ... )                   ATTR_PRINTF(2,3);
         void outArena( const char * str, ... )                  ATTR_PRINTF(2,3);        
         void outCharDump( const char * str, uint32 account_id, uint32 guid, const char * name );
-
         static void outTimestamp(FILE* file);
         static std::string GetTimestampStr();
 
@@ -178,10 +182,12 @@ class Log : public Trinity::Singleton<Log, Trinity::ClassLevelLockable<Log, ACE_
 #endif
 
 // primary for script library
+
 void TRINITY_DLL_SPEC outstring_log(const char * str, ...) ATTR_PRINTF(1,2);
 void TRINITY_DLL_SPEC detail_log(const char * str, ...) ATTR_PRINTF(1,2);
 void TRINITY_DLL_SPEC debug_log(const char * str, ...) ATTR_PRINTF(1,2);
 void TRINITY_DLL_SPEC error_log(const char * str, ...) ATTR_PRINTF(1,2);
 void TRINITY_DLL_SPEC error_db_log(const char * str, ...) ATTR_PRINTF(1,2);
+std::string FormatOutputString(const char * Prefix, const char * Description, bool useTimeStamp);
 #endif
 

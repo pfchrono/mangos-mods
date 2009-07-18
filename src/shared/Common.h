@@ -85,6 +85,8 @@
 #include <errno.h>
 #include <signal.h>
 #include <assert.h>
+#include "CrashHandler.h"
+#include "StackWalker.h"
 
 #if PLATFORM == PLATFORM_WINDOWS
 #define STRCASECMP stricmp
@@ -108,7 +110,7 @@
 #include <ace/RW_Thread_Mutex.h>
 #include <ace/Thread_Mutex.h>
 
-
+#define FORCED_SERVER_KEEPALIVE 1
 #if PLATFORM == PLATFORM_WINDOWS
 #  define FD_SETSIZE 4096
 #  include <ace/config-all.h>

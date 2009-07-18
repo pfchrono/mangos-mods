@@ -914,6 +914,27 @@ void error_log(const char * str, ...)
     Trinity::Singleton<Log>::Instance().outError(buf);
 }
 
+std::string FormatOutputString(const char * Prefix, const char * Description, bool useTimeStamp)
+{
+
+	char p[MAX_PATH];
+	p[0] = 0;
+	time_t t = time(NULL);
+	tm * a = gmtime(&t);
+	strcat(p, Prefix);
+	strcat(p, "/");
+	strcat(p, Description);
+	if(useTimeStamp)
+	{
+		char ftime[100];
+		snprintf(ftime, 100, "-%-4d-%02d-%02d %02d-%02d-%02d", a->tm_year+1900, a->tm_mon+1, a->tm_mday, a->tm_hour, a->tm_min, a->tm_sec);
+		strcat(p, ftime);
+	}
+
+	strcat(p, ".log");
+	return std::string(p);
+}
+
 void error_db_log(const char * str, ...)
 {
     if( !str )

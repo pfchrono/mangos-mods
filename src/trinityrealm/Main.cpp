@@ -66,7 +66,9 @@ void HookSignals();
 bool stopEvent = false;                                     ///< Setting it to true stops the server
 RealmList m_realmList;                                      ///< Holds the list of realms for this server
 
-DatabaseType LoginDatabase;                                 ///< Accessor to the realm server database
+DatabaseType WorldDatabase;                                 ///< Accessor to the world database
+DatabaseType CharacterDatabase;                             ///< Accessor to the character database
+DatabaseType LoginDatabase;                                 ///< Accessor to the realm/login database
 
 /// Print out the usage string for this program on the console.
 void usage(const char *prog)

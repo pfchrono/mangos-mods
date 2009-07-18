@@ -198,7 +198,7 @@ Master::~Master()
 }
 
 /// Main function
-int Master::Run()
+bool Master::Run()
 {
     sLog.outString( "%s (core-daemon)", _FULLVERSION );
     sLog.outString( "<Ctrl-C> to stop.\n" );

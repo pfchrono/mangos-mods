@@ -47,6 +47,7 @@ extern int m_ServiceStatus;
 /// Heartbeat for the World
 void WorldRunnable::run()
 {
+	THREAD_TRY_EXECUTION2
     ///- Init new SQL thread for the world database
     WorldDatabase.ThreadStart();                                // let thread do safe mySQL requests (one connection call enough)
     CharacterDatabase.ThreadStart();
@@ -101,4 +102,5 @@ void WorldRunnable::run()
     WorldDatabase.ThreadEnd();                                  // free mySQL thread resources
     CharacterDatabase.ThreadStart();
     LoginDatabase.ThreadEnd();
+	THREAD_HANDLE_CRASH2
 }

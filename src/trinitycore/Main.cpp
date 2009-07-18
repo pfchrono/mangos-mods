@@ -81,6 +81,8 @@ void usage(const char *prog)
 extern int main(int argc, char **argv)
 {
     ///- Command line parsing to get the configuration file name
+	StartCrashHandler();
+
     char const* cfg_file = _TRINITY_CORE_CONFIG;
     int c=1;
     while( c < argc )
@@ -166,7 +168,12 @@ extern int main(int argc, char **argv)
 
     ///- and run the 'Master'
     /// \todo Why do we need this 'Master'? Can't all of this be in the Main as for Realmd?
-    return sMaster.Run();
+	THREAD_TRY_EXECUTION
+	{
+		sMaster.Run();
+	}
+	THREAD_HANDLE_CRASH;
+	exit( 0 );
 
     // at sMaster return function exist with codes
     // 0 - normal shutdown

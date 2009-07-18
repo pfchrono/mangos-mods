@@ -627,6 +627,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\shared\CircularQueue.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\shared\CrashHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\shared\CrashHandler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\shared\Errors.h"
 				>
 			</File>
@@ -640,6 +652,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\shared\ProgressBar.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\shared\StackWalker.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\shared\StackWalker.h"
 				>
 			</File>
 			<File
@@ -860,6 +880,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\src\shared\git_revision.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\src\shared\LockedQueue.h"
 			>
 		</File>
@@ -872,8 +896,8 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Getting Version..."
-					CommandLine="cd $(InputDir)&#x0D;&#x0A;&quot;$(TargetDir)\..\genrevision__$(PlatformName)_$(ConfigurationName)\genrevision.exe&quot; &quot;..\..&quot;&#x0D;&#x0A;"
-					AdditionalDependencies="$(SolutionDir)../.git/gitk.cache"
+					CommandLine="cd &quot;$(SolutionDir)..\src\shared&quot;&#x0D;&#x0A;&quot;$(TargetDir)\..\genrevision__Win32_$(ConfigurationName)\genrevision.exe&quot; &quot;..\..&quot;&#x0D;&#x0A;"
+					AdditionalDependencies="$(SolutionDir)../.svn/entries;$(SolutionDir)../_svn/entries;$(SolutionDir)../.git/FETCH_HEAD"
 					Outputs="revision.h"
 				/>
 			</FileConfiguration>
@@ -883,8 +907,8 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Getting Version..."
-					CommandLine="cd $(InputDir)&#x0D;&#x0A;&quot;$(TargetDir)\..\genrevision__$(PlatformName)_$(ConfigurationName)\genrevision.exe&quot; &quot;..\..&quot;&#x0D;&#x0A;"
-					AdditionalDependencies="$(SolutionDir)../.hg/branch.cache"
+					CommandLine="cd &quot;$(SolutionDir)..\src\shared&quot;&#x0D;&#x0A;&quot;$(TargetDir)\..\genrevision__Win32_$(ConfigurationName)\genrevision.exe&quot; &quot;..\..&quot;&#x0D;&#x0A;"
+					AdditionalDependencies="$(SolutionDir)../.svn/entries;$(SolutionDir)../_svn/entries;$(SolutionDir)../.git/FETCH_HEAD"
 					Outputs="revision.h"
 				/>
 			</FileConfiguration>
