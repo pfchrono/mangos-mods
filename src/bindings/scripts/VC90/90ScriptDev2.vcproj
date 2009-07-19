@@ -563,14 +563,14 @@
 					<Filter
 						Name="Blackfathom Depths"
 						>
-						<File
-							RelativePath="..\scripts\zone\blackfathom_depths\def_blackfathom_deeps.h"
-							>
-						</File>
-						<File
-							RelativePath="..\scripts\zone\blackfathom_depths\instance_blackfathom_deeps.cpp"
-							>
-						</File>
+                        <File
+                            RelativePath="..\scripts\zone\blackfathom_depths\instance_blackfathom_deeps.cpp"
+                            >
+                        </File>
+                        <File
+                            RelativePath="..\scripts\zone\blackfathom_depths\def_blackfathom_deeps.h"
+                            >
+                        </File>
 					</Filter>
 					<Filter
 						Name="Bloodmyst Isle"
@@ -733,12 +733,10 @@
 						>
 					</Filter>
 					<Filter
-						Name="Desolace"
-						>
-						<File
-							RelativePath="..\scripts\zone\desolace\desolace.cpp"
-							>
-						</File>
+						Name="Desolace">
+                        <File
+                            RelativePath="..\scripts\zone\desolace\desolace.cpp">
+                        </File>
 					</Filter>
 					<Filter
 						Name="Dire Maul"
@@ -848,7 +846,7 @@
 						Name="Razorfen Kraul"
 						>
 						<File
-							RelativePath="..\scripts\zone\razorfen_kraul\def_razorfen_kraul.h"
+							RelativePath="..\scripts\zone\razorfen_kraul\razorfen_kraul.cpp"
 							>
 						</File>
 						<File
@@ -856,7 +854,7 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\zone\razorfen_kraul\razorfen_kraul.cpp"
+							RelativePath="..\scripts\zone\razorfen_kraul\def_razorfen_kraul.h"
 							>
 						</File>
 					</Filter>

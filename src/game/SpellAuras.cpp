@@ -944,6 +944,101 @@ void Aura::ApplyAllModifiers(bool apply, bool Real)
             m_partAuras[i]->ApplyModifier(apply, Real);
 }
 
+void Aura::HandleAuraSpecificMods(bool apply)
+{
+    if (GetSpellSpecific(m_spellProto->Id) == SPELL_PRESENCE)
+    {
+        AuraEffect *bloodPresenceAura=0;  // healing by damage done
+        AuraEffect *frostPresenceAura=0;  // increased health
+        AuraEffect *unholyPresenceAura=0; // increased movement speed, faster rune recovery
+
+        // Improved Presences
+        Unit::AuraEffectList const& vDummyAuras = m_target->GetAurasByType(SPELL_AURA_DUMMY);
+        for(Unit::AuraEffectList::const_iterator itr = vDummyAuras.begin(); itr != vDummyAuras.end(); ++itr)
+        {
+            switch((*itr)->GetId())
+            {
+                // Improved Blood Presence
+                case 50365:
+                case 50371:
+                {
+                    bloodPresenceAura = (*itr);
+                    break;
+                }
+                // Improved Frost Presence
+                case 50384:
+                case 50385:
+                {
+                    frostPresenceAura = (*itr);
+                    break;
+                }
+                // Improved Unholy Presence
+                case 50391:
+                case 50392:
+                {
+                    unholyPresenceAura = (*itr);
+                    break;
+                }
+            }
+        }
+
+        uint32 presence=GetId();
+        if (apply)
+        {
+            // Blood Presence bonus
+            if (presence == SPELL_ID_BLOOD_PRESENCE)
+                m_target->CastSpell(m_target,63611,true);
+            else if (bloodPresenceAura)
+            {
+                int32 basePoints1=bloodPresenceAura->GetAmount();
+                m_target->CastCustomSpell(m_target,63611,NULL,&basePoints1,NULL,true,0,bloodPresenceAura);
+            }
+            // Frost Presence bonus
+            if (presence == SPELL_ID_FROST_PRESENCE)
+                m_target->CastSpell(m_target,61261,true);
+            else if (frostPresenceAura)
+            {
+                int32 basePoints0=frostPresenceAura->GetAmount();
+                m_target->CastCustomSpell(m_target,61261,&basePoints0,NULL,NULL,true,0,frostPresenceAura);
+            }
+            // Unholy Presence bonus
+            if (presence == SPELL_ID_UNHOLY_PRESENCE)
+            {
+                if(unholyPresenceAura)
+                {
+                    // Not listed as any effect, only base points set
+                    int32 basePoints0 = unholyPresenceAura->GetSpellProto()->EffectBasePoints[1];
+                    //m_target->CastCustomSpell(m_target,63622,&basePoints0 ,NULL,NULL,true,0,unholyPresenceAura);
+                    m_target->CastCustomSpell(m_target,65095,&basePoints0 ,NULL,NULL,true,0,unholyPresenceAura);
+                }
+                m_target->CastSpell(m_target,49772, true);
+            }
+            else if (unholyPresenceAura)
+            {
+                int32 basePoints0=unholyPresenceAura->GetAmount();
+                m_target->CastCustomSpell(m_target,49772,&basePoints0,NULL,NULL,true,0,unholyPresenceAura);
+            }
+        }
+        else
+        {
+            // Remove passive auras
+            if (presence == SPELL_ID_BLOOD_PRESENCE || bloodPresenceAura)
+                m_target->RemoveAurasDueToSpell(63611);
+            if (presence == SPELL_ID_FROST_PRESENCE || frostPresenceAura)
+                m_target->RemoveAurasDueToSpell(61261);
+            if (presence == SPELL_ID_UNHOLY_PRESENCE || unholyPresenceAura)
+            {
+                if(presence == SPELL_ID_UNHOLY_PRESENCE && unholyPresenceAura)
+                {
+                    //m_target->RemoveAurasDueToSpell(63622);
+                    m_target->RemoveAurasDueToSpell(65095);
+                }
+                m_target->RemoveAurasDueToSpell(49772);
+            }
+        }
+    }
+}
+
 void Aura::SendAuraUpdate()
 {
     if (m_auraSlot>=MAX_AURAS)
@@ -1155,6 +1250,8 @@ void Aura::_AddAura()
     }
 
     m_target->ApplyModFlag(UNIT_FIELD_AURASTATE, GetAuraStateMask(), true);
+
+    HandleAuraSpecificMods(true);
 }
 
 bool Aura::SetPartAura(AuraEffect* aurEff, uint8 effIndex)
@@ -1283,6 +1380,7 @@ void Aura::_RemoveAura()
             caster->ProcDamageAndSpell(m_target,ProcCaster, ProcVictim, procEx, m_procDamage, BASE_ATTACK, m_spellProto);
         }
     }
+    HandleAuraSpecificMods(false);
 }
 
 void Aura::SetStackAmount(uint8 stackAmount, bool applied)
@@ -2499,6 +2597,29 @@ void AuraEffect::HandleAuraDummy(bool apply, bool Real, bool changeAmount)
     // AT APPLY
     if(apply)
     {
+        // Overpower
+        if (caster && m_spellProto->SpellFamilyName == SPELLFAMILY_WARRIOR && 
+            m_spellProto->SpellFamilyFlags[0] & 0x4)
+        {
+            // Must be casting target
+            if (!m_target->IsNonMeleeSpellCasted(false, false, true))
+                return;
+            if (AuraEffect * aurEff = caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARRIOR, 2775, 0))
+            {
+                switch (aurEff->GetId())
+                {
+                    // Unrelenting Assault, rank 1
+                    case 46859:
+                        caster->CastSpell(m_target,64849,true,NULL,aurEff);
+                        break;
+                    // Unrelenting Assault, rank 2
+                    case 46860:
+                        caster->CastSpell(m_target,64850,true,NULL,aurEff);
+                        break;
+                }
+            }
+            return;
+        }
         switch(GetId())
         {
             // Haunting Spirits - perdiodic trigger demon
@@ -4606,7 +4727,7 @@ void AuraEffect::HandlePeriodicEnergize(bool apply, bool Real, bool changeAmount
         if (m_spellProto->SpellIconID == 3184 && m_spellProto->SpellVisual[0] == 12495)
             m_amount = m_target->GetMaxPower(POWER_MANA) * 25 / 10000;
         else if (m_spellProto->Id == 29166) // Innervate
-            m_amount = m_target->GetCreatePowers(POWER_MANA) * m_amount / ((GetParentAura()->GetAuraMaxDuration() / 10.0f) * (m_amplitude / IN_MILISECONDS));
+            m_amount = m_target->GetCreatePowers(POWER_MANA) * m_amount / (GetTotalTicks() * 100.0f);
     }
 }
 
@@ -4702,17 +4823,6 @@ void AuraEffect::HandlePeriodicDamage(bool apply, bool Real, bool changeAmount)
 
     switch (m_spellProto->SpellFamilyName)
     {
-        case SPELLFAMILY_GENERIC:
-        {
-            // Pounce Bleed
-            if ( m_spellProto->SpellIconID == 147 && m_spellProto->SpellVisual[0] == 0 )
-            {
-                // $AP*0.18/6 bonus per tick
-                m_amount += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) * 3 / 100);
-                return;
-            }
-            break;
-        }
         case SPELLFAMILY_WARRIOR:
         {
             // Rend
@@ -4741,20 +4851,6 @@ void AuraEffect::HandlePeriodicDamage(bool apply, bool Real, bool changeAmount)
         }
         case SPELLFAMILY_DRUID:
         {
-            // Rake
-            if (m_spellProto->SpellFamilyFlags[0] & 0x1000)
-            {
-                // $AP*0.18 bonus per tick
-                m_amount += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) * 18 / 100);
-                return;
-            }
-            // Lacerate
-            if (m_spellProto->SpellFamilyFlags[1] & 0x0000000100)
-            {
-                // $AP*0.05/5 bonus per tick
-                m_amount += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) / 100);
-                return;
-            }
             // Rip
             if (m_spellProto->SpellVisual[0] == 3941)
             {
@@ -4777,13 +4873,6 @@ void AuraEffect::HandlePeriodicDamage(bool apply, bool Real, bool changeAmount)
                 m_amount += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) * cp / 100);
                 return;
             }
-            // Lock Jaw
-            if (m_spellProto->SpellFamilyFlags[1] & 0x10000000)
-            {
-                // 0.15*$AP
-                m_amount += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) * 15 / 100);
-                return;
-            }
             break;
         }
         case SPELLFAMILY_ROGUE:
@@ -4802,38 +4891,6 @@ void AuraEffect::HandlePeriodicDamage(bool apply, bool Real, bool changeAmount)
                 uint8 cp = ((Player*)caster)->GetComboPoints();
                 if (cp > 5) cp = 5;
                 m_amount += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) * AP_per_combo[cp]);
-                return;
-            }
-            // Garrote
-            if (m_spellProto->SpellFamilyFlags[0] & 0x100)
-            {
-                // $AP*0.07 bonus per tick
-                m_amount += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) * 7 / 100);
-                return;
-            }
-            // Deadly Poison
-            if (m_spellProto->SpellFamilyFlags[0] & 0x10000)
-            {
-                // 0.08*$AP / 4 * amount of stack
-                m_amount += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) * 2 * GetParentAura()->GetStackAmount() / 100);
-                return;
-            }
-            break;
-        }
-        case SPELLFAMILY_HUNTER:
-        {
-            // Serpent Sting
-            if (m_spellProto->SpellFamilyFlags[0] & 0x4000)
-            {
-                // $RAP*0.1/5 bonus per tick
-                m_amount += int32(caster->GetTotalAttackPowerValue(RANGED_ATTACK) * 10 / 500);
-                return;
-            }
-            // Immolation Trap
-            if (m_spellProto->SpellFamilyFlags[0] & 0x4 && m_spellProto->SpellIconID == 678)
-            {
-                // $RAP*0.1/5 bonus per tick
-                m_amount += int32(caster->GetTotalAttackPowerValue(RANGED_ATTACK) * 10 / 500);
                 return;
             }
             break;
