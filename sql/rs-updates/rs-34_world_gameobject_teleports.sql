@@ -1,5 +1,5 @@
 -- Portal ID = 1327
--- Type will be 27 always for custom Teleports
+-- Type will be 10 and data0 = 75000
 -- goentry = Gameobject Entry
 -- mapid = Map player will go to
 -- x_pos = X position player will go to
@@ -29,11 +29,11 @@ VALUES
 (7500004,0,'2460.407227','-5593.413086','367.394226','3.787965','Acherus: Heart of Acherus'),
 (7500005,1,'-8534.029297','2008.405884','100.720947','0.126833','Portal to Twisting Nether');
 
-REPLACE INTO `gameobject_template` (`entry`,`type`,`displayId`,`name`)
+REPLACE INTO `gameobject_template` (`entry`,`type`,`displayId`,`name`,`data0`)
 VALUES
-(7500000,27,1327,'Acherus: The Ebon Hold (Phased)'),
-(7500001,27,1327,'Acherus: Heart of Acherus (Phased)'),
-(7500002,27,1327,'Death\'s Breach (Phased)'),
-(7500003,27,1327,'Acherus: The Ebon Hold'),
-(7500004,27,1327,'Acherus: Heart of Acherus'),
-(7500005,27,1327,'Portal to Twisting Nether'); 
+(7500000,10,1327,'Acherus: The Ebon Hold (Phased)',75000),
+(7500001,10,1327,'Acherus: Heart of Acherus (Phased)',75000),
+(7500002,10,1327,'Death\'s Breach (Phased)',75000),
+(7500003,10,1327,'Acherus: The Ebon Hold',75000),
+(7500004,10,1327,'Acherus: Heart of Acherus',75000),
+(7500005,10,1327,'Portal to Twisting Nether',75000); 

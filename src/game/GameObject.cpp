@@ -1026,12 +1026,37 @@ void GameObject::Use(Unit* user)
         {
             GameObjectInfo const* info = GetGOInfo();
 
+            if(!info)
+                return;
+
             if(user->GetTypeId()==TYPEID_PLAYER)
             {
                 Player* player = (Player*)user;
 
+				if (info->spellFocus.focusId == 75000)
+				{
+					float xt,yt,zt,orientationt;
+					uint32 mapidt;
+
+					QueryResult *result = NULL;
+					std::ostringstream qry;
+					qry << "SELECT * FROM gameobject_teleports WHERE goentry = " << info->id;
+					result = WorldDatabase.Query(qry.str( ).c_str( ));
+					if(result != NULL)
+					{
+						Field *fields = result->Fetch();
+						mapidt = fields[1].GetInt32();
+						xt = fields[2].GetFloat();
+						yt = fields[3].GetFloat();
+						zt = fields[4].GetFloat();
+						orientationt = fields[5].GetFloat();
+	
+						player->TeleportTo(mapidt, xt, yt, zt, orientationt, TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);
+						delete result;
+					}
+				}
                 // show page
-                if(info->goober.pageId)
+				if(info->goober.pageId)
                 {
                     WorldPacket data(SMSG_GAMEOBJECT_PAGETEXT, 8);
                     data << GetGUID();
@@ -1327,36 +1352,6 @@ void GameObject::Use(Unit* user)
             }
             break;
         }
-		case GAMEOBJECT_TYPE_MINI_GAME:
-		{
-            GameObjectInfo const* info = GetGOInfo();
-            if(!info)
-                return;
-
-            if(user->GetTypeId()!=TYPEID_PLAYER)
-                return;
-
-            Player* player = (Player*)user;
-			float xt,yt,zt,orientationt;
-			uint32 mapidt;
-
-			QueryResult *result = NULL;
-			std::ostringstream qry;
-			qry << "SELECT * FROM gameobject_teleports WHERE entry = " << info->id;
-			result = WorldDatabase.Query(qry.str( ).c_str( ));
-			if(result != NULL)
-			{
-				Field *fields = result->Fetch();
-				mapidt = fields[1].GetInt32();
-				xt = fields[2].GetFloat();
-				yt = fields[3].GetFloat();
-				zt = fields[4].GetFloat();
-				orientationt = fields[5].GetFloat();
-
-				player->TeleportTo(mapidt, xt, yt, zt, orientationt, TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);
-				delete result;
-			}
-		}
         case GAMEOBJECT_TYPE_BARBER_CHAIR:                  //32
         {
             GameObjectInfo const* info = GetGOInfo();
