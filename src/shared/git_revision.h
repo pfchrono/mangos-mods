@@ -4,7 +4,7 @@
 #define GIT_REVISION_H
 
 static const char * BUILD_TAG = "RS-FUNSERVER";
-static int BUILD_REVISION = 33;
+static int BUILD_REVISION = 39;
 
 #define BUILD_USER "Grevin"
 #define BUILD_WORKSTATION "CHRONO"

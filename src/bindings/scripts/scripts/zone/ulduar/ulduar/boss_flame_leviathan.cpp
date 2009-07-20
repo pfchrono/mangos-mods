@@ -19,16 +19,16 @@
 #include "precompiled.h"
 #include "def_ulduar.h"
 
-#define SPELL_FLAME_VENTS       62396
+#define SPELL_PYROBLAST         64698
 #define SPELL_BATTERING_RAM     62376
-#define SPELL_MISSLE_BARRAGE    62400
+#define SPELL_BLAST_WAVE        38536
 
 
 enum Events
 {
-    EVENT_FLAME_VENTS,
+    EVENT_PYROBLAST,
     EVENT_BATTERING_RAM,
-	EVENT_MISSLE_BARRAGE,
+	EVENT_BLAST_WAVE,
 };
 
 struct TRINITY_DLL_DECL boss_flame_leviathanAI : public BossAI
@@ -38,9 +38,9 @@ struct TRINITY_DLL_DECL boss_flame_leviathanAI : public BossAI
     void EnterCombat(Unit *who)
     {
         _EnterCombat();
-        events.ScheduleEvent(EVENT_FLAME_VENTS, 50000); // Might need removal
+        events.ScheduleEvent(EVENT_PYROBLAST, 15000); // Might need removal
         events.ScheduleEvent(EVENT_BATTERING_RAM, 30000);
-        events.ScheduleEvent(EVENT_MISSLE_BARRAGE, 75000); 
+        events.ScheduleEvent(EVENT_BLAST_WAVE, 20000); 
     }
 
     void UpdateAI(const uint32 diff)
@@ -57,17 +57,18 @@ struct TRINITY_DLL_DECL boss_flame_leviathanAI : public BossAI
         {
             switch(eventId)
             {
-                case EVENT_FLAME_VENTS:
-                    DoCastAOE(62396);
-                    events.RepeatEvent(50000);
+                case EVENT_PYROBLAST:
+					if(Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
+						DoCastAOE(SPELL_PYROBLAST);
+                    events.RepeatEvent(15000);
                     return;
                 case EVENT_BATTERING_RAM:
                     DoCast(me->getVictim(), SPELL_BATTERING_RAM);
                     events.RepeatEvent(30000);
                     return;
-                case EVENT_MISSLE_BARRAGE:
-                    DoCastAOE(SPELL_MISSLE_BARRAGE);
-                    events.RepeatEvent(75000);
+                case EVENT_BLAST_WAVE:
+                    DoCastAOE(SPELL_BLAST_WAVE);
+                    events.RepeatEvent(20000);
                     return;
                 default:
                     events.PopEvent();
