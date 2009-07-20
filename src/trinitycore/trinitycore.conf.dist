@@ -536,17 +536,6 @@ ChatLogTimestamp = 0
 #                   (included in client by default, with active official localization or custom localization fonts in clientdir/Fonts).
 #                 3 basic latin characters + server timezone specific
 #
-#    CharactersCreatingDisabled
-#        Disable characters creating for specific team or any (non-player accounts not affected)
-#        Default: 0 - enabled
-#                 1 - disabled only for Alliance
-#                 2 - disabled only for Horde
-#                 3 - disabled for both teams
-#
-#    MaxWhoListReturns
-#        Set the maximum number of players returned in the /who list and interface.
-#        Default: 49 (stable)
-#
 #    MinPlayerName
 #        Minimal name length (1..12)
 #        Default: 2
@@ -558,6 +547,17 @@ ChatLogTimestamp = 0
 #    MinPetName
 #        Minimal name length (1..12)
 #        Default: 2
+#
+#    CharactersCreatingDisabled
+#        Disable characters creating for specific team or any (non-player accounts not affected)
+#        Default: 0 - enabled
+#                 1 - disabled only for Alliance
+#                 2 - disabled only for Horde
+#                 3 - disabled for both teams
+#
+#    MaxWhoListReturns
+#        Set the maximum number of players returned in the /who list and interface.
+#        Default: 49 (stable)
 #
 #    CharactersPerAccount
 #        Limit numbers of characters per account (at all realms).
@@ -1029,15 +1029,19 @@ Channel.SilentlyGMJoin = 0
 #                 0 (disable)
 #                 1 (enable)
 #
-#    GM.InGMList
-#        Is GM showed in GM list (if visible) in non-GM state (.gm off)
-#        Default: 0 (false)
-#                 1 (true)
+#    GM.InGMList.Level
+#        Max GM level showed in GM list (if visible) in non-GM state (.gm off)
+#                 0 (only players)
+#                 1 (only moderators)
+#                 2 (only gamemasters)
+#        Default: 3 (anyone)
 #
-#    GM.InWhoList
-#        Is GM showed in who list (if visible).
-#        Default: 0 (false)
-#                 1 (true)
+#    GM.InWhoList.Level
+#        Max GM level showed in who list (if visible).
+#                 0 (only players)
+#                 1 (only moderators)
+#                 2 (only gamemasters)
+#        Default: 3 (anyone)
 #
 #    GM.LogTrade
 #        Include GM trade and trade slot enchanting operations in GM log if it enable
@@ -1075,8 +1079,8 @@ GM.Visible               = 2
 GM.AcceptTickets         = 2
 GM.Chat                  = 2
 GM.WhisperingTo          = 2
-GM.InGMList              = 0
-GM.InWhoList             = 0
+GM.InGMList.Level        = 3
+GM.InWhoList.Level       = 3
 GM.LogTrade              = 1
 GM.StartLevel            = 80
 GM.AllowInvite           = 0

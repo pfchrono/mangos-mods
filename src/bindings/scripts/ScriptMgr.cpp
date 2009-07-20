@@ -640,6 +640,8 @@ extern void AddSC_zulaman();
 
 //Northrend
 //Dungeon
+//Ulduar
+extern void AddSC_boss_razorscale();
 //Vault of Archavon
 extern void AddSC_boss_archavon();
 
@@ -985,7 +987,7 @@ void ScriptsInit(char const* cfg_file = "trinitycore.conf")
     AddSC_npc_taxi();
 
     // -- Servers --
-
+	AddSC_boss_razorscale();
     //--------------------
     //------ ZONE --------
 
