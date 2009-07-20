@@ -277,9 +277,11 @@ UpdateMask Player::updateVisualBits;
 
 Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputationMgr(this)
 {
+	#ifdef MID_DEBUG
 	#ifdef WIN32
 		CStackWalker sw;
 		sw.ShowCallstack();
+	#endif
 	#endif
     m_speakTime = 0;
     m_speakCount = 0;
