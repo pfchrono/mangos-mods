@@ -642,6 +642,7 @@ extern void AddSC_zulaman();
 //Dungeon
 //Ulduar
 extern void AddSC_boss_razorscale();
+extern void AddSC_boss_flame_leviathan();
 //Vault of Archavon
 extern void AddSC_boss_archavon();
 
@@ -988,6 +989,7 @@ void ScriptsInit(char const* cfg_file = "trinitycore.conf")
 
     // -- Servers --
 	AddSC_boss_razorscale();
+	AddSC_boss_flame_leviathan();
     //--------------------
     //------ ZONE --------
 

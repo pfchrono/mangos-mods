@@ -33,7 +33,7 @@ enum Events
     EVENT_FUSE,
     EVENT_BREATH,
     EVENT_DEVOUR,
-    EVENT_BERSERK,
+    // EVENT_BERSERK, - We don't have enough DPS...
 };
 
 struct TRINITY_DLL_DECL boss_razorscaleAI : public BossAI
@@ -43,10 +43,10 @@ struct TRINITY_DLL_DECL boss_razorscaleAI : public BossAI
     void EnterCombat(Unit *who)
     {
         _EnterCombat();
-        events.ScheduleEvent(EVENT_BERSERK, 7*60000);
+        // events.ScheduleEvent(EVENT_BERSERK, 7*60000); 
         events.ScheduleEvent(EVENT_BUFFET, 10000+rand()%5000);
         events.ScheduleEvent(EVENT_WING, 30000+rand()%30000);
-        events.ScheduleEvent(EVENT_FUSE, 10000);
+        events.ScheduleEvent(EVENT_FUSE, 30000); // 30 seconds for no stacking
         events.ScheduleEvent(EVENT_BREATH, 15000);
         events.ScheduleEvent(EVENT_DEVOUR, 10000);
     }
@@ -65,9 +65,9 @@ struct TRINITY_DLL_DECL boss_razorscaleAI : public BossAI
         {
             switch(eventId)
             {
-                case EVENT_BERSERK:
+                /*case EVENT_BERSERK:
                     DoCast(me, SPELL_BERSERK);
-                    return;
+                    return;*/
                 case EVENT_BUFFET:
                     DoCastAOE(SPELL_FLAME_BUFFET);
                     events.RepeatEvent(10000+rand()%5000);
@@ -82,7 +82,7 @@ struct TRINITY_DLL_DECL boss_razorscaleAI : public BossAI
                     return;
                 case EVENT_FUSE:
                     DoCast(me->getVictim(), SPELL_FUSE_ARMOR);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(30000);
                     return;
                 case EVENT_DEVOUR:
                     if(Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
