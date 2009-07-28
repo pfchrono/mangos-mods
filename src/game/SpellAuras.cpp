@@ -300,7 +300,7 @@ pAuraHandler AuraHandler[TOTAL_AURAS]=
     &Aura::HandleComprehendLanguage,                        //244 SPELL_AURA_COMPREHEND_LANGUAGE
     &Aura::HandleNoImmediateEffect,                         //245 SPELL_AURA_MOD_AURA_DURATION_BY_DISPEL
     &Aura::HandleNoImmediateEffect,                         //246 SPELL_AURA_MOD_AURA_DURATION_BY_DISPEL_NOT_STACK implemented in Spell::EffectApplyAura
-    &Aura::HandleNULL,                                      //247 target to become a clone of the caster
+    &Aura::HandleAuraCloneCaster,                           //247 SPELL_AURA_CLONE_CASTER
     &Aura::HandleNoImmediateEffect,                         //248 SPELL_AURA_MOD_COMBAT_RESULT_CHANCE         implemented in Unit::RollMeleeOutcomeAgainst
     &Aura::HandleAuraConvertRune,                           //249 SPELL_AURA_CONVERT_RUNE
     &Aura::HandleAuraModIncreaseHealth,                     //250 SPELL_AURA_MOD_INCREASE_HEALTH_2
@@ -332,7 +332,7 @@ pAuraHandler AuraHandler[TOTAL_AURAS]=
     &Aura::HandleNULL,                                      //276 mod damage % mechanic?
     &Aura::HandleNoImmediateEffect,                         //277 SPELL_AURA_MOD_ABILITY_AFFECTED_TARGETS implemented in spell::settargetmap
     &Aura::HandleAuraModDisarm,                             //278 SPELL_AURA_MOD_DISARM_RANGED disarm ranged weapon
-    &Aura::HandleNULL,                                      //279 visual effects? 58836 and 57507 - makes summon to have name of caster
+    &Aura::HandleAuraInitializeImages,                      //279 SPELL_AURA_INITIALIZE_IMAGES
     &Aura::HandleModArmorPenetrationPct,                    //280 SPELL_AURA_MOD_ARMOR_PENETRATION_PCT
     &Aura::HandleNoImmediateEffect,                         //281 SPELL_AURA_MOD_HONOR_GAIN_PCT implemented in Player::RewardHonor
     &Aura::HandleAuraIncreaseBaseHealthPercent,             //282 SPELL_AURA_INCREASE_BASE_HEALTH_PERCENT
@@ -1203,10 +1203,13 @@ void Aura::_AddAura()
     if (IsSealSpell(m_spellProto))
         SetAuraState(AURA_STATE_JUDGEMENT);
 
-    // Conflagrate aura state on Immolate or Shadowflame
-    if (m_spellProto->SpellFamilyName == SPELLFAMILY_WARLOCK && (m_spellProto->SpellFamilyFlags[0] & 4
-        || m_spellProto->SpellFamilyFlags[2] & 2))
-        SetAuraState(AURA_STATE_IMMOLATE);
+    // Conflagrate aura state on Immolate and Shadowflame
+    if (m_spellProto->SpellFamilyName == SPELLFAMILY_WARLOCK &&
+        // Immolate
+        ((m_spellProto->SpellFamilyFlags[0] & 4) ||
+        // Shadowflame
+        (m_spellProto->SpellFamilyFlags[2] & 2)))
+        SetAuraState(AURA_STATE_CONFLAGRATE);
 
     // Faerie Fire (druid versions)
     if (m_spellProto->SpellFamilyName == SPELLFAMILY_DRUID && m_spellProto->SpellFamilyFlags[0] & 0x400)
@@ -1385,6 +1388,7 @@ void Aura::_RemoveAura()
 
 void Aura::SetStackAmount(uint8 stackAmount, bool applied)
 {
+    bool refresh = stackAmount >= m_stackAmount;
     if (stackAmount != m_stackAmount)
     {
         m_stackAmount = stackAmount;
@@ -1396,7 +1400,11 @@ void Aura::SetStackAmount(uint8 stackAmount, bool applied)
             }
         }
     }
-    RefreshAura();
+
+    if (refresh)
+        RefreshAura();
+    else
+        SendAuraUpdate();
 }
 
 bool Aura::modStackAmount(int32 num)
@@ -1718,12 +1726,8 @@ bool AuraEffect::isAffectedOnSpell(SpellEntry const *spell) const
     if (spell->SpellFamilyName != m_spellProto->SpellFamilyName)
         return false;
 
-    // Check EffectClassMask and Spell_Affect table
-    flag96 const *spellAffect = spellmgr.GetSpellAffect(GetId(), m_effIndex);
-    if (!spellAffect)
-        spellAffect = &m_spellProto->EffectSpellClassMask[m_effIndex];
-
-    if (*spellAffect & spell->SpellFamilyFlags)
+    // Check EffectClassMask
+    if (m_spellProto->EffectSpellClassMask[m_effIndex] & spell->SpellFamilyFlags)
         return true;
     return false;
 }
@@ -1768,10 +1772,7 @@ void AuraEffect::HandleAddModifier(bool apply, bool Real, bool changeAmount)
         mod->type = SpellModType(m_auraName);    // SpellModType value == spell aura types
         mod->spellId = GetId();
 
-        flag96 const *spellAffect = spellmgr.GetSpellAffect(GetId(), m_effIndex);
-        if (!spellAffect)
-            spellAffect = &m_spellProto->EffectSpellClassMask[m_effIndex];
-        mod->mask = *spellAffect;
+        mod->mask = m_spellProto->EffectSpellClassMask[m_effIndex];
         mod->charges = GetParentAura()->GetAuraCharges();
 
         m_spellmod = mod;
@@ -2548,6 +2549,9 @@ void AuraEffect::TriggerSpell()
             case 29213:
             case 54835:
                 caster->CastSpell(m_target, trigger_spell_id, true, NULL, this);
+            // Ground Slam
+            case 33525:
+                target->CastSpell(target, trigger_spell_id, true);
                 return;
         }
     }
@@ -3278,6 +3282,8 @@ void AuraEffect::HandleAuraModShapeshift(bool apply, bool Real, bool changeAmoun
         case FORM_AMBIENT:
         case FORM_SHADOW:
         case FORM_STEALTH:
+        case FORM_UNDEAD:
+        case FORM_SHADOW_DANCE:
             break;
         case FORM_TREE:
             modelid = 864;
@@ -4393,11 +4399,21 @@ void AuraEffect::HandleAuraModIncreaseSwimSpeed(bool /*apply*/, bool Real, bool 
     m_target->UpdateSpeed(MOVE_SWIM, true);
 }
 
-void AuraEffect::HandleAuraModDecreaseSpeed(bool /*apply*/, bool Real, bool changeAmount)
+void AuraEffect::HandleAuraModDecreaseSpeed(bool apply, bool Real, bool changeAmount)
 {
     // all applied/removed only at real aura add/remove
     if(!Real && !changeAmount)
         return;
+
+    if (apply)
+    {
+        // Gronn Lord's Grasp, becomes stoned
+        if (GetId() == 33572)
+        {
+            if (GetParentAura()->GetStackAmount() >= 5 && !m_target->HasAura(33652))
+                m_target->CastSpell(m_target, 33652, true);
+        }
+    }
 
     m_target->UpdateSpeed(MOVE_RUN, true);
     m_target->UpdateSpeed(MOVE_SWIM, true);
@@ -4834,6 +4850,13 @@ void AuraEffect::HandlePeriodicDamage(bool apply, bool Real, bool changeAmount)
                 float mwb_min = caster->GetWeaponDamageRange(BASE_ATTACK,MINDAMAGE);
                 float mwb_max = caster->GetWeaponDamageRange(BASE_ATTACK,MAXDAMAGE);
                 m_amount+=int32(((mwb_min+mwb_max)/2+ap*mws/14000)*0.2f);
+                // "If used while your target is above 75% health, Rend does 35% more damage."
+                // as for 3.1.3 only ranks above 9 (wrong tooltip?)
+                if (spellmgr.GetSpellRank(m_spellProto->Id) >= 9)
+                {
+                    if (m_target->HasAuraState(AURA_STATE_HEALTH_ABOVE_75_PERCENT, m_spellProto, caster))
+                        m_amount += int32(m_amount*0.35);
+                }
                 return;
             }
             break;
@@ -6127,7 +6150,7 @@ void AuraEffect::PeriodicTick()
 
             uint32 absorb=0;
             uint32 resist=0;
-            CleanDamage cleanDamage =  CleanDamage(0, BASE_ATTACK, MELEE_HIT_NORMAL );
+            CleanDamage cleanDamage =  CleanDamage(0, 0, BASE_ATTACK, MELEE_HIT_NORMAL );
 
             // ignore non positive values (can be result apply spellmods to aura damage
             //uint32 amount = GetModifierValuePerStack() > 0 ? GetModifierValuePerStack() : 0;
@@ -6143,7 +6166,7 @@ void AuraEffect::PeriodicTick()
                      GetEffectMechanic(GetSpellProto(), m_effIndex) != MECHANIC_BLEED)
                 {
                     uint32 pdamageReductedArmor = pCaster->CalcArmorReducedDamage(m_target, pdamage, GetSpellProto());
-                    cleanDamage.damage += pdamage - pdamageReductedArmor;
+                    cleanDamage.mitigated_damage += pdamage - pdamageReductedArmor;
                     pdamage = pdamageReductedArmor;
                 }
 
@@ -6227,7 +6250,7 @@ void AuraEffect::PeriodicTick()
 
             uint32 absorb=0;
             uint32 resist=0;
-            CleanDamage cleanDamage =  CleanDamage(0, BASE_ATTACK, MELEE_HIT_NORMAL );
+            CleanDamage cleanDamage =  CleanDamage(0, 0, BASE_ATTACK, MELEE_HIT_NORMAL );
 
             //uint32 pdamage = GetModifierValuePerStack() > 0 ? GetModifierValuePerStack() : 0;
             uint32 pdamage = GetAmount() > 0 ? GetAmount() : 0;
@@ -6237,7 +6260,7 @@ void AuraEffect::PeriodicTick()
             if (GetSpellSchoolMask(GetSpellProto()) & SPELL_SCHOOL_MASK_NORMAL)
             {
                 uint32 pdamageReductedArmor = pCaster->CalcArmorReducedDamage(m_target, pdamage, GetSpellProto());
-                cleanDamage.damage += pdamage - pdamageReductedArmor;
+                cleanDamage.mitigated_damage += pdamage - pdamageReductedArmor;
                 pdamage = pdamageReductedArmor;
             }
 
@@ -6397,7 +6420,7 @@ void AuraEffect::PeriodicTick()
                     pCaster->DealDamageMods(pCaster,damage,&absorb);
                     pCaster->SendSpellNonMeleeDamageLog(pCaster, GetId(), damage, GetSpellSchoolMask(GetSpellProto()), absorb, 0, false, 0, false);
 
-                    CleanDamage cleanDamage =  CleanDamage(0, BASE_ATTACK, MELEE_HIT_NORMAL );
+                    CleanDamage cleanDamage =  CleanDamage(0, 0, BASE_ATTACK, MELEE_HIT_NORMAL );
                     pCaster->DealDamage(pCaster, damage, &cleanDamage, NODAMAGE, GetSpellSchoolMask(GetSpellProto()), GetSpellProto(), true);
                 }
             }
@@ -6966,7 +6989,7 @@ void AuraEffect::PeriodicDummyTick()
             if (spell->Id == 55342)
             {
                 // Set name of summons to name of caster
-                m_target->CastSpell(m_target, m_spellProto->EffectTriggerSpell[m_effIndex], true);
+                m_target->CastSpell((Unit *)NULL, m_spellProto->EffectTriggerSpell[m_effIndex], true);
                 m_isPeriodic = false;
             }
             break;
@@ -7357,7 +7380,7 @@ void AuraEffect::HandleModPossessPet(bool apply, bool Real, bool /*changeAmount*
         ((Player*)caster)->PetSpellInitialize();
         if(!m_target->getVictim())
         {
-            m_target->GetMotionMaster()->MoveFollow(caster, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+            m_target->GetMotionMaster()->MoveFollow(caster, PET_FOLLOW_DIST, m_target->GetFollowAngle());
             m_target->GetCharmInfo()->SetCommandState(COMMAND_FOLLOW);
         }
     }
@@ -7489,7 +7512,40 @@ void AuraEffect::HandleReflectSpells( bool Apply, bool Real , bool /*changeAmoun
         }
     }
 }
+void AuraEffect::HandleAuraInitializeImages( bool Apply, bool Real , bool /*changeAmount*/)
+{
+    if (!Real || !Apply)
+        return;
+    Unit * caster = GetCaster();
+    if (!caster)
+        return;
+    // Set item visual
+    if (caster->GetTypeId()== TYPEID_PLAYER)
+    {
+        if (Item const * item = ((Player *)caster)->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
+            m_target->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID, item->GetProto()->ItemId);
+        if (Item const * item = ((Player *)caster)->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
+            m_target->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 1, item->GetProto()->ItemId);
+    }
+    else
+    {
+        m_target->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID, caster->GetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID));
+        m_target->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 1, caster->GetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 1));
+        m_target->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 2, caster->GetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 2));
+    }
+}
 
+void AuraEffect::HandleAuraCloneCaster( bool Apply, bool Real , bool /*changeAmount*/)
+{
+    if (!Real || !Apply)
+        return;
+    Unit * caster = GetCaster();
+    if (!caster)
+        return;
+    // Set item visual
+    m_target->SetDisplayId(caster->GetDisplayId());
+    m_target->SetUInt32Value(UNIT_FIELD_FLAGS_2, 2064);
+}
 int32 AuraEffect::CalculateCrowdControlAuraAmount(Unit * caster)
 {
     // Damage cap for CC effects
@@ -7499,7 +7555,8 @@ int32 AuraEffect::CalculateCrowdControlAuraAmount(Unit * caster)
     if (m_auraName !=SPELL_AURA_MOD_CONFUSE &&
         m_auraName !=SPELL_AURA_MOD_FEAR &&
         m_auraName !=SPELL_AURA_MOD_STUN &&
-        m_auraName !=SPELL_AURA_MOD_ROOT)
+        m_auraName !=SPELL_AURA_MOD_ROOT &&
+        m_auraName !=SPELL_AURA_TRANSFORM)
         return 0;
 
     int32 damageCap = (int32)(m_target->GetMaxHealth()*0.10f);

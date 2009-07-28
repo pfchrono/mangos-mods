@@ -32,7 +32,8 @@ INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comm
 (-27068, 27069, 0, 'Wyvern Sting'),
 (-49011, 49009, 0, 'Wyvern Sting'),
 (-49012, 49010, 0, 'Wyvern Sting'),
-( 47585, 60069, 0, 'Dispersion (transform/regen)'),
+( 47585, 60069, 2, 'Dispersion (transform/regen)'),
+( 47585, 63230, 2, 'Dispersion (immunity)'),
 ( 61847, 61848, 2, 'Aspect of te dragonhawk'),
 ( 61846, 61848, 2, 'Aspect of te dragonhawk'),
 ( 47988, 54501, 2, 'Consume Shadows - Rank 9'),
@@ -69,6 +70,8 @@ INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comm
 (48395, 50171, 2, 'Improved Moonkin Form'),
 (48396, 50172, 2, 'Improved Moonkin Form'),
 ( 20594, 65116, 0, 'Stoneform'),
+( 49039, 50397, 2, 'Lichborne - shapeshift'),
+( 64382, 64380, 0, 'Shattering Throw'),
 
 -- Creature
 ( 36574, 36650, 0, 'Apply Phase Slip Vulnerability'),
@@ -140,7 +143,9 @@ INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comm
 -- --------
 -- TARGET
 -- --------
-
+-- Mirror Image
+DELETE FROM `spell_script_target` WHERE `entry` IN (58836);
+INSERT INTO `spell_script_target` VALUES (58836, 1, 31216);
 -- zulaman
 DELETE FROM `spell_script_target` WHERE `entry` IN
 (42577,42471,43734,42631);
@@ -479,6 +484,10 @@ INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`) VALUES
 ('48714', '2', '27234'),
 ('48714', '2', '27236'),
 ('57806', '2', '31043');
+
+-- Zul'Drak
+DELETE FROM `spell_script_target` WHERE `entry` IN (55083,55223,59951,59952);
+INSERT INTO `spell_script_target` VALUES (55083, 1, 29700),(55223, 1, 29686),(59951, 1, 29686),(59952, 1, 29686);
 
 -- --------
 -- POSITION
@@ -1095,8 +1104,8 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 47535, 0x00,   6, 0x00000001, 0x00000000, 0x00000000, 0x00004000, 0x00002000,   0,   0,  12), -- Rapture (Rank 1)
 ( 47536, 0x00,   6, 0x00000001, 0x00000000, 0x00000000, 0x00004000, 0x00002000,   0,   0,  12), -- Rapture (Rank 2)
 ( 47537, 0x00,   6, 0x00000001, 0x00000000, 0x00000000, 0x00004000, 0x00002000,   0,   0,  12), -- Rapture (Rank 3)
-( 47569, 0x00,   6, 0x00004000, 0x00000000, 0x00000000, 0x00000400, 0x00000000,   0,  50,   0), -- Improved Shadowform (Rank 1)
-( 47570, 0x00,   6, 0x00004000, 0x00000000, 0x00000000, 0x00000400, 0x00000000,   0, 100,   0), -- Improved Shadowform (Rank 2)
+( 47569, 0x00,   6, 0x00004000, 0x00000000, 0x00000000, 0x00004000, 0x00000000,   0,  50,   0), -- Improved Shadowform (Rank 1)
+( 47570, 0x00,   6, 0x00004000, 0x00000000, 0x00000000, 0x00004000, 0x00000000,   0, 100,   0), -- Improved Shadowform (Rank 2)
 ( 47580, 0x00,   6, 0x00000000, 0x00000000, 0x00000040, 0x00000000, 0x00010000,   0,   0,   0), -- Pain and Suffering (Rank 1)
 ( 47581, 0x00,   6, 0x00000000, 0x00000000, 0x00000040, 0x00000000, 0x00010000,   0,   0,   0), -- Pain and Suffering (Rank 2)
 ( 47582, 0x00,   6, 0x00000000, 0x00000000, 0x00000040, 0x00000000, 0x00010000,   0,   0,   0), -- Pain and Suffering (Rank 3)
@@ -1484,7 +1493,10 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 56344, 0x00,   9, 0x00000018, 0x08000000, 0x00020000, 0x00000000, 0x00000000,   0,   0,   0), -- Lock and Load
 ( 48539, 0x00,   7, 0x00000010, 0x04000000, 0x00000000, 0x00040000, 0x00000000,   0,   0,   0), -- Revitalize
 ( 48544, 0x00,   7, 0x00000010, 0x04000000, 0x00000000, 0x00040000, 0x00000000,   0,   0,   0), -- Revitalize
-( 48545, 0x00,   7, 0x00000010, 0x04000000, 0x00000000, 0x00040000, 0x00000000,   0,   0,   0); -- Revitalize
+( 48545, 0x00,   7, 0x00000010, 0x04000000, 0x00000000, 0x00040000, 0x00000000,   0,   0,   0), -- Revitalize
+( 53234, 0x00,   9, 0x00020000, 0x00000001, 0x00000001, 0x00000000, 0x00000002,   0,   0,   0), -- Piercing Shots (Rank 1)
+( 53237, 0x00,   9, 0x00020000, 0x00000001, 0x00000001, 0x00000000, 0x00000002,   0,   0,   0), -- Piercing Shots (Rank 2)
+( 53238, 0x00,   9, 0x00020000, 0x00000001, 0x00000001, 0x00000000, 0x00000002,   0,   0,   0); -- Piercing Shots (Rank 3)
 
 
 -- --------
@@ -1534,6 +1546,7 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (47632, -1, -1, 0.15, -1, 'Death Knight - Death Coil'),
 (47633, -1, -1, 0.15, -1, 'Death Knight - Death Coil Heal'),
 (55095, -1, -1, -1, 0.055, 'Death Knight - Frost Fever'),
+(58621, -1, -1, 0.08, -1, 'Death Knight - Glyph of Chains of Ice'),
 (49184, -1, -1, 0.1, -1, 'Death Knight - Howling Blast'),
 (45477, -1, -1, 0.1, -1, 'Death Knight - Icy Touch'),
 (56903, 0, 0, 0, 0, 'Death Knight - Lichflame'),
@@ -1545,9 +1558,12 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (5185, 1.611, -1, -1, -1, 'Druid - Healing Touch'),
 (42231, 0.12898, -1, -1, -1, 'Druid - Hurricane Triggered'),
 (5570, -1, 0.2, -1, -1, 'Druid - Insect Swarm'),
+(33745, -1, -1, -1, 0.01, 'Druid - Lacerate($AP*0.05 / number of ticks)'),
 (33763, 0.6453, 0.09518, -1, -1, 'Druid - Lifebloom'),
+(48628, -1, -1, -1, 0.15, 'Druid - Lock Jaw'),
 (8921, 0.1515, 0.13, -1, -1, 'Druid - Moonfire'),
 (50464, 0.67305, -1, -1, -1, 'Druid - Nourish'),
+(1822, -1, -1, 0.01, 0.06, 'Druid - Rake ($AP*0.18 / number of ticks)'),
 (8936, 0.539, 0.188, -1, -1, 'Druid - Regrowth'),
 (774, -1, 0.37604, -1, -1, 'Druid - Rejuvenation'),
 (50294, 0.0119, -1, -1, -1, 'Druid - Starfall AOE rank 1'),
@@ -1560,10 +1576,20 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (53195, 0.0458, -1, -1, -1, 'Druid - Starfall rank 4'),
 (2912, 1, -1, -1, -1, 'Druid - Starfire'),
 (18562, 0, 0, 0, 0, 'Druid - Swiftmend'),
+(779, -1, -1, 0.063, -1, 'Druid - Swipe (Bear)'),
 (44203, 0.538, -1, -1, -1, 'Druid - Tranquility Triggered'),
 (61391, 0.193, -1, -1, -1, 'Druid - Typhoon'),
 (48438, -1, 0.11505, -1, -1, 'Druid - Wild Growth'),
 (5176, 0.5714, -1, -1, -1, 'Druid - Wrath'),
+(60089, -1, -1, 0.05, -1, 'Faerie Fire (feral)'),
+(3044, -1, -1, 0.15, -1, 'Hunter - Arcane Shot'),
+(3674, -1, -1, -1, 0.02, 'Hunter - Black Arrow($RAP*0.1 / number of ticks)'),
+(19306, -1, -1, 0.2, -1, 'Hunter - Counterattack'),
+(13812, -1, -1, 0.1, -1, 'Hunter - Explosive Trap Effect'),
+(13797, -1, -1, -1, 0.02, 'Hunter - Immolation Trap($RAP*0.1 / number of ticks)'),
+(1495, -1, -1, 0.2, -1, 'Hunter - Mongoose Bite'),
+(1978, -1, -1, -1, 0.04, 'Hunter - Serpent Sting($RAP*0.2 / number of ticks)'),
+(56641, -1, -1, 0.1, -1, 'Hunter - Steady Shot'),
 (55039, 0, 0, 0, 0, 'Item - Gnomish Lightning Generator'),
 (44425, 0.7143, -1, -1, -1, 'Mage - Arcane Barrage'),
 (30451, 0.7143, -1, -1, -1, 'Mage - Arcane Blast'),
@@ -1611,6 +1637,7 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (53726, 0.25, -1, 0.16, -1, 'Paladin - Judgement of the Martyr Enemy'),
 (53725, 0.0833, -1, 0.0533, -1, 'Paladin - Judgement of the Martyr Self'),
 (31804, 0, 0, 0, 0, 'Paladin - Judgement of Vengeance'),
+(54158, 0.25, -1, 0.16, -1, 'Paladin - Jugdement (Seal of Light, Seal of Wisdom, Seal of Justice)'),
 (58597, 0.75, -1, -1, -1, 'Paladin - Sacred Shield'),
 (53601, 0.75, -1, -1, -1, 'Paladin - Sacred Shield'),
 (31893, 0, 0, 0, 0, 'Paladin - Seal of Blood Proc Enemy'),
@@ -1620,7 +1647,8 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (25742, 0.07, -1, 0.039, -1, 'Paladin - Seal of Righteousness Dummy Proc'),
 (53719, 0, 0, 0, 0, 'Paladin - Seal of the Martyr Proc Enemy'),
 (53718, 0, 0, 0, 0, 'Paladin - Seal of the Martyr Proc Self'),
-(53600, 0, 0, 0, 0, 'Paladin - Shield of Righteousness'),
+(62124, 0.085, -1, -1, -1, 'Paladin - Hand of Reckoning'),
+(50256, -1, -1, 0.08, -1, 'Pet Skills - Bear (Swipe)'),
 (32546, 0.8068, -1, -1, -1, 'Priest - Binding Heal'),
 (27813, 0, 0, 0, 0, 'Priest - Blessed Recovery Rank 1'),
 (34861, 0.402, -1, -1, -1, 'Priest - Circle of Healing'),
@@ -1649,6 +1677,33 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (34433, 0.65, -1, -1, -1, 'Priest - Shadowfiend'),
 (585, 0.714, -1, -1, -1, 'Priest - Smite'),
 (34914, -1, 0.4, -1, -1, 'Priest - Vampiric Touch'),
+(2818, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 1($AP*0.12 / number of ticks)'),
+(2819, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 2($AP*0.12 / number of ticks)'),
+(11353, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 3($AP*0.12 / number of ticks)'),
+(11354, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 4($AP*0.12 / number of ticks)'),
+(25349, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 5($AP*0.12 / number of ticks)'),
+(26968, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 6($AP*0.12 / number of ticks)'),
+(27187, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 7($AP*0.12 / number of ticks)'),
+(57969, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 8($AP*0.12 / number of ticks)'),
+(57970, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 9($AP*0.12 / number of ticks)'),
+(703, -1, -1, -1, 0.02, 'Rogue - Garrote'),
+(1776, -1, -1, 0.21, -1, 'Rogue - Gouge'),
+(8680, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 1'),
+(8685, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 2'),
+(8689, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 3'),
+(11335, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 4'),
+(11336, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 5'),
+(11337, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 6'),
+(26890, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 7'),
+(57964, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 8'),
+(57965, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 9'),
+(13218, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 1'),
+(13222, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 2'),
+(13223, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 3'),
+(13224, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 4'),
+(27189, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 5'),
+(57974, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 6'),
+(57975, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 7'),
 (1064, 1.34, -1, -1, -1, 'Shaman - Chain Heal'),
 (421, 0.57, -1, -1, -1, 'Shaman - Chain Lightning'),
 (974, 0.4762, -1, -1, -1, 'Shaman - Earth Shield'),
@@ -1741,61 +1796,140 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (30294, 0, 0, 0, 0, 'Warlock - Soul Leech'),
 (30108, -1, 0.2, -1, -1, 'Warlock - Unstable Affliction'),
 (31117, 1.8, -1, -1, -1, 'Warlock - Unstable Affliction Dispell'),
-(54158, 0.25, -1, 0.16, -1, 'Paladin - Jugdement (Seal of Light, Seal of Wisdom, Seal of Justice)'),
-(60089, -1, -1, 0.05, -1, 'Faerie Fire (feral)'),
-(58621, -1, -1, 0.08, -1, 'Death Knight - Glyph of Chains of Ice'),
-(13797, -1, -1, -1, 0.02, 'Hunter - Immolation Trap($RAP*0.1 / number of ticks)'),
-(3674, -1, -1, -1, 0.02, 'Hunter - Black Arrow($RAP*0.1 / number of ticks)'),
-(1978, -1, -1, -1, 0.04, 'Hunter - Serpent Sting($RAP*0.2 / number of ticks)'),
-(703, -1, -1, -1, 0.02, 'Rogue - Garrote'),
-(2818, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 1($AP*0.12 / number of ticks)'),
-(2819, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 2($AP*0.12 / number of ticks)'),
-(11353, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 3($AP*0.12 / number of ticks)'),
-(11354, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 4($AP*0.12 / number of ticks)'),
-(25349, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 5($AP*0.12 / number of ticks)'),
-(26968, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 6($AP*0.12 / number of ticks)'),
-(27187, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 7($AP*0.12 / number of ticks)'),
-(57969, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 8($AP*0.12 / number of ticks)'),
-(57970, -1, -1, -1, 0.03, 'Rogue - Deadly Poison Rank 9($AP*0.12 / number of ticks)'),
-(48628, -1, -1, -1, 0.15, 'Druid - Lock Jaw'),
-(1822, -1, -1, -1, 0.06, 'Druid - Rake ($AP*0.18 / number of ticks)'),
-(33745, -1, -1, -1, 0.01, 'Druid - Lacerate($AP*0.05 / number of ticks)'),
-(6572, -1, -1, 0.207, -1, 'Warrior - Revenge'),
 (57755, -1, -1, 0.5, -1, 'Warrior - Heroic Throw'),
-(6343, -1, -1, 0.12, -1, 'Warrior - Thunder Clap'),
-(50256, -1, -1, 0.08, -1, 'Druid - Swipe'),
-(1776, -1, -1, 0.21, -1, 'Rogue - Gouge'),
-(8680, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 1'),
-(8685, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 2'),
-(8689, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 3'),
-(11335, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 4'),
-(11336, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 5'),
-(11337, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 6'),
-(26890, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 7'),
-(57964, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 8'),
-(57965, -1, -1, 0.1, -1, 'Rogue - Instant Poison Rank 9'),
-(13218, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 1'),
-(13222, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 2'),
-(13223, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 3'),
-(13224, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 4'),
-(27189, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 5'),
-(57974, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 6'),
-(57975, -1, -1, 0.04, -1, 'Rogue - Wound Poison Rank 7'),
-(1495, -1, -1, 0.2, -1, 'Hunter - Mongoose Bite'),
-(19306, -1, -1, 0.2, -1, 'Hunter - Counterattack'),
-(3044, -1, -1, 0.15, -1, 'Hunter - Arcane Shot'),
-(56641, -1, -1, 0.1, -1, 'Hunter - Steady Shot'),
-(13812, -1, -1, 0.1, -1, 'Hunter - Explosive Trap Effect'),
 (20253, -1, -1, 0.12, -1, 'Warrior - Intercept'),
-(61491, -1, -1, 0.12, -1, 'Warrior - Intercept');
+(61491, -1, -1, 0.12, -1, 'Warrior - Intercept'),
+(6572, -1, -1, 0.207, -1, 'Warrior - Revenge'),
+(6343, -1, -1, 0.12, -1, 'Warrior - Thunder Clap'),
+(64382, -1, -1, 0.5, -1, 'Warrior - Shattering Throw');
 
 -- --------
--- SPELL AFFECT
+-- SPELL ELIXIR
 -- --------
 
-TRUNCATE TABLE `spell_affect`;
-INSERT INTO `spell_affect` (`entry`, `effectId`, `SpellClassMask0`, `SpellClassMask1`, `SpellClassMask2`) VALUES
-(44544,0,685904631,1151048,0); -- Fingers of frost
+TRUNCATE TABLE `spell_elixir`;
+INSERT INTO `spell_elixir` (`entry`, `mask`) VALUES
+(673, 0x2),
+(2367, 0x1),
+(2374, 0x1),
+(2378, 0x2),
+(2380, 0x2),
+(3160, 0x1),
+(3164, 0x1),
+(3166, 0x2),
+(3219, 0x2),
+(3220, 0x2),
+(3222, 0x2),
+(3223, 0x2),
+(3593, 0x2),
+(7844, 0x1),
+(8212, 0x1),
+(10667, 0x1),
+(10668, 0x2),
+(10669, 0x1),
+(10692, 0x2),
+(10693, 0x2),
+(11319, 0x2),
+(11328, 0x1),
+(11334, 0x1),
+(11348, 0x2),
+(11349, 0x2),
+(11364, 0x2),
+(11371, 0x2),
+(11390, 0x1),
+(11396, 0x2),
+(11405, 0x1),
+(11406, 0x1),
+(11474, 0x1),
+(15231, 0x2),
+(15233, 0x2),
+(16321, 0x2),
+(16322, 0x1),
+(16323, 0x1),
+(16325, 0x2),
+(16326, 0x2),
+(16327, 0x2),
+(16329, 0x1),
+(17038, 0x1),
+(17535, 0x2),
+(17537, 0x1),
+(17538, 0x1),
+(17539, 0x1),
+(17624, 0x3),
+(17626, 0x3),
+(17627, 0x3),
+(17628, 0x3),
+(17629, 0x3),
+(21920, 0x1),
+(24361, 0x2),
+(24363, 0x2),
+(24382, 0x2),
+(24383, 0x2),
+(24417, 0x2),
+(26276, 0x1),
+(27652, 0x2),
+(27653, 0x2),
+(28486, 0x1),
+(28488, 0x1),
+(28490, 0x1),
+(28491, 0x1),
+(28493, 0x1),
+(28497, 0x1),
+(28501, 0x1),
+(28502, 0x2),
+(28503, 0x1),
+(28509, 0x2),
+(28514, 0x2),
+(28518, 0x3),
+(28519, 0x3),
+(28520, 0x3),
+(28521, 0x3),
+(28540, 0x3),
+(29348, 0x2),
+(33720, 0x1),
+(33721, 0x1),
+(33726, 0x1),
+(38954, 0x1),
+(39625, 0x2),
+(39626, 0x2),
+(39627, 0x2),
+(39628, 0x2),
+(40567, 0x7),
+(40568, 0x7),
+(40572, 0x7),
+(40573, 0x7),
+(40575, 0x7),
+(40576, 0x7),
+(41608, 0xB),
+(41609, 0xB),
+(41610, 0xB),
+(41611, 0xB),
+(42735, 0x3),
+(45373, 0x1),
+(46837, 0xB),
+(46839, 0xB),
+(53746, 0x1),
+(53747, 0x2),
+(53748, 0x1),
+(53749, 0x1),
+(53751, 0x2),
+(53752, 0x3),
+(53755, 0x3),
+(53758, 0x3),
+(53760, 0x3),
+(53763, 0x2),
+(53764, 0x2),
+(54212, 0x3),
+(54452, 0x1),
+(54494, 0x1),
+(60340, 0x1),
+(60341, 0x1),
+(60343, 0x2),
+(60344, 0x1),
+(60345, 0x1),
+(60346, 0x1),
+(60347, 0x2),
+(62380, 0x3);
 
 -- --------
 -- Death Knight

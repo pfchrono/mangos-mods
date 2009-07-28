@@ -563,14 +563,14 @@
 					<Filter
 						Name="Blackfathom Depths"
 						>
-                        <File
-                            RelativePath="..\scripts\zone\blackfathom_depths\instance_blackfathom_deeps.cpp"
-                            >
-                        </File>
-                        <File
-                            RelativePath="..\scripts\zone\blackfathom_depths\def_blackfathom_deeps.h"
-                            >
-                        </File>
+						<File
+							RelativePath="..\scripts\zone\blackfathom_depths\def_blackfathom_deeps.h"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\zone\blackfathom_depths\instance_blackfathom_deeps.cpp"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="Bloodmyst Isle"
@@ -733,10 +733,12 @@
 						>
 					</Filter>
 					<Filter
-						Name="Desolace">
-                        <File
-                            RelativePath="..\scripts\zone\desolace\desolace.cpp">
-                        </File>
+						Name="Desolace"
+						>
+						<File
+							RelativePath="..\scripts\zone\desolace\desolace.cpp"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="Dire Maul"
@@ -846,7 +848,7 @@
 						Name="Razorfen Kraul"
 						>
 						<File
-							RelativePath="..\scripts\zone\razorfen_kraul\razorfen_kraul.cpp"
+							RelativePath="..\scripts\zone\razorfen_kraul\def_razorfen_kraul.h"
 							>
 						</File>
 						<File
@@ -854,7 +856,7 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\zone\razorfen_kraul\def_razorfen_kraul.h"
+							RelativePath="..\scripts\zone\razorfen_kraul\razorfen_kraul.cpp"
 							>
 						</File>
 					</Filter>
@@ -1109,6 +1111,10 @@
 							RelativePath="..\scripts\zone\magisters_terrace\instance_magisters_terrace.cpp"
 							>
 						</File>
+                        <File
+                            RelativePath="..\scripts\zone\magisters_terrace\magisters_terrace.cpp"
+                            >
+                        </File>
 					</Filter>
 					<Filter
 						Name="Loch Modan"
@@ -1842,6 +1848,14 @@
 							>
 						</File>
 					</Filter>
+                    <Filter
+                        Name="Zul&apos;Drak"
+                        >
+                        <File
+                            RelativePath="..\scripts\zone\zuldrak\zuldrak.cpp"
+                            >
+                        </File>
+                    </Filter>
 					<Filter
 						Name="Wetlands"
 						>
@@ -2452,6 +2466,10 @@
 						<Filter
 							Name="Sholazar Basin"
 							>
+                            <File
+                                RelativePath="..\scripts\zone\sholazar_basin\sholazar_basin.cpp"
+                                >
+                            </File>
 						</Filter>
 						<Filter
 							Name="Dalaran"

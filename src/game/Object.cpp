@@ -1718,6 +1718,8 @@ TempSummon *Map::SummonCreature(uint32 entry, float x, float y, float z, float a
             mask = SUMMON_MASK_PUPPET;
         else if(properties->Type == SUMMON_TYPE_MINIPET)
             mask = SUMMON_MASK_MINION;
+        else if (properties->Flags & 512) // Mirror Image, Summon Gargoyle
+            mask = SUMMON_MASK_GUARDIAN;
     }
 
     uint32 phase = PHASEMASK_NORMAL, team = 0;
@@ -1988,6 +1990,36 @@ GameObject* WorldObject::FindNearestGameObject(uint32 entry, float range)
     Trinity::GameObjectLastSearcher<Trinity::NearestGameObjectEntryInObjectRangeCheck> searcher(this, go, checker);
     VisitNearbyGridObject(range, searcher);
     return go;
+}
+
+void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange)
+{
+    CellPair pair(Trinity::ComputeCellPair(this->GetPositionX(), this->GetPositionY()));
+    Cell cell(pair);
+    cell.data.Part.reserved = ALL_DISTRICT;
+    cell.SetNoCreate();
+
+    Trinity::AllGameObjectsWithEntryInRange check(this, uiEntry, fMaxSearchRange);
+    Trinity::GameObjectListSearcher<Trinity::AllGameObjectsWithEntryInRange> searcher(this, lList, check);
+    TypeContainerVisitor<Trinity::GameObjectListSearcher<Trinity::AllGameObjectsWithEntryInRange>, GridTypeMapContainer> visitor(searcher);
+
+    CellLock<GridReadGuard> cell_lock(cell, pair);
+    cell_lock->Visit(cell_lock, visitor, *(this->GetMap()));
+}
+
+void WorldObject::GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange)
+{
+    CellPair pair(Trinity::ComputeCellPair(this->GetPositionX(), this->GetPositionY()));
+    Cell cell(pair);
+    cell.data.Part.reserved = ALL_DISTRICT;
+    cell.SetNoCreate();
+
+    Trinity::AllCreaturesOfEntryInRange check(this, uiEntry, fMaxSearchRange);
+    Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(this, lList, check);
+    TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange>, GridTypeMapContainer> visitor(searcher);
+
+    CellLock<GridReadGuard> cell_lock(cell, pair);
+    cell_lock->Visit(cell_lock, visitor, *(this->GetMap()));
 }
 
 /*

@@ -49,6 +49,13 @@ m_declinedname(NULL), m_owner(owner)
     m_summonMask |= SUMMON_MASK_PET;
     if(type == HUNTER_PET)
         m_summonMask |= SUMMON_MASK_HUNTER_PET;
+
+    if (!(m_summonMask & SUMMON_MASK_CONTROLABLE_GUARDIAN))
+    {
+        m_summonMask |= SUMMON_MASK_CONTROLABLE_GUARDIAN;
+        InitCharmInfo();
+    }
+
     m_name = "Pet";
     m_regenTimer = 4000;
 }
@@ -166,7 +173,7 @@ bool Pet::LoadPetFromDB( Player* owner, uint32 petentry, uint32 petnumber, bool 
     }
 
     float px, py, pz;
-    owner->GetClosePoint(px, py, pz, GetObjectSize(), PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+    owner->GetClosePoint(px, py, pz, GetObjectSize(), PET_FOLLOW_DIST, GetFollowAngle());
     Relocate(px, py, pz, owner->GetOrientation());
 
     if (!IsPositionValid())

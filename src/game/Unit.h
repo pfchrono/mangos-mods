@@ -197,6 +197,7 @@ enum ShapeshiftForm
     FORM_AMBIENT            = 0x06,
     FORM_GHOUL              = 0x07,
     FORM_DIREBEAR           = 0x08,
+    FORM_SHADOW_DANCE       = 0x0D,
     FORM_CREATUREBEAR       = 0x0E,
     FORM_CREATURECAT        = 0x0F,
     FORM_GHOSTWOLF          = 0x10,
@@ -206,6 +207,7 @@ enum ShapeshiftForm
     FORM_TEST               = 0x14,
     FORM_ZOMBIE             = 0x15,
     FORM_METAMORPHOSIS      = 0x16,
+    FORM_UNDEAD             = 0x19,
     FORM_FLIGHT_EPIC        = 0x1B,
     FORM_SHADOW             = 0x1C,
     FORM_FLIGHT             = 0x1D,
@@ -769,10 +771,12 @@ enum MeleeHitOutcome
 
 struct CleanDamage
 {
-    CleanDamage(uint32 _damage, WeaponAttackType _attackType, MeleeHitOutcome _hitOutCome) :
-    damage(_damage), attackType(_attackType), hitOutCome(_hitOutCome) {}
+    CleanDamage(uint32 mitigated, uint32 absorbed, WeaponAttackType _attackType, MeleeHitOutcome _hitOutCome) :
+    mitigated_damage(mitigated), absorbed_damage(absorbed), attackType(_attackType), hitOutCome(_hitOutCome) {}
 
-    uint32 damage;
+    uint32 absorbed_damage;
+    uint32 mitigated_damage;
+
     WeaponAttackType attackType;
     MeleeHitOutcome hitOutCome;
 };
@@ -1448,6 +1452,7 @@ class TRINITY_DLL_SPEC Unit : public WorldObject
         void RemoveAurasWithInterruptFlags(uint32 flag, uint32 except = NULL);
         void RemoveAurasWithFamily(uint32 family, uint32 familyFlag1, uint32 familyFlag2, uint32 familyFlag3, uint64 casterGUID);
         void RemoveMovementImpairingAuras();
+        void RemoveAurasWithMechanic(uint32 mechanic_mask, uint32 except=0);
         void RemoveAllAuras();
         void RemoveArenaAuras(bool onleave = false);
         void RemoveAllAurasOnDeath();
@@ -1803,6 +1808,10 @@ class TRINITY_DLL_SPEC Unit : public WorldObject
         bool canFly() const     { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_FLY_MODE); }
         bool IsFlying() const   { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_FLYING); }
         void SetFlying(bool apply);
+
+        void RewardRage( uint32 damage, uint32 weaponSpeedHitFactor, bool attacker );
+
+        virtual float GetFollowAngle() const { return M_PI/2; }
     protected:
         explicit Unit ();
 
