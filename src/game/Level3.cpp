@@ -994,9 +994,9 @@ bool ChatHandler::HandleReloadSkillFishingBaseLevelCommand(const char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellAffectCommand(const char*)
 {
-    sLog.outString( "Re-Loading SpellAffect definitions..." );
+/*    sLog.outString( "Re-Loading SpellAffect definitions..." );
     spellmgr.LoadSpellAffects();
-    SendGlobalGMSysMessage("DB table `spell_affect` (spell mods apply requirements) reloaded.");
+    SendGlobalGMSysMessage("DB table `spell_affect` (spell mods apply requirements) reloaded.");*/
     return true;
 }
 
