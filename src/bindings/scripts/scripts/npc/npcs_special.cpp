@@ -1669,7 +1669,8 @@ struct TRINITY_DLL_DECL npc_mirror_image : SpellAI
             if (count == spell)
             {
                 DoCast(spells[spell]);
-                cooldown += me->GetCurrentSpellCastTime(*itr);
+                //cooldown += me->GetCurrentSpellCastTime(*itr); // Temp fix till this is fixed via TC2
+                cooldown += urand(500,1000);
             }
             events.ScheduleEvent(*itr, cooldown);
         }
@@ -1688,7 +1689,8 @@ struct TRINITY_DLL_DECL npc_mirror_image : SpellAI
         if(uint32 spellId = events.ExecuteEvent())
         {
             DoCast(spellId);
-            uint32 casttime = me->GetCurrentSpellCastTime(spellId);
+            //uint32 casttime = me->GetCurrentSpellCastTime(spellId); // Temp fix till this is fixed via TC2
+			uint32 casttime = urand(500,1000);
             events.ScheduleEvent(spellId, (casttime ? casttime : 500) + GetAISpellInfo(spellId)->cooldown);
         }
     }
