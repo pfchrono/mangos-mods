@@ -1,0 +1,2031 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Include">
+      <UniqueIdentifier>{dd29e298-bdcb-4108-ad0a-4ae23a368ee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{b27cd74e-81f4-4248-afcb-417e391a613e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\areatrigger">
+      <UniqueIdentifier>{6a5f44f6-6528-4213-9014-57c57002e903}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\boss">
+      <UniqueIdentifier>{78fc0509-1677-418f-8e75-5bb56e35b770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\creature">
+      <UniqueIdentifier>{9752723d-ec14-4734-80eb-2525134f65b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\custom">
+      <UniqueIdentifier>{84dafcfe-2908-4c16-b34b-0ed5c4e609e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\examples">
+      <UniqueIdentifier>{983f2521-a3e6-4601-a69a-312e908fc28d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\go">
+      <UniqueIdentifier>{4516920f-0456-464d-a645-dc807e966c25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\guard">
+      <UniqueIdentifier>{6952e936-5a7f-47c6-99e8-8cb2b0ff2ef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\honor">
+      <UniqueIdentifier>{9697c8c1-aea4-44fe-a5bd-cc30ec328f07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\item">
+      <UniqueIdentifier>{3d4d84ad-00f5-425c-a576-6475ce581552}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\npc">
+      <UniqueIdentifier>{e2e16ca2-c11f-4cea-b6f3-89428d4fd331}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\servers">
+      <UniqueIdentifier>{a1d66750-a0af-4f76-9f3a-98b8b86bd009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone">
+      <UniqueIdentifier>{2f174514-7998-473b-ab21-2289677acb60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth">
+      <UniqueIdentifier>{cefd171d-aa8f-4095-9a93-19aa8529bca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Alterac Mountains">
+      <UniqueIdentifier>{20786310-82b3-4ed6-9090-5ab5b08548ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Arathi Highlands">
+      <UniqueIdentifier>{4289d5a0-3622-4f4a-8660-ae165b7f220d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Blackrock Depths">
+      <UniqueIdentifier>{3087ab65-04db-42d0-a7a1-6e6293cd1758}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Blackrock Spire">
+      <UniqueIdentifier>{d28dc1c4-24b1-43e4-b822-92a48a4d820e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Blackwing Lair">
+      <UniqueIdentifier>{a56e489c-c541-43f4-b33e-8acf39ca74a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Blasted Lands">
+      <UniqueIdentifier>{0dd3db74-5f22-4e4c-b03b-a7b4f40ab754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Burning Steppes">
+      <UniqueIdentifier>{44c5606b-2037-4b90-832c-863796a99ac2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Deadmines">
+      <UniqueIdentifier>{141296a9-787c-4f87-9f32-f1e4a77c1f16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Deadwind Pass">
+      <UniqueIdentifier>{346e73aa-1879-4eed-b9d9-0b2991d71d9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Dun Morogh">
+      <UniqueIdentifier>{7c034fd8-2adc-45ab-9da1-be22308fa685}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Duskwood">
+      <UniqueIdentifier>{c3538e6b-62a0-45a2-8fa7-f967ddb59589}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Eastern Plaguelands">
+      <UniqueIdentifier>{bdc4c176-3153-4aa7-aef6-9c5af9f9647d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Elwynn Forest">
+      <UniqueIdentifier>{8b7c5c28-dc61-490a-9eb6-9b12790a2c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Eversong Woods">
+      <UniqueIdentifier>{99b0f434-005a-4b67-b52d-df5788602af5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Ghostlands">
+      <UniqueIdentifier>{2608de3c-cfca-46d2-a382-5bf492176d92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Gnomeregan">
+      <UniqueIdentifier>{33b048c7-a1c0-4ca7-b52f-d104f8b128f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Hillsbrad Foothills">
+      <UniqueIdentifier>{61ac9041-daa6-47c0-9a2d-75b44c65da0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Hinterlands">
+      <UniqueIdentifier>{e79d7862-393b-4b0e-b7c6-04a44d36062f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Iron Forge">
+      <UniqueIdentifier>{be8a1376-db46-4699-8363-368c9411de3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Isle of Quel%27Danas">
+      <UniqueIdentifier>{aeb36a0d-a6da-4e27-98b5-f4f0af565d4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Karazhan">
+      <UniqueIdentifier>{09cb76cb-1566-4372-a46e-1ed5fbbfaf30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Loch Modan">
+      <UniqueIdentifier>{48a3cbd3-e476-44bb-b44f-714daf2cdc4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Magister%27s Terrace">
+      <UniqueIdentifier>{64d7b23d-7ab4-4bcd-bf02-79ff7b563eb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Molten Core">
+      <UniqueIdentifier>{84ee294a-39b1-4d47-a0a2-73ae9549863f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Redridge Mountains">
+      <UniqueIdentifier>{af18cb44-454e-40ea-b16d-bfb43e8f60ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Scarlet Monastery">
+      <UniqueIdentifier>{ab4dd0ba-0131-4632-b870-9b075a1bc6a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Scholomance">
+      <UniqueIdentifier>{c831904f-a391-4fe8-95a7-3a96635f5f04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Searing Gorge">
+      <UniqueIdentifier>{dd805b1b-4029-4e12-93f9-e684b78f12ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Shadowfang Keep">
+      <UniqueIdentifier>{d88d1b09-4399-473f-9ec7-8dfd937019b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Silvermoon City">
+      <UniqueIdentifier>{82024b3d-5c77-4eb3-817a-80dbf4cb3ea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Silverpine Forest">
+      <UniqueIdentifier>{2672bccc-82eb-49c7-b1b4-997b6db44e7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Stockade">
+      <UniqueIdentifier>{3539bef3-d0fd-4f44-b6b5-a7c0b6bc2e63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Stormwind City">
+      <UniqueIdentifier>{0be85276-ff83-473d-af99-4c2d26e3f2d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Stranglethorn Vale">
+      <UniqueIdentifier>{14860f9b-2a96-4ffd-b209-8726e12cc366}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Stratholme">
+      <UniqueIdentifier>{b271e750-1aaf-4c2c-b532-73f94fe55099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Sunken Temple">
+      <UniqueIdentifier>{3b6aadb5-d9ed-42ba-9adb-a3d8605b83ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Sunwell Plateau">
+      <UniqueIdentifier>{7660772f-f9c5-478b-9ffb-3f86cb2d850c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Swamp of Sorrows">
+      <UniqueIdentifier>{fa2a9a32-cf0a-4fb4-91c1-3181b006360e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Tirisfal Glades">
+      <UniqueIdentifier>{2ca17c26-a34c-444c-a661-f9b27c4efaf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Uldaman">
+      <UniqueIdentifier>{6f424196-2bda-4865-aee9-c35c8f2339a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Undercity">
+      <UniqueIdentifier>{6adbe24d-a843-4cfb-a0e0-723b23ae2ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Western Plaguelands">
+      <UniqueIdentifier>{b22384d0-9559-4b5e-8e20-590d33067b6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Westfall">
+      <UniqueIdentifier>{57107c79-7aa2-45fe-8b9b-f43064b1dc10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Wetlands">
+      <UniqueIdentifier>{0e3fece2-ab5a-4da3-988e-069fb89aeb41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Zul%27Aman">
+      <UniqueIdentifier>{4360feef-b729-4ecf-9b0d-8448c0a1d7d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Zul%27Drak">
+      <UniqueIdentifier>{e1444fd1-3f6c-4893-bc0a-c826b0c2c136}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Azeroth\Zul%27Gurub">
+      <UniqueIdentifier>{49475d70-1f8d-4c3c-8408-481e89d9a209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor">
+      <UniqueIdentifier>{e10e3bbb-5d55-425c-8e29-47dc6b800d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Ashenvale Forest">
+      <UniqueIdentifier>{fa930f11-20c8-47ea-b5f3-c8f014330ee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Azshara">
+      <UniqueIdentifier>{f4360b36-08d8-4faa-8d3f-379e61c1500d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Azuremyst Isle">
+      <UniqueIdentifier>{f443455a-992f-4d05-9170-270b6da52afb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Badlands">
+      <UniqueIdentifier>{1c9af2a5-4db4-426d-b705-ddb210a238d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Barrens">
+      <UniqueIdentifier>{7b956a66-fceb-4302-b089-84191e13f9c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Blackfathom Depths">
+      <UniqueIdentifier>{5fdeecd4-2971-4d9c-8235-81e81c3e5d77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Bloodmyst Isle">
+      <UniqueIdentifier>{b3917cdc-18db-4f5f-b6d8-06884bd0c243}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Caverns of Time">
+      <UniqueIdentifier>{8f443d7e-4663-4609-a8b9-64f69a8da440}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal">
+      <UniqueIdentifier>{29683962-fcc4-4432-96e7-19250b5574e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Caverns of Time\Culling of Stratholme">
+      <UniqueIdentifier>{04150115-c2d5-4ffb-b3b3-7d50567c5f59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Caverns of Time\Old Hillsbrad">
+      <UniqueIdentifier>{02d5f21a-eb61-4b06-9440-781b95b382dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Caverns of Time\The Dark Portal">
+      <UniqueIdentifier>{62acfffe-8a95-4223-85da-24286bf45014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Darkshore">
+      <UniqueIdentifier>{3c9a483a-e774-4426-a4ab-1104c6432801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Darnassus">
+      <UniqueIdentifier>{c568f7b7-3069-4952-8553-286ca68effd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Desolace">
+      <UniqueIdentifier>{855f4779-bf74-4de0-b702-b937f62f4236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Dire Maul">
+      <UniqueIdentifier>{bd2b3d69-f4ca-41d0-936e-0ddecffcc89e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Durotar">
+      <UniqueIdentifier>{76a63868-7633-4bbc-8c35-59f60da5585a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Dustwallow Marsh">
+      <UniqueIdentifier>{10fae30e-bd11-43ba-9417-65a66033f930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Exodar">
+      <UniqueIdentifier>{29c6a18e-3a94-4743-bd5b-824c7886332e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Felwood">
+      <UniqueIdentifier>{60d08bc2-9495-4c8c-aa4d-7d1480a41b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Feralas">
+      <UniqueIdentifier>{7ca61abc-734a-4de2-afc1-bf90b7fbcffc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Maraudon">
+      <UniqueIdentifier>{9f005a17-de9f-4a06-956a-94546f73a477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Moonglade">
+      <UniqueIdentifier>{37608e08-11ff-4716-b405-91b0faf519e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Mulgore">
+      <UniqueIdentifier>{352d7588-5f94-4810-b2a9-a2d3f29fb8cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Onyxia%27s Lair">
+      <UniqueIdentifier>{4a7fc2a3-e509-4500-9e86-0f77d9868a95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Orgrimmar">
+      <UniqueIdentifier>{d9550052-3748-4ff8-a617-77ca8bb4a73b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Ragefire Chasm">
+      <UniqueIdentifier>{7937f5cc-5927-4177-adea-d854c9326b35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Razorfen Downs">
+      <UniqueIdentifier>{65a6b53e-7da3-4b1a-b2f3-2810ed161a1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Razorfen Kraul">
+      <UniqueIdentifier>{3579b8cd-df1c-43bf-aee0-2e28842fba47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Ruins of Ahn%27Qiraj">
+      <UniqueIdentifier>{ba4cd29e-c6d7-47f4-bd02-dd17facbf5ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Silithus">
+      <UniqueIdentifier>{da1a6364-bb8e-4747-b42c-b02b9149087c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Stonetalon Mountains">
+      <UniqueIdentifier>{9727bc6b-acd1-4cf2-a0ca-1daf1a8c5f16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Tanaris">
+      <UniqueIdentifier>{d21dae7f-79cf-43c1-95f1-8abe0fcf4683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Teldrassil">
+      <UniqueIdentifier>{4a56c3f0-3501-450b-8ecb-6542c9a1a595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Temple of Ahn%27Qiraj">
+      <UniqueIdentifier>{f136e2fc-1d1a-40f7-aba4-0754683ab24a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Thousand Needles">
+      <UniqueIdentifier>{89fc3ccc-a3db-4bde-98b8-2365f67d3a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Thunder Bluff">
+      <UniqueIdentifier>{4edf72be-a587-40a7-8489-e3044fc6d834}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Un%27Goro Crater">
+      <UniqueIdentifier>{ed8cf6f0-4460-4c7d-b21a-d50a87df7191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Wailing Caverns">
+      <UniqueIdentifier>{c0946a52-a331-4e20-8188-ba3c79fc6d3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Winterspring">
+      <UniqueIdentifier>{0bfcb63b-3d30-48fe-ad61-69c6b5bb7f55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Kalimdor\Zul%27Farrak">
+      <UniqueIdentifier>{c542547c-4462-410c-9dbc-bd85f05dbcd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend">
+      <UniqueIdentifier>{ecee3175-8294-4551-bc16-3f1c3c97b0e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon">
+      <UniqueIdentifier>{4299ef54-ef7d-4e69-a977-7ae0bb233fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Azjol-Nerub">
+      <UniqueIdentifier>{405d0c2e-ae7a-4d7a-bfab-c13a60d717b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Ahn%27kahet">
+      <UniqueIdentifier>{35ef5624-2e1b-4b68-99ad-863660b9614b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Azjol-Nerub">
+      <UniqueIdentifier>{1f918213-0402-460e-a214-7d821fd8c5a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Drak%27Tharon Keep">
+      <UniqueIdentifier>{83cca8b1-1e6f-4af3-b12b-365e17e35669}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Gundrak">
+      <UniqueIdentifier>{13aced6a-e461-4e21-9c66-b30a960e8990}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Naxxramas">
+      <UniqueIdentifier>{2e846c3e-2bb9-49ff-a85a-737fd9983591}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Nexus">
+      <UniqueIdentifier>{f81c3ea3-363d-4495-b9c0-071d10a46d10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Nexus\Eye of Eternity">
+      <UniqueIdentifier>{51d4babd-be4e-4e18-b5cf-4994dc8a9088}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Nexus\Nexus">
+      <UniqueIdentifier>{b8b5f34e-3be9-4690-85ad-354360d34e5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Nexus\Oculus">
+      <UniqueIdentifier>{be71be9b-9858-4b4d-a47d-e314d2f9c689}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Obsidian Sanctum">
+      <UniqueIdentifier>{e509f30f-efde-42f5-ae89-d2ecfcd99f54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Ulduar">
+      <UniqueIdentifier>{098419dd-a4b1-4b0e-bf77-2785d451e53e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Lightning">
+      <UniqueIdentifier>{04d501f0-736a-4f0f-b074-6a50eb1383b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Stone">
+      <UniqueIdentifier>{048ec2ec-91a6-431f-8c60-7d77b195d4be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar">
+      <UniqueIdentifier>{06afc32d-0463-40c9-b604-478b3a80a70a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Utgarde Keep">
+      <UniqueIdentifier>{3d4702d8-5625-4e26-8507-83ccfbfb12f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Keep">
+      <UniqueIdentifier>{509fad02-e63d-4351-9c52-f7839d40f945}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Pinnacle">
+      <UniqueIdentifier>{bb961fd7-724d-47c7-a238-1bb6fa6f5584}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Vault of Archavon">
+      <UniqueIdentifier>{54cdbf1c-962e-46f1-a84c-c2fee6b059a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Dungeon\Violet Hold">
+      <UniqueIdentifier>{4f54d62e-d8d6-4832-a10c-ce212108b85c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region">
+      <UniqueIdentifier>{d65350e2-1248-4afe-bf39-63cf037460e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\Borean Tundra">
+      <UniqueIdentifier>{0d441b02-7823-4929-b7da-274c6c77d8ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\Crystalsong Forest">
+      <UniqueIdentifier>{7443a059-6a54-4c5d-b98e-4c7d07090b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\Dalaran">
+      <UniqueIdentifier>{f1605ae2-d646-454c-9b12-d450d9127cdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\Dragonblight">
+      <UniqueIdentifier>{56ee0d09-4375-4d82-89bd-ae710747b759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\Grizzly Hills">
+      <UniqueIdentifier>{d58b8d48-8d44-46fe-ab19-913602ac8e63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\Howling Fjord">
+      <UniqueIdentifier>{ff052008-9bae-4327-85ae-4a1cdaea2853}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\Icecrown">
+      <UniqueIdentifier>{b0ed3e20-0bc1-40ba-ae93-f3d649134cc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\Sholazar Basin">
+      <UniqueIdentifier>{9ddc68bc-51d7-4643-b749-a5bea71dd010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\The Storm Peaks">
+      <UniqueIdentifier>{75220a2e-f7a6-4127-9b84-4e4c96a64642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\Wintergrasp">
+      <UniqueIdentifier>{a6423840-b9ea-41e3-8123-0671db050e79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Northrend\Region\Zul%27Drak">
+      <UniqueIdentifier>{57fea923-4898-432a-8de5-477a9c909f12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland">
+      <UniqueIdentifier>{a45feda3-289a-499e-ae62-4f7979a5c3f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Aunchindoun">
+      <UniqueIdentifier>{e5297e8a-c4c4-490b-9584-cfa0b7c095df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Aunchindoun\Auchenai Crypts">
+      <UniqueIdentifier>{49596c24-86ab-4a49-99ca-1fe50f82f6d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Aunchindoun\Mana Tombs">
+      <UniqueIdentifier>{8fb95732-683a-4b70-a234-e6e132a0051f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Aunchindoun\Sethekk Halls">
+      <UniqueIdentifier>{2d4694b6-01e1-4558-94f8-15a5d89b0d22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Aunchindoun\Shadow Labyrinth">
+      <UniqueIdentifier>{19b12df6-c9a2-4fab-9da4-cc4f9e45551d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Black Temple">
+      <UniqueIdentifier>{785a58a1-aaf7-475b-8696-6ac94917167d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Blade%27s Edge Mountains">
+      <UniqueIdentifier>{aeca3681-c422-49c0-9eda-40edd9c580b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Coilfang Resevoir">
+      <UniqueIdentifier>{c85ec6f9-0b9c-4969-a9f4-a19844c98d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Coilfang Resevoir\Serpent Shrine Cavern">
+      <UniqueIdentifier>{ed49fa5e-6a62-4f75-b081-5ee364580ad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Coilfang Resevoir\Slave Pens">
+      <UniqueIdentifier>{45812002-8394-4fb9-832d-a89ef13aa81a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Coilfang Resevoir\Steam Vault">
+      <UniqueIdentifier>{c611e4dd-fe18-4062-9670-7685fbd55792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Coilfang Resevoir\Underbog">
+      <UniqueIdentifier>{4044b824-bebc-4890-8589-880a9958068e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Gruul%27s Lair">
+      <UniqueIdentifier>{eb891f6a-04c2-4896-9035-4ef4830129e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Hellfire Citadel">
+      <UniqueIdentifier>{6192a855-4f97-4e28-9886-85e2ea55be0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Hellfire Citadel\Blood Furnace">
+      <UniqueIdentifier>{79100237-ba94-4efc-bedb-81744ca54448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Hellfire Citadel\Hellfire Ramparts">
+      <UniqueIdentifier>{e0c59abe-41c5-4806-a15b-9dc53bad6e99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Hellfire Citadel\Magtheridon%27s lair">
+      <UniqueIdentifier>{4dcb2610-3526-4d90-8e70-6efcda66234e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Hellfire Citadel\Shattered Halls">
+      <UniqueIdentifier>{dd0b11d7-3c56-4889-9b3f-28c63a156b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Hellfire Peninsula">
+      <UniqueIdentifier>{04bca08f-2d50-4976-9b72-5058f05bc1c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Nagrand">
+      <UniqueIdentifier>{97b300d9-7498-4b06-adc6-49a327431e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Netherstorm">
+      <UniqueIdentifier>{47d0a1a4-61ad-488b-bda3-3bdde9fa23a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Shadowmoon Valley">
+      <UniqueIdentifier>{79534bc8-c7d5-4f94-af5e-1be9916fb6b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Shattrath City">
+      <UniqueIdentifier>{221b59d6-4f40-4c74-9b71-7ae30c286ac0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Tempest Keep">
+      <UniqueIdentifier>{1139dfe0-c570-45fe-81de-8c6ac7ed7f3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Tempest Keep\Arcatraz">
+      <UniqueIdentifier>{fc02ef35-b858-4afb-8304-73a7453638d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Tempest Keep\Botanica">
+      <UniqueIdentifier>{960c7e8a-f9e8-4417-8ce4-6944a609da8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Tempest Keep\The Eye">
+      <UniqueIdentifier>{dc6dfba4-aa01-4735-8271-3f47386b16f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Tempest Keep\The Mechanar">
+      <UniqueIdentifier>{9cf9446f-90be-448c-9b92-f78b971e14d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Terokkar Forest">
+      <UniqueIdentifier>{29706b2d-113a-4f47-97db-c75a2a538e61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\zone\Outland\Zangarmarsh">
+      <UniqueIdentifier>{9d0ef67c-0982-4cdf-b075-d67bc08753b9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\include\precompiled.cpp">
+      <Filter>Include</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\sc_creature.cpp">
+      <Filter>Include</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ScriptMgr.cpp" />
+    <ClCompile Include="..\scripts\areatrigger\areatrigger_scripts.cpp">
+      <Filter>Scripts\areatrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\boss\boss_emeriss.cpp">
+      <Filter>Scripts\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\boss\boss_lethon.cpp">
+      <Filter>Scripts\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\boss\boss_taerar.cpp">
+      <Filter>Scripts\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\boss\boss_ysondre.cpp">
+      <Filter>Scripts\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\creature\mob_generic_creature.cpp">
+      <Filter>Scripts\creature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\creature\simple_ai.cpp">
+      <Filter>Scripts\creature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\custom\npc_acherus_taxi.cpp">
+      <Filter>Scripts\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\custom\npc_teleport.cpp">
+      <Filter>Scripts\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\custom\npc_wyrmresttempel_taxi.cpp">
+      <Filter>Scripts\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\custom\sc_npc_teleport.cpp">
+      <Filter>Scripts\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\examples\example_creature.cpp">
+      <Filter>Scripts\examples</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\examples\example_escort.cpp">
+      <Filter>Scripts\examples</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\examples\example_gossip_codebox.cpp">
+      <Filter>Scripts\examples</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\examples\example_misc.cpp">
+      <Filter>Scripts\examples</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\go\go_scripts.cpp">
+      <Filter>Scripts\go</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\guard\guards.cpp">
+      <Filter>Scripts\guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\guard\guard_ai.cpp">
+      <Filter>Scripts\guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\item\item_scripts.cpp">
+      <Filter>Scripts\item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\npc\npcs_special.cpp">
+      <Filter>Scripts\npc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\npc\npc_escortAI.cpp">
+      <Filter>Scripts\npc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\npc\npc_innkeeper.cpp">
+      <Filter>Scripts\npc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\npc\npc_professions.cpp">
+      <Filter>Scripts\npc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\npc\npc_taxi.cpp">
+      <Filter>Scripts\npc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\alterac_mountains\alterac_mountains.cpp">
+      <Filter>Scripts\zone\Azeroth\Alterac Mountains</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\arathi_highlands\arathi_highlands.cpp">
+      <Filter>Scripts\zone\Azeroth\Arathi Highlands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ashenvale_forest\ashenvale.cpp">
+      <Filter>Scripts\zone\Kalimdor\Ashenvale Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\auchenai_crypts\boss_exarch_maladaar.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Auchenai Crypts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\auchenai_crypts\boss_shirrak_the_dead_watcher.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Auchenai Crypts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\mana_tombs\boss_nexusprince_shaffar.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Mana Tombs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\mana_tombs\boss_pandemonius.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Mana Tombs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\sethekk_halls\boss_darkweaver_syth.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Sethekk Halls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\sethekk_halls\boss_tailonking_ikiss.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Sethekk Halls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\sethekk_halls\instance_sethekk_halls.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Sethekk Halls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\shadow_labyrinth\boss_ambassador_hellmaw.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Shadow Labyrinth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\shadow_labyrinth\boss_blackheart_the_inciter.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Shadow Labyrinth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\shadow_labyrinth\boss_grandmaster_vorpil.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Shadow Labyrinth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\shadow_labyrinth\boss_murmur.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Shadow Labyrinth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\aunchindoun\shadow_labyrinth\instance_shadow_labyrinth.cpp">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Shadow Labyrinth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azjol_nerub\ahnkahet\boss_amanitar.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Ahn'kahet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azjol_nerub\ahnkahet\boss_elder_nadox.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Ahn'kahet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azjol_nerub\ahnkahet\boss_herald_volazj.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Ahn'kahet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azjol_nerub\ahnkahet\boss_jedoga_shadowseeker.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Ahn'kahet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azjol_nerub\ahnkahet\boss_prince_taldaram.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Ahn'kahet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azjol_nerub\ahnkahet\instance_ahnkahet.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Ahn'kahet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azjol_nerub\azjol_nerub\boss_anubarak.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Azjol-Nerub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azjol_nerub\azjol_nerub\boss_hadronox.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Azjol-Nerub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azjol_nerub\azjol_nerub\boss_krikthir_the_gatewatcher.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Azjol-Nerub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azjol_nerub\azjol_nerub\instance_azjol_nerub.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Azjol-Nerub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azshara\azshara.cpp">
+      <Filter>Scripts\zone\Kalimdor\Azshara</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azshara\boss_azuregos.cpp">
+      <Filter>Scripts\zone\Kalimdor\Azshara</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\azuremyst_isle\azuremyst_isle.cpp">
+      <Filter>Scripts\zone\Kalimdor\Azuremyst Isle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\barrens\the_barrens.cpp">
+      <Filter>Scripts\zone\Kalimdor\Barrens</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackfathom_depths\instance_blackfathom_deeps.cpp">
+      <Filter>Scripts\zone\Kalimdor\Blackfathom Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\blackrock_depths.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\boss_ambassador_flamelash.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\boss_anubshiah.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\boss_emperor_dagran_thaurissan.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\boss_general_angerforge.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\boss_gorosh_the_dervish.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\boss_grizzle.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\boss_high_interrogator_gerstahn.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\boss_magmus.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\boss_moira_bronzebeard.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\boss_tomb_of_seven.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_depths\instance_blackrock_depths.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_drakkisath.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_gyth.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_halycon.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_highlord_omokk.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_mother_smolderweb.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_overlord_wyrmthalak.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_pyroguard_emberseer.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_quartermaster_zigris.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_rend_blackhand.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_shadow_hunter_voshgajin.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_the_beast.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackrock_spire\boss_warmaster_voone.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackrock Spire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackwing_lair\boss_broodlord_lashlayer.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackwing Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackwing_lair\boss_chromaggus.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackwing Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackwing_lair\boss_ebonroc.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackwing Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackwing_lair\boss_firemaw.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackwing Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackwing_lair\boss_flamegor.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackwing Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackwing_lair\boss_nefarian.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackwing Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackwing_lair\boss_razorgore.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackwing Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackwing_lair\boss_vaelastrasz.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackwing Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackwing_lair\boss_victor_nefarius.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackwing Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blackwing_lair\instance_blackwing_lair.cpp">
+      <Filter>Scripts\zone\Azeroth\Blackwing Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\black_temple.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\boss_bloodboil.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\boss_illidan.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\boss_mother_shahraz.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\boss_reliquary_of_souls.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\boss_shade_of_akama.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\boss_supremus.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\boss_teron_gorefiend.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\boss_warlord_najentus.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\illidari_council.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\black_temple\instance_black_temple.cpp">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blades_edge_mountains\blades_edge_mountains.cpp">
+      <Filter>Scripts\zone\Outland\Blade's Edge Mountains</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blasted_lands\blasted_lands.cpp">
+      <Filter>Scripts\zone\Azeroth\Blasted Lands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\blasted_lands\boss_kruul.cpp">
+      <Filter>Scripts\zone\Azeroth\Blasted Lands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\bloodmyst_isle\bloodmyst_isle.cpp">
+      <Filter>Scripts\zone\Kalimdor\Bloodmyst Isle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\borean_tundra\borean_tundra.cpp">
+      <Filter>Scripts\zone\Northrend\Region\Borean Tundra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\burning_steppes\burning_steppes.cpp">
+      <Filter>Scripts\zone\Azeroth\Burning Steppes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\culling_of_stratholme\boss_epoch.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Culling of Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\culling_of_stratholme\boss_mal_ganis.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Culling of Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\culling_of_stratholme\boss_meathook.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Culling of Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\culling_of_stratholme\boss_salramm.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Culling of Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\culling_of_stratholme\instance_culling_of_stratholme.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Culling of Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\dark_portal\boss_aeonus.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\The Dark Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\dark_portal\boss_chrono_lord_deja.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\The Dark Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\dark_portal\boss_temporus.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\The Dark Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\dark_portal\dark_portal.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\The Dark Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\dark_portal\instance_dark_portal.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\The Dark Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\hyjal\boss_anetheron.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\hyjal\boss_archimonde.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\hyjal\boss_azgalor.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\hyjal\boss_kazrogal.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\hyjal\boss_rage_winterchill.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\hyjal\hyjal.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\hyjal\hyjalAI.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\hyjal\hyjal_trash.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\hyjal\instance_hyjal.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\old_hillsbrad\boss_captain_skarloc.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Old Hillsbrad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\old_hillsbrad\boss_epoch_hunter.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Old Hillsbrad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\old_hillsbrad\boss_leutenant_drake.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Old Hillsbrad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\old_hillsbrad\instance_old_hillsbrad.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Old Hillsbrad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\caverns_of_time\old_hillsbrad\old_hillsbrad.cpp">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Old Hillsbrad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\serpent_shrine\boss_fathomlord_karathress.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Serpent Shrine Cavern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\serpent_shrine\boss_hydross_the_unstable.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Serpent Shrine Cavern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\serpent_shrine\boss_lady_vashj.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Serpent Shrine Cavern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\serpent_shrine\boss_leotheras_the_blind.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Serpent Shrine Cavern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\serpent_shrine\boss_lurker_below.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Serpent Shrine Cavern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\serpent_shrine\boss_morogrim_tidewalker.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Serpent Shrine Cavern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\serpent_shrine\instance_serpent_shrine.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Serpent Shrine Cavern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\steam_vault\boss_hydromancer_thespia.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Steam Vault</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\steam_vault\boss_mekgineer_steamrigger.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Steam Vault</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\steam_vault\boss_warlord_kalithresh.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Steam Vault</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\steam_vault\instance_steam_vault.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Steam Vault</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\underbog\boss_hungarfen.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Underbog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\coilfang_resevoir\underbog\boss_the_black_stalker.cpp">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Underbog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\darkshore\darkshore.cpp">
+      <Filter>Scripts\zone\Kalimdor\Darkshore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\deadmines\deadmines.cpp">
+      <Filter>Scripts\zone\Azeroth\Deadmines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\desolace\desolace.cpp">
+      <Filter>Scripts\zone\Kalimdor\Desolace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\dragonblight\dragonblight.cpp">
+      <Filter>Scripts\zone\Northrend\Region\Dragonblight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\draktharon_keep\boss_dred.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Drak'Tharon Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\draktharon_keep\boss_novos.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Drak'Tharon Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\draktharon_keep\boss_tharon_ja.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Drak'Tharon Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\draktharon_keep\boss_trollgore.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Drak'Tharon Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\draktharon_keep\instance_drak_tharon_keep.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Drak'Tharon Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\dun_morogh\dun_morogh.cpp">
+      <Filter>Scripts\zone\Azeroth\Dun Morogh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\dustwallow_marsh\dustwallow_marsh.cpp">
+      <Filter>Scripts\zone\Kalimdor\Dustwallow Marsh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\eastern_plaguelands\eastern_plaguelands.cpp">
+      <Filter>Scripts\zone\Azeroth\Eastern Plaguelands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\eastern_plaguelands\the_scarlet_enclave.cpp">
+      <Filter>Scripts\zone\Azeroth\Eastern Plaguelands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\elwynn_forest\elwynn_forest.cpp">
+      <Filter>Scripts\zone\Azeroth\Elwynn Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\eversong_woods\eversong_woods.cpp">
+      <Filter>Scripts\zone\Azeroth\Eversong Woods</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\felwood\felwood.cpp">
+      <Filter>Scripts\zone\Kalimdor\Felwood</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\feralas\feralas.cpp">
+      <Filter>Scripts\zone\Kalimdor\Feralas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ghostlands\ghostlands.cpp">
+      <Filter>Scripts\zone\Azeroth\Ghostlands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\gruuls_lair\boss_gruul.cpp">
+      <Filter>Scripts\zone\Outland\Gruul's Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\gruuls_lair\boss_high_king_maulgar.cpp">
+      <Filter>Scripts\zone\Outland\Gruul's Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\gruuls_lair\instance_gruuls_lair.cpp">
+      <Filter>Scripts\zone\Outland\Gruul's Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\gundrak\boss_drakkari_colossus.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Gundrak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\gundrak\boss_eck.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Gundrak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\gundrak\boss_gal_darah.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Gundrak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\gundrak\boss_moorabi.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Gundrak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\gundrak\boss_slad_ran.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Gundrak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\gundrak\instance_gundrak.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Gundrak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\blood_furnace\boss_broggok.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Blood Furnace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\blood_furnace\boss_kelidan_the_breaker.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Blood Furnace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\blood_furnace\boss_the_maker.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Blood Furnace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\blood_furnace\instance_blood_furnace.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Blood Furnace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\hellfire_ramparts\boss_omor_the_unscarred.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Hellfire Ramparts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\hellfire_ramparts\boss_vazruden_the_herald.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Hellfire Ramparts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\hellfire_ramparts\boss_watchkeeper_gargolmar.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Hellfire Ramparts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\hellfire_ramparts\instance_hellfire_ramparts.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Hellfire Ramparts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\magtheridons_lair\boss_magtheridon.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Magtheridon's lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\magtheridons_lair\instance_magtheridons_lair.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Magtheridon's lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\shattered_halls\boss_nethekurse.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Shattered Halls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\shattered_halls\boss_warbringer_omrogg.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Shattered Halls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\shattered_halls\boss_warchief_kargath_bladefist.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Shattered Halls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_citadel\shattered_halls\instance_shattered_halls.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Shattered Halls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_peninsula\boss_doomlord_kazzak.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Peninsula</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\hellfire_peninsula\hellfire_peninsula.cpp">
+      <Filter>Scripts\zone\Outland\Hellfire Peninsula</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ironforge\ironforge.cpp">
+      <Filter>Scripts\zone\Azeroth\Iron Forge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\isle_of_queldanas\isle_of_queldanas.cpp">
+      <Filter>Scripts\zone\Azeroth\Isle of Quel'Danas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\bosses_opera.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\boss_curator.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\boss_maiden_of_virtue.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\boss_midnight.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\boss_moroes.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\boss_netherspite.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\boss_nightbane.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\boss_prince_malchezaar.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\boss_shade_of_aran.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\boss_terestian_illhoof.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\instance_karazhan.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\karazhan\karazhan.cpp">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\loch_modan\loch_modan.cpp">
+      <Filter>Scripts\zone\Azeroth\Loch Modan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\magisters_terrace\boss_felblood_kaelthas.cpp">
+      <Filter>Scripts\zone\Azeroth\Magister's Terrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\magisters_terrace\boss_priestess_delrissa.cpp">
+      <Filter>Scripts\zone\Azeroth\Magister's Terrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\magisters_terrace\boss_selin_fireheart.cpp">
+      <Filter>Scripts\zone\Azeroth\Magister's Terrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\magisters_terrace\boss_vexallus.cpp">
+      <Filter>Scripts\zone\Azeroth\Magister's Terrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\magisters_terrace\instance_magisters_terrace.cpp">
+      <Filter>Scripts\zone\Azeroth\Magister's Terrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\magisters_terrace\magisters_terrace.cpp">
+      <Filter>Scripts\zone\Azeroth\Magister's Terrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\maraudon\boss_celebras_the_cursed.cpp">
+      <Filter>Scripts\zone\Kalimdor\Maraudon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\maraudon\boss_landslide.cpp">
+      <Filter>Scripts\zone\Kalimdor\Maraudon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\maraudon\boss_noxxion.cpp">
+      <Filter>Scripts\zone\Kalimdor\Maraudon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\maraudon\boss_princess_theradras.cpp">
+      <Filter>Scripts\zone\Kalimdor\Maraudon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\boss_baron_geddon.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\boss_garr.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\boss_gehennas.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\boss_golemagg.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\boss_lucifron.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\boss_magmadar.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\boss_majordomo_executus.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\boss_ragnaros.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\boss_shazzrah.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\boss_sulfuron_harbinger.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\instance_molten_core.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\molten_core\molten_core.cpp">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\moonglade\moonglade.cpp">
+      <Filter>Scripts\zone\Kalimdor\Moonglade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\mulgore\mulgore.cpp">
+      <Filter>Scripts\zone\Kalimdor\Mulgore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nagrand\nagrand.cpp">
+      <Filter>Scripts\zone\Outland\Nagrand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_anubrekhan.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_faerlina.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_four_horsemen.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_gluth.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_gothik.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_grobbulus.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_heigan.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_kelthuzad.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_loatheb.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_maexxna.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_noth.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_patchwerk.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_razuvious.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_sapphiron.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\boss_thaddius.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\naxxramas\instance_naxxramas.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\netherstorm\netherstorm.cpp">
+      <Filter>Scripts\zone\Outland\Netherstorm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\eye_of_eternity\boss_malygos.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Eye of Eternity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\eye_of_eternity\instance_eye_of_eternity.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Eye of Eternity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\nexus\boss_anomalus.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\nexus\boss_keristrasza.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\nexus\boss_magus_telestra.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\nexus\boss_ormorok.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\nexus\commander_kolurg.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\nexus\commander_stoutbeard.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\nexus\instance_nexus.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Nexus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\oculus\boss_drakos.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Oculus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\oculus\boss_eregos.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Oculus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\oculus\boss_urom.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Oculus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\oculus\boss_varos.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Oculus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\nexus\oculus\instance_oculus.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Oculus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\obsidian_sanctum\boss_sartharion.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Obsidian Sanctum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\obsidian_sanctum\instance_obsidian_sanctum.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Obsidian Sanctum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\onyxias_lair\boss_onyxia.cpp">
+      <Filter>Scripts\zone\Kalimdor\Onyxia's Lair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\orgrimmar\orgrimmar.cpp">
+      <Filter>Scripts\zone\Kalimdor\Orgrimmar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\razorfen_downs\boss_amnennar_the_coldbringer.cpp">
+      <Filter>Scripts\zone\Kalimdor\Razorfen Downs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\razorfen_downs\razorfen_downs.cpp">
+      <Filter>Scripts\zone\Kalimdor\Razorfen Downs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\razorfen_kraul\instance_razorfen_kraul.cpp">
+      <Filter>Scripts\zone\Kalimdor\Razorfen Kraul</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\razorfen_kraul\razorfen_kraul.cpp">
+      <Filter>Scripts\zone\Kalimdor\Razorfen Kraul</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ruins_of_ahnqiraj\boss_ayamiss.cpp">
+      <Filter>Scripts\zone\Kalimdor\Ruins of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ruins_of_ahnqiraj\boss_buru.cpp">
+      <Filter>Scripts\zone\Kalimdor\Ruins of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ruins_of_ahnqiraj\boss_kurinnaxx.cpp">
+      <Filter>Scripts\zone\Kalimdor\Ruins of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ruins_of_ahnqiraj\boss_moam.cpp">
+      <Filter>Scripts\zone\Kalimdor\Ruins of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ruins_of_ahnqiraj\boss_ossirian.cpp">
+      <Filter>Scripts\zone\Kalimdor\Ruins of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ruins_of_ahnqiraj\boss_rajaxx.cpp">
+      <Filter>Scripts\zone\Kalimdor\Ruins of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ruins_of_ahnqiraj\instance_ruins_of_ahnqiraj.cpp">
+      <Filter>Scripts\zone\Kalimdor\Ruins of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\boss_arcanist_doan.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\boss_azshir_the_sleepless.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\boss_bloodmage_thalnos.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\boss_headless_horseman.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\boss_herod.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\boss_high_inquisitor_fairbanks.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\boss_houndmaster_loksey.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\boss_interrogator_vishas.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\boss_mograine_and_whitemane.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\boss_scorn.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scarlet_monastery\instance_scarlet_monastery.cpp">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_darkmaster_gandling.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_death_knight_darkreaver.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_doctor_theolen_krastinov.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_illucia_barov.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_instructor_malicia.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_jandice_barov.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_kormok.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_lord_alexei_barov.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_lorekeeper_polkelt.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_ras_frostwhisper.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_the_ravenian.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\boss_vectus.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\scholomance\instance_scholomance.cpp">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\searing_gorge\searing_gorge.cpp">
+      <Filter>Scripts\zone\Azeroth\Searing Gorge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\shadowfang_keep\instance_shadowfang_keep.cpp">
+      <Filter>Scripts\zone\Azeroth\Shadowfang Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\shadowfang_keep\shadowfang_keep.cpp">
+      <Filter>Scripts\zone\Azeroth\Shadowfang Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\shadowmoon_valley\boss_doomwalker.cpp">
+      <Filter>Scripts\zone\Outland\Shadowmoon Valley</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\shadowmoon_valley\shadowmoon_valley.cpp">
+      <Filter>Scripts\zone\Outland\Shadowmoon Valley</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\shattrath\shattrath_city.cpp">
+      <Filter>Scripts\zone\Outland\Shattrath City</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\sholazar_basin\sholazar_basin.cpp">
+      <Filter>Scripts\zone\Northrend\Region\Sholazar Basin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\silithus\silithus.cpp">
+      <Filter>Scripts\zone\Kalimdor\Silithus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\silvermoon\silvermoon_city.cpp">
+      <Filter>Scripts\zone\Azeroth\Silvermoon City</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\silverpine_forest\silverpine_forest.cpp">
+      <Filter>Scripts\zone\Azeroth\Silverpine Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stonetalon_mountains\stonetalon_mountains.cpp">
+      <Filter>Scripts\zone\Kalimdor\Stonetalon Mountains</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stormwind\stormwind_city.cpp">
+      <Filter>Scripts\zone\Azeroth\Stormwind City</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stranglethorn_vale\stranglethorn_vale.cpp">
+      <Filter>Scripts\zone\Azeroth\Stranglethorn Vale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_baroness_anastari.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_baron_rivendare.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_cannon_master_willey.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_dathrohan_balnazzar.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_magistrate_barthilas.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_maleki_the_pallid.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_nerubenkan.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_order_of_silver_hand.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_postmaster_malown.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_ramstein_the_gorger.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\boss_timmy_the_cruel.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\instance_stratholme.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\stratholme\stratholme.cpp">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\sunwell_plateau\boss_brutallus.cpp">
+      <Filter>Scripts\zone\Azeroth\Sunwell Plateau</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\sunwell_plateau\boss_eredar_twins.cpp">
+      <Filter>Scripts\zone\Azeroth\Sunwell Plateau</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\sunwell_plateau\boss_felmyst.cpp">
+      <Filter>Scripts\zone\Azeroth\Sunwell Plateau</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\sunwell_plateau\boss_kalecgos.cpp">
+      <Filter>Scripts\zone\Azeroth\Sunwell Plateau</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\sunwell_plateau\boss_kiljaeden.cpp">
+      <Filter>Scripts\zone\Azeroth\Sunwell Plateau</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\sunwell_plateau\boss_muru.cpp">
+      <Filter>Scripts\zone\Azeroth\Sunwell Plateau</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\sunwell_plateau\instance_sunwell_plateau.cpp">
+      <Filter>Scripts\zone\Azeroth\Sunwell Plateau</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\sunwell_plateau\sunwell_plateau.cpp">
+      <Filter>Scripts\zone\Azeroth\Sunwell Plateau</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tanaris\tanaris.cpp">
+      <Filter>Scripts\zone\Kalimdor\Tanaris</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\teldrassil\teldrassil.cpp">
+      <Filter>Scripts\zone\Kalimdor\Teldrassil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\arcatraz\arcatraz.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\Arcatraz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\arcatraz\boss_harbinger_skyriss.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\Arcatraz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\arcatraz\instance_arcatraz.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\Arcatraz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\botanica\boss_high_botanist_freywinn.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\Botanica</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\botanica\boss_laj.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\Botanica</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\botanica\boss_warp_splinter.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\Botanica</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_eye\boss_alar.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Eye</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_eye\boss_astromancer.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Eye</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_eye\boss_kaelthas.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Eye</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_eye\boss_void_reaver.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Eye</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_eye\instance_the_eye.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Eye</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_eye\the_eye.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Eye</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_mechanar\boss_gatewatcher_gyrokill.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Mechanar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_mechanar\boss_gatewatcher_ironhand.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Mechanar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_mechanar\boss_nethermancer_sepethrea.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Mechanar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_mechanar\boss_pathaleon_the_calculator.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Mechanar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tempest_keep\the_mechanar\instance_mechanar.cpp">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Mechanar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\boss_bug_trio.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\boss_cthun.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\boss_fankriss.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\boss_huhuran.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\boss_ouro.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\boss_sartura.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\boss_skeram.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\boss_twinemperors.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\boss_viscidus.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\instance_temple_of_ahnqiraj.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\temple_of_ahnqiraj\mob_anubisath_sentinel.cpp">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\terokkar_forest\terokkar_forest.cpp">
+      <Filter>Scripts\zone\Outland\Terokkar Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\thousand_needles\thousand_needles.cpp">
+      <Filter>Scripts\zone\Kalimdor\Thousand Needles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\thunder_bluff\thunder_bluff.cpp">
+      <Filter>Scripts\zone\Kalimdor\Thunder Bluff</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\tirisfal_glades\tirisfal_glades.cpp">
+      <Filter>Scripts\zone\Azeroth\Tirisfal Glades</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\uldaman\boss_archaedas.cpp">
+      <Filter>Scripts\zone\Azeroth\Uldaman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\uldaman\boss_ironaya.cpp">
+      <Filter>Scripts\zone\Azeroth\Uldaman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\uldaman\instance_uldaman.cpp">
+      <Filter>Scripts\zone\Azeroth\Uldaman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\uldaman\uldaman.cpp">
+      <Filter>Scripts\zone\Azeroth\Uldaman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\halls_of_lightning\boss_bjarngrim.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Lightning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\halls_of_lightning\boss_ionar.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Lightning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\halls_of_lightning\boss_loken.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Lightning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\halls_of_lightning\boss_volkhan.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Lightning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\halls_of_lightning\instance_halls_of_lightning.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Lightning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\halls_of_stone\boss_krystallus.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Stone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\halls_of_stone\boss_maiden_of_grief.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Stone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\halls_of_stone\boss_sjonnir.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Stone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\halls_of_stone\instance_halls_of_stone.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Stone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_algalon.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_assembly_of_iron.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_auriaya.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_flame_leviathan.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_freya.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_general_vezax.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_hodir.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_ignis.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_kologarn.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_mimiron.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_razorscale.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_thorim.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_xt002.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\boss_yoggsaron.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ulduar\ulduar\instance_ulduar.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\undercity\undercity.cpp">
+      <Filter>Scripts\zone\Azeroth\Undercity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\ungoro_crater\ungoro_crater.cpp">
+      <Filter>Scripts\zone\Kalimdor\Un'Goro Crater</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_keep\boss_ingvar_the_plunderer.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_keep\boss_keleseth.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_keep\boss_skarvald_dalronn.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_keep\instance_utgarde_keep.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_keep\utgarde_keep.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Keep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_pinnacle\boss_palehoof.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Pinnacle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_pinnacle\boss_skadi.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Pinnacle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_pinnacle\boss_svala.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Pinnacle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_pinnacle\boss_ymiron.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Pinnacle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_pinnacle\instance_pinnacle.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Pinnacle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\vault_of_archavon\boss_archavon.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Vault of Archavon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\vault_of_archavon\instance_vault_of_archavon.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Vault of Archavon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\violet_hold\boss_cyanigosa.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Violet Hold</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\violet_hold\boss_erekem.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Violet Hold</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\violet_hold\boss_ichoron.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Violet Hold</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\violet_hold\boss_lavanthor.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Violet Hold</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\violet_hold\boss_moragg.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Violet Hold</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\violet_hold\boss_xevozz.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Violet Hold</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\violet_hold\boss_zuramat.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Violet Hold</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\violet_hold\instance_violet_hold.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Violet Hold</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\wailing_caverns\instance_wailing_caverns.cpp">
+      <Filter>Scripts\zone\Kalimdor\Wailing Caverns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\western_plaguelands\western_plaguelands.cpp">
+      <Filter>Scripts\zone\Azeroth\Western Plaguelands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\westfall\westfall.cpp">
+      <Filter>Scripts\zone\Azeroth\Westfall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\wintergrasp\wintergrasp.cpp">
+      <Filter>Scripts\zone\Northrend\Region\Wintergrasp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\winterspring\winterspring.cpp">
+      <Filter>Scripts\zone\Kalimdor\Winterspring</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zangarmarsh\zangarmarsh.cpp">
+      <Filter>Scripts\zone\Outland\Zangarmarsh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulaman\boss_akilzon.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Aman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulaman\boss_halazzi.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Aman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulaman\boss_hexlord.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Aman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulaman\boss_janalai.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Aman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulaman\boss_nalorakk.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Aman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulaman\boss_zuljin.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Aman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulaman\instance_zulaman.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Aman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulaman\zulaman.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Aman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zuldrak\zuldrak.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Drak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulfarrak\zulfarrak.cpp">
+      <Filter>Scripts\zone\Kalimdor\Zul'Farrak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_arlokk.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_gahzranka.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_grilek.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_hakkar.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_hazzarah.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_jeklik.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_jindo.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_mandokir.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_marli.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_renataki.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_thekal.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_venoxis.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\boss_wushoolay.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\zone\zulgurub\instance_zulgurub.cpp">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\system.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\precompiled.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sc_creature.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sc_gossip.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sc_instance.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sc_item.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sc_npc_teleport.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ScriptMgr.h" />
+    <ClInclude Include="..\scripts\creature\simple_ai.h">
+      <Filter>Scripts\creature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\guard\guard_ai.h">
+      <Filter>Scripts\guard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\npc\npc_escortAI.h">
+      <Filter>Scripts\npc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\aunchindoun\sethekk_halls\def_sethekk_halls.h">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Sethekk Halls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\aunchindoun\shadow_labyrinth\def_shadow_labyrinth.h">
+      <Filter>Scripts\zone\Outland\Aunchindoun\Shadow Labyrinth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\azjol_nerub\ahnkahet\def_ahnkahet.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Ahn'kahet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\azjol_nerub\azjol_nerub\def_azjol_nerub.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Azjol-Nerub\Azjol-Nerub</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\blackfathom_depths\def_blackfathom_deeps.h">
+      <Filter>Scripts\zone\Kalimdor\Blackfathom Depths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\blackrock_depths\def_blackrock_depths.h">
+      <Filter>Scripts\zone\Azeroth\Blackrock Depths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\black_temple\def_black_temple.h">
+      <Filter>Scripts\zone\Outland\Black Temple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\caverns_of_time\culling_of_stratholme\def_culling_of_stratholme.h">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Culling of Stratholme</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\caverns_of_time\dark_portal\def_dark_portal.h">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\The Dark Portal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\caverns_of_time\hyjal\def_hyjal.h">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\caverns_of_time\hyjal\hyjalAI.h">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\caverns_of_time\hyjal\hyjal_trash.h">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Battle for Mt. Hyjal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\caverns_of_time\old_hillsbrad\def_old_hillsbrad.h">
+      <Filter>Scripts\zone\Kalimdor\Caverns of Time\Old Hillsbrad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\coilfang_resevoir\serpent_shrine\def_serpent_shrine.h">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Serpent Shrine Cavern</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\coilfang_resevoir\steam_vault\def_steam_vault.h">
+      <Filter>Scripts\zone\Outland\Coilfang Resevoir\Steam Vault</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\deadmines\def_deadmines.h">
+      <Filter>Scripts\zone\Azeroth\Deadmines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\draktharon_keep\def_drak_tharon_keep.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Drak'Tharon Keep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\gruuls_lair\def_gruuls_lair.h">
+      <Filter>Scripts\zone\Outland\Gruul's Lair</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\gundrak\def_gundrak.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Gundrak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\hellfire_citadel\blood_furnace\def_blood_furnace.h">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Blood Furnace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\hellfire_citadel\hellfire_ramparts\def_hellfire_ramparts.h">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Hellfire Ramparts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\hellfire_citadel\magtheridons_lair\def_magtheridons_lair.h">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Magtheridon's lair</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\hellfire_citadel\shattered_halls\def_shattered_halls.h">
+      <Filter>Scripts\zone\Outland\Hellfire Citadel\Shattered Halls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\karazhan\def_karazhan.h">
+      <Filter>Scripts\zone\Azeroth\Karazhan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\magisters_terrace\def_magisters_terrace.h">
+      <Filter>Scripts\zone\Azeroth\Magister's Terrace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\molten_core\def_molten_core.h">
+      <Filter>Scripts\zone\Azeroth\Molten Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\naxxramas\def_naxxramas.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Naxxramas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\nexus\eye_of_eternity\def_eye_of_eternity.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Eye of Eternity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\nexus\nexus\def_nexus.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Nexus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\nexus\oculus\def_oculus.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Nexus\Oculus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\obsidian_sanctum\def_obsidian_sanctum.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Obsidian Sanctum</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\razorfen_kraul\def_razorfen_kraul.h">
+      <Filter>Scripts\zone\Kalimdor\Razorfen Kraul</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\scarlet_monastery\def_scarlet_monastery.h">
+      <Filter>Scripts\zone\Azeroth\Scarlet Monastery</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\scholomance\def_scholomance.h">
+      <Filter>Scripts\zone\Azeroth\Scholomance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\shadowfang_keep\def_shadowfang_keep.h">
+      <Filter>Scripts\zone\Azeroth\Shadowfang Keep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\stratholme\def_stratholme.h">
+      <Filter>Scripts\zone\Azeroth\Stratholme</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\sunwell_plateau\def_sunwell_plateau.h">
+      <Filter>Scripts\zone\Azeroth\Sunwell Plateau</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\tempest_keep\arcatraz\def_arcatraz.h">
+      <Filter>Scripts\zone\Outland\Tempest Keep\Arcatraz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\tempest_keep\the_eye\def_the_eye.h">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Eye</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\tempest_keep\the_mechanar\def_mechanar.h">
+      <Filter>Scripts\zone\Outland\Tempest Keep\The Mechanar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\temple_of_ahnqiraj\def_temple_of_ahnqiraj.h">
+      <Filter>Scripts\zone\Kalimdor\Temple of Ahn'Qiraj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\ulduar\halls_of_lightning\def_halls_of_lightning.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Lightning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\ulduar\halls_of_stone\def_halls_of_stone.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Halls of Stone</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\ulduar\ulduar\def_ulduar.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Ulduar\Ulduar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\utgarde_keep\utgarde_keep\def_utgarde_keep.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Keep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\utgarde_keep\utgarde_pinnacle\def_pinnacle.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Utgarde Keep\Utgarde Pinnacle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\vault_of_archavon\def_vault_of_archavon.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Vault of Archavon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\violet_hold\def_violet_hold.h">
+      <Filter>Scripts\zone\Northrend\Dungeon\Violet Hold</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\zulaman\def_zulaman.h">
+      <Filter>Scripts\zone\Azeroth\Zul'Aman</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\zone\zulgurub\def_zulgurub.h">
+      <Filter>Scripts\zone\Azeroth\Zul'Gurub</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
