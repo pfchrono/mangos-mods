@@ -19,8 +19,10 @@ win/ipch/*
 win/VC90/*Win32*/
 win/VC90/*.user
 win/VC100/*.user
+win/VC100/*.log
 win/VC100/*Win32*/
 src/bindings/scripts/VC90/*.user
 src/bindings/scripts/VC90/*Win32*/
 src/bindings/scripts/VC100/*.user
+src/bindings/scripts/VC100/*.log
 src/bindings/scripts/VC100/*Win32*/

@@ -345,12 +345,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\shared\revision.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Getting Version...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd %(RootDir)%(Directory)
-"$(TargetDir)\..\genrevision__$(Platform)_$(Configuration)\genrevision.exe" "..\.."
-</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)../.hg/branch.cache;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">revision.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Getting Version...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|X64'">cd %(RootDir)%(Directory)
 "$(TargetDir)\..\genrevision__$(Platform)_$(Configuration)\genrevision.exe" "..\.."
@@ -487,9 +489,6 @@
     </ProjectReference>
     <ProjectReference Include="g3dlite.vcxproj">
       <Project>{8072769e-cf10-48bf-b9e1-12752a5dac6e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="genrevision.vcxproj">
-      <Project>{803f488e-4c5a-4866-8d5c-1e6c03c007c2}</Project>
     </ProjectReference>
     <ProjectReference Include="zlib.vcxproj">
       <Project>{8f1dea42-6a5b-4b62-839d-c141a7bfacf2}</Project>
