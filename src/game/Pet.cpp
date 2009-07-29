@@ -849,12 +849,12 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
     else                                            // not exist in DB, use some default fake data
     {
 		// FIXME: Using a bare random generated stat system for pet stats.
-		unt32 bonusstat = float(irand(5,15));
-		unt32 s_strength = float(22 + bonusstat);
-		unt32 s_agility = float(22 + bonusstat);
-		unt32 s_stamina = float(25 + bonusstat);
-		unt32 s_intellect = float(28 + bonusstat);
-		unt32 s_spirit = float(27 + bonusstat);
+		uint32 bonusstat = float(irand(5,15));
+		uint32 s_strength = float(22 + bonusstat);
+		uint32 s_agility = float(22 + bonusstat);
+		uint32 s_stamina = float(25 + bonusstat);
+		uint32 s_intellect = float(28 + bonusstat);
+		uint32 s_spirit = float(27 + bonusstat);
 
         SetCreateStat(STAT_STRENGTH, s_strength);
         SetCreateStat(STAT_AGILITY, s_agility);
@@ -863,8 +863,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
         SetCreateStat(STAT_SPIRIT, s_spirit);
     }
 	// FIXME: using a preset damage, will find a better forumal soon
-	unt32 minbasedam = (petlevel * 4 - petlevel * 5 * 0.5);
-	unt32 maxbasedam = (petlevel * 4 - petlevel * 5);
+	uint32 minbasedam = (petlevel * 4 - petlevel * 5 * 0.5);
+	uint32 maxbasedam = (petlevel * 4 - petlevel * 5);
     m_bonusdamage = 0;
     switch(petType)
     {
@@ -935,8 +935,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
                 }
                 case 31216: // Mirror Image
                 {
-					unt32 ohealth = urand(2950,3350);
-					unt32 omana = (m_owner->GetMaxPower(POWER_MANA) * 0.5);
+					uint32 ohealth = urand(2950,3350);
+					uint32 omana = (m_owner->GetMaxPower(POWER_MANA) * 0.5);
                     SetBonusDamage( int32(m_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_FROST) * 0.33f * 3));
                     if(!pInfo)
                     {
