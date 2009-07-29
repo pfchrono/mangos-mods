@@ -938,6 +938,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
 					uint32 ohealth = urand(2950,3350);
 					uint32 omana = (m_owner->GetMaxPower(POWER_MANA) * 0.5);
                     SetBonusDamage( int32(m_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_FROST) * 0.33f * 3));
+					std::string ownername = m_owner->GetName();
+					SetName(ownername);
                     if(!pInfo)
                     {
                         SetCreateMana(omana);
