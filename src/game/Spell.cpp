@@ -1296,7 +1296,7 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit *unit, const uint32 effectMask, bool 
             }
             if( unit->isInCombat() && !(m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_NO_INITIAL_AGGRO) )
             {
-                m_caster->SetInCombatState(unit->GetCombatTimer() > 0);
+                m_caster->SetInCombatState(unit->GetCombatTimer() > 0, unit);
                 unit->getHostilRefManager().threatAssist(m_caster, 0.0f);
             }
         }
@@ -2280,6 +2280,7 @@ void Spell::SetTargetMap(uint32 i, uint32 cur)
                         // Search for ghoul if our ghoul or dead body not valid unit target
                         if (!(m_targets.getUnitTarget() && (m_targets.getUnitTarget()->GetEntry() == 26125 && m_targets.getUnitTarget()->GetOwnerGUID() == m_caster->GetGUID()
                             || (m_targets.getUnitTarget()->getDeathState() == CORPSE
+                                && m_targets.getUnitTarget()->GetDisplayId() == m_targets.getUnitTarget()->GetNativeDisplayId() 
                                 && m_targets.getUnitTarget()->GetTypeId()== TYPEID_UNIT
                                 && !((Creature*)m_targets.getUnitTarget())->isDeadByDefault()
                                 && !(m_targets.getUnitTarget()->GetCreatureTypeMask() & CREATURE_TYPEMASK_MECHANICAL_OR_ELEMENTAL))
@@ -2621,8 +2622,12 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect* triggeredByAura
         }
     }
 
+    if (m_caster->GetTypeId()==TYPEID_PLAYER)
+        ((Player*)m_caster)->SetSpellModTakingSpell(this, true);
     // Fill cost data (not use power for item casts
     m_powerCost = m_CastItem ? 0 : CalculatePowerCost(m_spellInfo, m_caster, m_spellSchoolMask);
+    if (m_caster->GetTypeId()==TYPEID_PLAYER)
+        ((Player*)m_caster)->SetSpellModTakingSpell(this, false);
 
     SpellCastResult result = CheckCast(true);
     if(result != SPELL_CAST_OK && !IsAutoRepeat())          //always cast autorepeat dummy for triggering
