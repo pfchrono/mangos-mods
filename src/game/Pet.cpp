@@ -848,16 +848,13 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
     }
     else                                            // not exist in DB, use some default fake data
     {
-        // remove elite bonuses included in DB values
-        //SetCreateHealth(uint32(((float(cinfo->maxhealth) / cinfo->maxlevel) / (1 + 2 * cinfo->rank)) * petlevel) );
-        //SetCreateMana(  uint32(((float(cinfo->maxmana)   / cinfo->maxlevel) / (1 + 2 * cinfo->rank)) * petlevel) );
-
-		int32 bonusstat = irand(5,15);
-		int32 s_strength = 22 + bonusstat;
-		int32 s_agility = 22 + bonusstat;
-		int32 s_stamina = 25 + bonusstat;
-		int32 s_intellect = 28 + bonusstat;
-		int32 s_spirit = 27 + bonusstat;
+		// FIXME: Using a bare random generated stat system for pet stats.
+		unt32 bonusstat = float(irand(5,15));
+		unt32 s_strength = float(22 + bonusstat);
+		unt32 s_agility = float(22 + bonusstat);
+		unt32 s_stamina = float(25 + bonusstat);
+		unt32 s_intellect = float(28 + bonusstat);
+		unt32 s_spirit = float(27 + bonusstat);
 
         SetCreateStat(STAT_STRENGTH, s_strength);
         SetCreateStat(STAT_AGILITY, s_agility);
@@ -865,7 +862,9 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
         SetCreateStat(STAT_INTELLECT, s_intellect);
         SetCreateStat(STAT_SPIRIT, s_spirit);
     }
-
+	// FIXME: using a preset damage, will find a better forumal soon
+	unt32 minbasedam = (petlevel * 4 - petlevel * 5 * 0.5);
+	unt32 maxbasedam = (petlevel * 4 - petlevel * 5);
     m_bonusdamage = 0;
     switch(petType)
     {
@@ -873,31 +872,25 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
         {
 			uint32 val2 = (irand(75,185));
 			uint32 val3 = (irand(100,235));
-            //the damage bonus used for pets is either fire or shadow damage, whatever is higher
-            uint32 fire  = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE);
+			// FIXME: using a preset damage, will find a better forumal soon
+			uint32 fire  = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE);
             uint32 shadow = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW);
             uint32 val  = (fire > shadow) ? fire : shadow;
             SetBonusDamage(int32 (val + val2 * 0.15f + val3));
-            //bonusAP += val * 0.57;
 
-			uint32 bonusd = (petlevel * 0.15f + irand(75,150));
-            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel - (petlevel / 4) + bonusd) );
-            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel + (petlevel / 4) + bonusd) );
-
-            //SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, float(cinfo->attackpower));
+			uint32 bonusd = (petlevel * 0.45f + irand(75,150));
+            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(minbasedam + bonusd) );
+            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxbasedam + bonusd) );
             break;
         }
         case HUNTER_PET:
         {
 			uint32 val = (irand(75,185));
             SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, objmgr.GetXPForLevel(petlevel)*PET_XP_FACTOR);
-            //these formula may not be correct; however, it is designed to be close to what it should be
-            //this makes dps 0.5 of pets level
+			// FIXME: using a preset damage, will find a better forumal soon
 			uint32 bonusd = (petlevel * 0.15f + irand(75,150));
-			SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel - (petlevel / 4) + bonusd) );
-            //damage range is then petlevel / 2
-			SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel + (petlevel / 4) + bonusd) );
-            //damage is increased afterwards as strength and pet scaling modify attack power
+			SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(minbasedam + bonusd) );
+			SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxbasedam + bonusd) );
             break;
         }
         default:
@@ -909,44 +902,46 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
                     //40% damage bonus of mage's frost damage
                     float val = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FROST) * 0.4;
                     if(val < 0)
-                        val = 0;
+                        val = 15;
                     SetBonusDamage( int32(val));
                     break;
                 }
                 case 1964: //force of nature
                 {
                     if(!pInfo)
-                        SetCreateHealth(30 + 30*petlevel);
-                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel * 2.5f - (petlevel / 2)));
-                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel * 2.5f + (petlevel / 2)));
+                        SetCreateHealth(urand(30,100) + (urand(30,55) * petlevel));
+                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(minbasedam));
+                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxbasedam));
                     break;
                 }
                 case 15352: //earth elemental 36213
                 {
                     if(!pInfo)
-                        SetCreateHealth(100 + 120*petlevel);
-                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel - (petlevel / 4)));
-                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel + (petlevel / 4)));
+                        SetCreateHealth(urand(100,500) + 120 * petlevel);
+                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(minbasedam));
+                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxbasedam));
                     break;
                 }
                 case 15438: //fire elemental
                 {
                     if(!pInfo)
                     {
-                        SetCreateHealth(40*petlevel);
-                        SetCreateMana(28 + 10*petlevel);
+                        SetCreateHealth(urand(100,500) + 120 * petlevel);
+                        SetCreateMana(urand(100,500) + 120 * petlevel * 0.5f);
                     }
-                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel * 4 - petlevel));
-                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel * 4 + petlevel));
+                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(minbasedam));
+                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxbasedam));
                     break;
                 }
                 case 31216: // Mirror Image
                 {
-                    SetBonusDamage( int32(m_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_FROST) * 0.33f));
+					unt32 ohealth = urand(2950,3350);
+					unt32 omana = (m_owner->GetMaxPower(POWER_MANA) * 0.5);
+                    SetBonusDamage( int32(m_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_FROST) * 0.33f * 3));
                     if(!pInfo)
                     {
-                        SetCreateMana(28 + 30*petlevel);
-                        SetCreateHealth(28 + 10*petlevel);
+                        SetCreateMana(omana);
+                        SetCreateHealth(ohealth);
                     }
                     break;
                 }
@@ -957,12 +952,9 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
                         SetCreateMana(28 + 10*petlevel);
                         SetCreateHealth(28 + 30*petlevel);
                     }
-                    // FIXME: this is wrong formula, possible each guardian pet have own damage formula
-                    //these formula may not be correct; however, it is designed to be close to what it should be
-                    //this makes dps 0.5 of pets level
-                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel - (petlevel / 4)));
-                    //damage range is then petlevel / 2
-                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel + (petlevel / 4)));
+                    // FIXME: using a preset damage, will find a better forumal soon
+                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(minbasedam));
+                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxbasedam));
                     break;
                 }
             }
