@@ -38,6 +38,7 @@ npc_snake_trap_serpents 80%     AI for snakes that summoned by Snake Trap
 EndContentData */
 
 #include "precompiled.h"
+#include "Unit.h"
 #include "../npc/npc_escortAI.h"
 #include "ObjectMgr.h"
 
@@ -1669,8 +1670,7 @@ struct TRINITY_DLL_DECL npc_mirror_image : SpellAI
             if (count == spell)
             {
                 DoCast(spells[spell]);
-                //cooldown += me->GetCurrentSpellCastTime(*itr); // Temp fix till this is fixed via TC2
-                cooldown += urand(500,1000);
+                cooldown += me->GetCurrentSpellCastTime(*itr);
             }
             events.ScheduleEvent(*itr, cooldown);
         }
@@ -1689,8 +1689,7 @@ struct TRINITY_DLL_DECL npc_mirror_image : SpellAI
         if(uint32 spellId = events.ExecuteEvent())
         {
             DoCast(spellId);
-            //uint32 casttime = me->GetCurrentSpellCastTime(spellId); // Temp fix till this is fixed via TC2
-			uint32 casttime = urand(500,1000);
+			uint32 casttime = me->GetCurrentSpellCastTime(spellId);
             events.ScheduleEvent(spellId, (casttime ? casttime : 500) + GetAISpellInfo(spellId)->cooldown);
         }
     }
