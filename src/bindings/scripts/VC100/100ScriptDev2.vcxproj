@@ -100,8 +100,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy ..\..\..\..\bin\$(Platform)_$(Configuration)\trinitycore.lib ..\..\..\..\win\VC100\trinitycore__$(Platform)_$(Configuration)\</Command>
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -130,8 +129,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy ..\..\..\..\bin\$(Platform)_$(Configuration)\trinitycore.lib ..\..\..\..\win\VC100\trinitycore__$(Platform)_$(Configuration)\</Command>
     </PreBuildEvent>
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
