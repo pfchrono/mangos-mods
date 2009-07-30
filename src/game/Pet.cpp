@@ -880,8 +880,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
 
 			uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
 			uint32 apwr = bonusd + cinfo->attackpower;
-            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg + apwr) );
-            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg + apwr * 2) );
+            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 4 + apwr) );
+            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 4 + apwr * 2) );
             break;
         }
         case HUNTER_PET:
@@ -890,45 +890,112 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
             SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, objmgr.GetXPForLevel(petlevel)*PET_XP_FACTOR);
 			// FIXME: using a preset damage, will find a better forumal soon
 			uint32 bonusd = (2 + petlevel * 0.15f + irand(75,150));
-			SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(minbasedam + bonusd) );
-			SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxbasedam + bonusd * 2) );
+			SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg + bonusd) );
+			SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg + bonusd * 2) );
             break;
         }
         default:
         {
             switch(GetEntry())
             {
+                case 89: // Infernal
+                {
+                    //40% damage bonus
+					uint32 val2 = (urand(75,185));
+					uint32 val3 = (urand(100,235));
+					// FIXME: using a preset damage, will find a better forumal soon
+					uint32 fire  = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE);
+		            uint32 shadow = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW);
+            		uint32 val  = (fire > shadow) ? fire : shadow;
+		            SetBonusDamage(int32 (val + val2 * 0.15f + val3 * 2));
+					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
+					uint32 apwr = bonusd + cinfo->attackpower;
+					SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 2 + apwr) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 2 + apwr) );
+                    break;
+                }
+                case 1860: // Voidwalker
+                {
+                    //40% damage bonus
+					uint32 val2 = (urand(75,185));
+					uint32 val3 = (urand(100,235));
+					// FIXME: using a preset damage, will find a better forumal soon
+					uint32 fire  = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE);
+		            uint32 shadow = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW);
+            		uint32 val  = (fire > shadow) ? fire : shadow;
+		            SetBonusDamage(int32 (val + val2 * 0.15f + val3 * 2));
+					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
+					uint32 apwr = bonusd + cinfo->attackpower;
+					SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 2 + apwr + petlevel) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 2 + apwr + petlevel) );
+                    break;
+                }
+                case 1863: // Succubus
+                {
+                    //40% damage bonus
+					uint32 val2 = (urand(75,185));
+					uint32 val3 = (urand(100,235));
+					// FIXME: using a preset damage, will find a better forumal soon
+					uint32 fire  = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE);
+		            uint32 shadow = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW);
+            		uint32 val  = (fire > shadow) ? fire : shadow;
+		            SetBonusDamage(int32 (val + val2 * 0.15f + val3 * 2));
+					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
+					uint32 apwr = bonusd + cinfo->attackpower;
+					SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 2 + apwr + petlevel) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 2 + apwr + petlevel) );
+                    break;
+                }
                 case 510: // mage Water Elemental
                 {
                     //40% damage bonus of mage's frost damage
                     float val = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FROST) * 0.4;
                     if(val < 0)
                         val = 15;
-                    SetBonusDamage( int32(val));
+                    SetBonusDamage( int32(val * 3));
                     break;
                 }
                 case 1964: //force of nature
                 {
+                    //40% damage bonus
+                    float val = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_NATURE) * 0.4;
+                    if(val < 0)
+                        val = 15;
+                    SetBonusDamage( int32(val * 3));
                     if(!pInfo)
+					{
                         SetCreateHealth(urand(30,100) + (urand(30,55) * petlevel));
-						uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-						uint32 apwr = bonusd + cinfo->attackpower;
-				        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * petlevel + apwr) );
-						SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * petlevel + apwr) );
+					}
+					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
+					uint32 apwr = bonusd + cinfo->attackpower;
+					SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * petlevel / 6 + apwr) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * petlevel / 6 + apwr) );
                     break;
                 }
                 case 15352: //earth elemental 36213
                 {
+                    //40% damage bonus
+                    float val = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_NATURE) * 0.4;
+                    if(val < 0)
+                        val = 15;
+                    SetBonusDamage( int32(val * 3));
                     if(!pInfo)
+					{
                         SetCreateHealth(urand(100,500) + 120 * petlevel);
-						uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-						uint32 apwr = bonusd + cinfo->attackpower;
-				        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg + apwr) );
-						SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg + apwr) );
+					}
+					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
+					uint32 apwr = bonusd + cinfo->attackpower;
+					SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 2 + apwr) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 2 + apwr) );
                     break;
                 }
                 case 15438: //fire elemental
                 {
+                    //40% damage bonus
+                    float val = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE) * 0.4;
+                    if(val < 0)
+                        val = 15;
+                    SetBonusDamage( int32(val * 3));
                     if(!pInfo)
                     {
                         SetCreateHealth(urand(100,500) + 120 * petlevel);
@@ -936,15 +1003,15 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
                     }
 					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
 					uint32 apwr = bonusd + cinfo->attackpower;
-			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg + apwr) );
-					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg + apwr) );
+			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 2 + apwr) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 2 + apwr) );
                     break;
                 }
                 case 31216: // Mirror Image
                 {
 					uint32 ohealth = urand(2950,3350);
 					uint32 omana = (m_owner->GetMaxPower(POWER_MANA) * 0.5);
-                    SetBonusDamage( int32(m_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_FROST) * 0.33f * 3));
+                    SetBonusDamage( int32(m_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_FROST) * 0.33f * 4.5));
 					std::string ownername = m_owner->GetName();
 					SetName(ownername);
                     if(!pInfo)
@@ -960,6 +1027,11 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
                 }
                 default:
                 {
+                    //40% damage bonus
+                    float val = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_NORMAL) * 0.4;
+                    if(val < 0)
+                        val = 15;
+                    SetBonusDamage( int32(val * 3));
                     if(!pInfo)
                     {
                         SetCreateMana(28 + 10*petlevel);
