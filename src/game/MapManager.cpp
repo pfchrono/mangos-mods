@@ -303,8 +303,7 @@ void MapManager::DoDelayedMovesAndRemoves()
     
 #pragma omp parallel for schedule(dynamic) private(i) shared(update_queue)
     for(i=0;i<i_maps.size();i++)
-	update_queue[i]->DoDelayedMovesAndRemoves();
-    */
+	update_queue[i]->DoDelayedMovesAndRemoves();*/
 }
 
 bool MapManager::ExistMapAndVMap(uint32 mapid, float x,float y)

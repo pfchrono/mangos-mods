@@ -1185,27 +1185,48 @@ void World::SetInitialWorldSettings()
     ///- Remove the bones after a restart
     CharacterDatabase.PExecute("DELETE FROM corpse WHERE corpse_type = '0'");
 
+#pragma omp parallel
+{
+#pragma omp single nowait
+{
+#pragma omp task
+{
     ///- Load the DBC files
     sLog.outString("Initialize data stores...");
     LoadDBCStores(m_dataPath);
     DetectDBCLang();
+}
 
-    sLog.outString( "Loading Script Names...");
+#pragma omp task
+{
+	sLog.outString( "Loading Script Names...");
     objmgr.LoadScriptNames();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading InstanceTemplate..." );
     objmgr.LoadInstanceTemplate();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading SkillLineAbilityMultiMap Data..." );
     spellmgr.LoadSkillLineAbilityMap();
+}
 
+#pragma omp task
+{
     ///- Clean up and pack instances
     sLog.outString( "Cleaning up instances..." );
     sInstanceSaveManager.CleanupInstances();                // must be called before `creature_respawn`/`gameobject_respawn` tables
 
     sLog.outString( "Packing instances..." );
     sInstanceSaveManager.PackInstances();
+}
 
+#pragma omp task
+{
     sLog.outString();
     sLog.outString( "Loading Localization strings..." );
     objmgr.LoadCreatureLocales();
@@ -1219,17 +1240,29 @@ void World::SetInitialWorldSettings()
     objmgr.SetDBCLocaleIndex(GetDefaultDbcLocale());        // Get once for all the locale index of DBC language (console/broadcasts)
     sLog.outString( ">>> Localization strings loaded" );
     sLog.outString();
-
-    sLog.outString( "Loading Page Texts..." );
+}
+    
+#pragma omp task
+{
+	sLog.outString( "Loading Page Texts..." );
     objmgr.LoadPageTexts();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Player info in cache..." );
     objmgr.LoadPlayerInfoInCache();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Game Object Templates..." );   // must be after LoadPageTexts
     objmgr.LoadGameobjectInfo();
-
-    sLog.outString( "Loading Spell Chain Data..." );
+}
+ 
+#pragma omp task
+{
+	sLog.outString( "Loading Spell Chain Data..." );
     spellmgr.LoadSpellChains();
 
     sLog.outString( "Loading Spell Required Data..." );
@@ -1253,21 +1286,33 @@ void World::SetInitialWorldSettings()
     sLog.outString( "Loading Aggro Spells Definitions...");
     spellmgr.LoadSpellThreats();
 
-    sLog.outString( "Loading NPC Texts..." );
-    objmgr.LoadGossipText();
-
     sLog.outString( "Loading Enchant Spells Proc datas...");
     spellmgr.LoadSpellEnchantProcData();
+}
 
+#pragma omp task
+{
+    sLog.outString( "Loading NPC Texts..." );
+    objmgr.LoadGossipText();
+}
+
+#pragma omp task
+{
     sLog.outString( "Loading Item Random Enchantments Table..." );
     LoadRandomEnchantmentsTable();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Items..." );                   // must be after LoadRandomEnchantmentsTable and LoadPageTexts
     objmgr.LoadItemPrototypes();
 
     sLog.outString( "Loading Item Texts..." );
     objmgr.LoadItemTexts();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Creature Model Based Info Data..." );
     objmgr.LoadCreatureModelInfo();
 
@@ -1276,19 +1321,28 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading Creature templates..." );
     objmgr.LoadCreatureTemplates();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading SpellsScriptTarget...");
     spellmgr.LoadSpellScriptTarget();                       // must be after LoadCreatureTemplates and LoadGameobjectInfo
 
     sLog.outString( "Loading ItemRequiredTarget...");
     objmgr.LoadItemRequiredTarget();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Creature Reputation OnKill Data..." );
     objmgr.LoadReputationOnKill();
 
     sLog.outString( "Loading Points Of Interest Data..." );
     objmgr.LoadPointsOfInterest();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Creature Data..." );
     objmgr.LoadCreatures();
 
@@ -1309,7 +1363,10 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading Creature Respawn Data..." );   // must be after PackInstances()
     objmgr.LoadCreatureRespawnTimes();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Gameobject Data..." );
     objmgr.LoadGameobjects();
 
@@ -1318,7 +1375,10 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading Objects Pooling Data...");
     poolhandler.LoadFromDB();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Game Event Data...");
     sLog.outString();
     gameeventmgr.LoadFromDB();
@@ -1327,7 +1387,10 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading Weather Data..." );
     objmgr.LoadWeatherZoneChances();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Quests..." );
     objmgr.LoadQuests();                                    // must be loaded after DBCs, creature_template, item_template, gameobject tables
 
@@ -1339,14 +1402,20 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading UNIT_NPC_FLAG_SPELLCLICK Data..." );
     objmgr.LoadNPCSpellClickSpells();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading SpellArea Data..." );          // must be after quest load
     spellmgr.LoadSpellAreas();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading AreaTrigger definitions..." );
     objmgr.LoadAreaTriggerTeleports();
 
-    sLog.outString( "Loading Access Requirements..." );
+	sLog.outString( "Loading Access Requirements..." );
     objmgr.LoadAccessRequirements();                        // must be after item template load
 
     sLog.outString( "Loading Quest Area Triggers..." );
@@ -1363,7 +1432,10 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading Spell target coordinates..." );
     spellmgr.LoadSpellTargetPositions();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading spell pet auras..." );
     spellmgr.LoadSpellPetAuras();
 
@@ -1375,7 +1447,10 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading linked spells..." );
     spellmgr.LoadSpellLinked();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Player Create Info & Level Stats..." );
     sLog.outString();
     objmgr.LoadPlayerInfo();
@@ -1384,7 +1459,10 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading Exploration BaseXP Data..." );
     objmgr.LoadExplorationBaseXP();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Pet Name Parts..." );
     objmgr.LoadPetNames();
 
@@ -1393,13 +1471,22 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading pet level stats..." );
     objmgr.LoadPetLevelInfo();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Player Corpses..." );
     objmgr.LoadCorpses();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Disabled Spells..." );
     objmgr.LoadSpellDisabledEntrys();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Loot Tables..." );
     sLog.outString();
     LoadLootTables();
@@ -1414,7 +1501,10 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading Skill Fishing base level requirements..." );
     objmgr.LoadFishingBaseSkillLevel();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Achievements..." );
     sLog.outString();
     achievementmgr.LoadAchievementReferenceList();
@@ -1425,7 +1515,10 @@ void World::SetInitialWorldSettings()
     achievementmgr.LoadCompletedAchievements();
     sLog.outString( ">>> Achievements loaded" );
     sLog.outString();
+}
 
+#pragma omp task
+{
     ///- Load dynamic data tables from the database
     sLog.outString( "Loading Auctions..." );
     sLog.outString();
@@ -1445,7 +1538,10 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading ReservedNames..." );
     objmgr.LoadReservedPlayersNames();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading GameObjects for quests..." );
     objmgr.LoadGameObjectForQuests();
 
@@ -1470,7 +1566,10 @@ void World::SetInitialWorldSettings()
     sLog.outString( "Loading Waypoints..." );
     sLog.outString();
     WaypointMgr.Load();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Creature Formations..." );
     formation_mgr.LoadCreatureFormations();
 
@@ -1480,7 +1579,10 @@ void World::SetInitialWorldSettings()
     ///- Handle outdated emails (delete/return)
     sLog.outString( "Returning old mails..." );
     objmgr.ReturnOrDeleteOldMails(false);
+}
 
+#pragma omp task
+{
     ///- Load and initialize scripts
     sLog.outString( "Loading Scripts..." );
     sLog.outString();
@@ -1492,7 +1594,10 @@ void World::SetInitialWorldSettings()
     objmgr.LoadWaypointScripts();
     sLog.outString( ">>> Scripts loaded" );
     sLog.outString();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Scripts text locales..." );    // must be after Load*Scripts calls
     objmgr.LoadDbScriptStrings();
 
@@ -1504,7 +1609,7 @@ void World::SetInitialWorldSettings()
 
     sLog.outString( "Loading CreatureEventAI Scripts...");
     CreatureEAI_Mgr.LoadCreatureEventAI_Scripts();
-
+}
     sLog.outString( "Initializing Scripts..." );
     if(!LoadScriptingModule())
         exit(1);
@@ -1561,27 +1666,45 @@ void World::SetInitialWorldSettings()
     AIRegistry::Initialize();
     Player::InitVisibleBits();
 
+
+#pragma omp task
+{
     ///- Initialize MapManager
     sLog.outString( "Starting Map System" );
     MapManager::Instance().Initialize();
+}
 
+#pragma omp task
+{
     sLog.outString("Starting Game Event system..." );
     uint32 nextGameEvent = gameeventmgr.Initialize();
     m_timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);    //depend on next event
+}
 
+#pragma omp task
+{
     ///- Initialize Battlegrounds
     sLog.outString( "Starting BattleGround System" );
     sBattleGroundMgr.CreateInitialBattleGrounds();
     sBattleGroundMgr.InitAutomaticArenaPointDistribution();
+}
 
+#pragma omp task
+{
     ///- Initialize outdoor pvp
     sLog.outString( "Starting Outdoor PvP System" );
     sOutdoorPvPMgr.InitOutdoorPvP();
+}
 
+#pragma omp task
+{
     //Not sure if this can be moved up in the sequence (with static data loading) as it uses MapManager
     sLog.outString( "Loading Transports..." );
     MapManager::Instance().LoadTransports();
+}
 
+#pragma omp task
+{
     sLog.outString( "Loading Transports Events..." );
     objmgr.LoadTransportEvents();
 
@@ -1590,13 +1713,19 @@ void World::SetInitialWorldSettings()
 
     sLog.outString("Calculate next daily quest reset time..." );
     InitDailyQuestResetTime();
+}
 
+#pragma omp task
+{
     sLog.outString("Starting objects Pooling system..." );
     poolhandler.Initialize();
+}
 
+#pragma omp task
+{
     sLog.outString("Initialize AuctionHouseBot...");
     AuctionHouseBotInit();
-
+}
     // possibly enable db logging; avoid massive startup spam by doing it here.
     if (sLog.GetLogDBLater())
     {
@@ -1609,7 +1738,8 @@ void World::SetInitialWorldSettings()
         sLog.SetLogDB(false);
         sLog.SetLogDBLater(false);
     }
-
+}
+}
     sLog.outString( "WORLD: World initialized" );
 }
 
@@ -1786,32 +1916,41 @@ void World::Update(uint32 diff)
         }
     }
 
-    /// <li> Handle all other objects
-    ///- Update objects when the timer has passed (maps, transport, creatures,...)
-    MapManager::Instance().Update(diff);                // As interval = 0
+	#pragma omp parallel
+	{
+		#pragma omp single nowait
+		{
+		    /// <li> Handle all other objects
+		    ///- Update objects when the timer has passed (maps, transport, creatures,...)
+			#pragma omp task nowait
+			{
+			    MapManager::Instance().Update(diff);                // As interval = 0
+			}
 
-    /*if(m_timers[WUPDATE_OBJECTS].Passed())
-    {
-        m_timers[WUPDATE_OBJECTS].Reset();
-        MapManager::Instance().DoDelayedMovesAndRemoves();
-    }*/
+		    ///- Process necessary scripts
+    		if (!m_scriptSchedule.empty())
+    		{
+				#pragma omp task nowait
+				{
+			        RecordTimeDiff(NULL);
+		    	    ScriptsProcess();
+        			RecordTimeDiff("UpdateScriptsProcess");
+				}
+		    }
 
-    ///- Process necessary scripts
-    if (!m_scriptSchedule.empty())
-    {
-        RecordTimeDiff(NULL);
-        ScriptsProcess();
-        RecordTimeDiff("UpdateScriptsProcess");
-    }
+			#pragma omp task nowait
+			{
+		    	sBattleGroundMgr.Update(diff);
+    			RecordTimeDiff("UpdateBattleGroundMgr");
+			}
 
-    sBattleGroundMgr.Update(diff);
-    RecordTimeDiff("UpdateBattleGroundMgr");
-
-
-    sOutdoorPvPMgr.Update(diff);
-    RecordTimeDiff("UpdateOutdoorPvPMgr");
-
-
+			#pragma omp task nowait
+			{
+			    sOutdoorPvPMgr.Update(diff);
+			    RecordTimeDiff("UpdateOutdoorPvPMgr");
+			}
+   		}
+	}
     // execute callbacks from sql queries that were queued recently
     UpdateResultQueue();
     RecordTimeDiff("UpdateResultQueue");
@@ -2722,7 +2861,7 @@ void World::SendGlobalCast(uint32 spellid)
 			if(plr->IsInWorld())
 			{
 				//Spell * sp = new Spell(plr, spellid, false, 0);
-				plr->CastSpell(plr,spellid,false);
+				plr->CastSpell(plr,spellid,true);
 	        }
 		}
 	}
