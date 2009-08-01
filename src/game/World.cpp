@@ -1866,12 +1866,21 @@ void World::Update(uint32 diff)
         auctionmgr.Update();
     }
 
-    /// <li> Handle session updates when the timer has passed
+#pragma omp parallel
+{
+#pragma omp single nowait
+{
+#pragma omp task
+{
+	/// <li> Handle session updates when the timer has passed
     RecordTimeDiff(NULL);
     UpdateSessions(diff);
     RecordTimeDiff("UpdateSessions");
+}
 
-    /// <li> Handle weather updates when the timer has passed
+#pragma omp task
+{
+	/// <li> Handle weather updates when the timer has passed
     if (m_timers[WUPDATE_WEATHERS].Passed())
     {
         m_timers[WUPDATE_WEATHERS].Reset();
@@ -1892,7 +1901,11 @@ void World::Update(uint32 diff)
             }
         }
     }
-    /// <li> Update uptime table
+}
+
+#pragma omp task
+{
+	/// <li> Update uptime table
     if (m_timers[WUPDATE_UPTIME].Passed())
     {
         uint32 tmpDiff = (m_gameTime - m_startTime);
@@ -1901,7 +1914,7 @@ void World::Update(uint32 diff)
         m_timers[WUPDATE_UPTIME].Reset();
         LoginDatabase.PExecute("UPDATE uptime SET uptime = %u, maxplayers = %u WHERE realmid = %u AND starttime = " UI64FMTD, tmpDiff, maxClientsNum, realmID, uint64(m_startTime));
     }
-
+}
     /// <li> Clean logs table
     if(sWorld.getConfig(CONFIG_LOGDB_CLEARTIME) > 0) // if not enabled, ignore the timer
     {
@@ -1915,7 +1928,8 @@ void World::Update(uint32 diff)
                 sWorld.getConfig(CONFIG_LOGDB_CLEARTIME), uint64(time(0)));
         }
     }
-
+  }
+}
 	#pragma omp parallel
 	{
 		#pragma omp single nowait
