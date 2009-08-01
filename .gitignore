@@ -10,19 +10,24 @@
 # MaNGOS generated files at Windows build
 #
 bin/*
-dep/lib/win32*/
+dep/lib/Win32*/
+dep/lib/X64*/
 win/*.opensdf
 win/*.sdf
 win/*.ncb
 win/*.suo
 win/ipch/*
 win/VC90/*Win32*/
+win/VC90/*X64*/
 win/VC90/*.user
 win/VC100/*.user
 win/VC100/*.log
 win/VC100/*Win32*/
+win/VC100/*X64*/
 src/bindings/scripts/VC90/*.user
 src/bindings/scripts/VC90/*Win32*/
+src/bindings/scripts/VC90/*X64*/
 src/bindings/scripts/VC100/*.user
 src/bindings/scripts/VC100/*.log
 src/bindings/scripts/VC100/*Win32*/
+src/bindings/scripts/VC100/*X64*/
