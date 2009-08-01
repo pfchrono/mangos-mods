@@ -1018,10 +1018,11 @@ void WorldSession::HandleRequestAccountData(WorldPacket& recv_data)
 
     uint32 size = adata->Data.size();
 
-    ByteBuffer dest;
-    dest.resize(size);
+    uLongf destSize = compressBound(size);
 
-    uLongf destSize = size;
+    ByteBuffer dest;
+    dest.resize(destSize);
+
     if(size && compress(const_cast<uint8*>(dest.contents()), &destSize, (uint8*)adata->Data.c_str(), size) != Z_OK)
     {
         sLog.outDebug("RAD: Failed to compress account data");
@@ -1215,15 +1216,17 @@ void WorldSession::HandleWardenDataOpcode(WorldPacket& /*recv_data*/)
     */
 }
 
-void WorldSession::HandlePlayedTime(WorldPacket& /*recv_data*/)
+void WorldSession::HandlePlayedTime(WorldPacket& recv_data)
 {
-    uint32 TotalTimePlayed = GetPlayer()->GetTotalPlayedTime();
-    uint32 LevelPlayedTime = GetPlayer()->GetLevelPlayedTime();
+    CHECK_PACKET_SIZE(recv_data, 1);
 
-    WorldPacket data(SMSG_PLAYED_TIME, 9);
-    data << TotalTimePlayed;
-    data << LevelPlayedTime;
-    data << uint8(0);
+    uint8 unk1;
+    recv_data >> unk1;                                      // 0 or 1 expected
+
+    WorldPacket data(SMSG_PLAYED_TIME, 4 + 4 + 1);
+    data << uint32(_player->GetTotalPlayedTime());
+    data << uint32(_player->GetLevelPlayedTime());
+    data << uint8(unk1);                                    // 0 - will not show in chat frame
     SendPacket(&data);
 }
 
@@ -1355,7 +1358,7 @@ void WorldSession::HandleWhoisOpcode(WorldPacket& recv_data)
 
     uint32 accid = plr->GetSession()->GetAccountId();
 
-    QueryResult *result = LoginDatabase.PQuery("SELECT username,email,last_ip FROM account WHERE id=%u", accid);
+    QueryResult *result = loginDatabase.PQuery("SELECT username,email,last_ip FROM account WHERE id=%u", accid);
     if(!result)
     {
         SendNotification(LANG_ACCOUNT_FOR_PLAYER_NOT_FOUND, charname.c_str());
@@ -1493,7 +1496,7 @@ void WorldSession::HandleSetTitleOpcode( WorldPacket & recv_data )
     recv_data >> title;
 
     // -1 at none
-    if(title > 0 && title < 192)
+    if(title > 0 && title < MAX_TITLE_INDEX)
     {
        if(!GetPlayer()->HasTitle(title))
             return;

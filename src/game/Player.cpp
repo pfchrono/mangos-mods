@@ -322,10 +322,6 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
 
     m_nextSave = sWorld.getConfig(CONFIG_INTERVAL_SAVE);
 
-    // randomize first save time in range [CONFIG_INTERVAL_SAVE] around [CONFIG_INTERVAL_SAVE]
-    // this must help in case next save after mass player load after server startup
-    m_nextSave = urand(m_nextSave/2,m_nextSave*3/2);
-
     clearResurrectRequestData();
 
     memset(m_items, 0, sizeof(Item*)*PLAYER_SLOTS_COUNT);
@@ -491,6 +487,10 @@ Player::~Player ()
     // it must be unloaded already in PlayerLogout and accessed only for loggined player
     //m_social = NULL;
 
+    // Remove reference to map if still exists
+    if (FindMap())
+        ResetMap();
+
     // Note: buy back item already deleted from DB when player was saved
     for(uint8 i = 0; i < PLAYER_SLOTS_COUNT; ++i)
     {
@@ -554,7 +554,6 @@ bool Player::Create( uint32 guidlow, const std::string& name, uint8 race, uint8 
     for (uint8 i = 0; i < PLAYER_SLOTS_COUNT; i++)
         m_items[i] = NULL;
 
-    SetLocationMapId(info->mapId);
     Relocate(info->positionX,info->positionY,info->positionZ);
 
     ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(class_);
@@ -564,7 +563,7 @@ bool Player::Create( uint32 guidlow, const std::string& name, uint8 race, uint8 
         return false;
     }
 
-    SetMap(MapManager::Instance().CreateMap(info->mapId, this));
+    SetMap(MapManager::Instance().CreateMap(info->mapId, this, 0));
 
     uint8 powertype = cEntry->powerType;
 
@@ -1335,8 +1334,8 @@ void Player::Update( uint32 p_time )
     {
         if (p_time >= m_DetectInvTimer)
         {
-            m_DetectInvTimer = 3000;
             HandleStealthedUnitsDetection();
+            m_DetectInvTimer = 3000;
         }
         else
             m_DetectInvTimer -= p_time;
@@ -3871,9 +3870,9 @@ void Player::BuildCreateUpdateBlockForPlayer( UpdateData *data, Player *target )
     Unit::BuildCreateUpdateBlockForPlayer( data, target );
 }
 
-void Player::DestroyForPlayer( Player *target ) const
+void Player::DestroyForPlayer( Player *target, bool anim ) const
 {
-    Unit::DestroyForPlayer( target );
+    Unit::DestroyForPlayer( target, anim );
 
     for(uint8 i = 0; i < INVENTORY_SLOT_BAG_END; i++)
     {
@@ -4116,7 +4115,7 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
     CharacterDatabase.PExecute("DELETE FROM character_equipmentsets WHERE guid = '%u'",guid);
     CharacterDatabase.CommitTransaction();
 
-    //LoginDatabase.PExecute("UPDATE realmcharacters SET numchars = numchars - 1 WHERE acctid = %d AND realmid = %d", accountId, realmID);
+    //loginDatabase.PExecute("UPDATE realmcharacters SET numchars = numchars - 1 WHERE acctid = %d AND realmid = %d", accountId, realmID);
     if(updateRealmChars) sWorld.UpdateRealmCharCount(accountId);
 }
 
@@ -4366,7 +4365,7 @@ void Player::CreateCorpse()
         corpse->SaveToDB();
 
     // register for player, but not show
-    ObjectAccessor::Instance().AddCorpse(corpse);
+    ObjectAccessor::Instance().AddCorpse(corpse, corpse->GetMapId(), corpse->GetInstanceId());
 }
 
 void Player::SpawnCorpseBones()
@@ -10716,7 +10715,6 @@ Item* Player::EquipNewItem( uint16 pos, uint32 item, bool update )
 
 Item* Player::EquipItem( uint16 pos, Item *pItem, bool update )
 {
-
     AddEnchantmentDurations(pItem);
     AddItemDurations(pItem);
 
@@ -12889,7 +12887,7 @@ void Player::AddQuest( Quest const *pQuest, Object *questGiver )
 
     //starting initial quest script
     if(questGiver && pQuest->GetQuestStartScript()!=0)
-        sWorld.ScriptsStart(sQuestStartScripts, pQuest->GetQuestStartScript(), questGiver, this);
+        GetMap()->ScriptsStart(sQuestStartScripts, pQuest->GetQuestStartScript(), questGiver, this);
 
     // Some spells applied at quest activation
     SpellAreaForQuestMapBounds saBounds = spellmgr.GetSpellAreaForQuestMapBounds(quest_id,true);
@@ -14149,7 +14147,7 @@ void Player::SendQuestReward( Quest const *pQuest, uint32 XP, Object * questGive
     GetSession()->SendPacket( &data );
 
     if (pQuest->GetQuestCompleteScript() != 0)
-        sWorld.ScriptsStart(sQuestEndScripts, pQuest->GetQuestCompleteScript(), questGiver, this);
+        GetMap()->ScriptsStart(sQuestEndScripts, pQuest->GetQuestCompleteScript(), questGiver, this);
 }
 
 void Player::SendQuestFailed( uint32 quest_id )
@@ -14260,7 +14258,12 @@ bool Player::MinimalLoadFromDB( QueryResult *result, uint32 guid )
     m_name = fields[2].GetCppString();
 
     Relocate(fields[3].GetFloat(),fields[4].GetFloat(),fields[5].GetFloat());
-    SetLocationMapId(fields[6].GetUInt32());
+    Map *map = MapManager::Instance().CreateMap(fields[6].GetUInt32(), this, 0);
+    SetMap(map);
+
+    // randomize first save time in range [CONFIG_INTERVAL_SAVE] around [CONFIG_INTERVAL_SAVE]
+    // this must help in case next save after mass player load after server startup
+    m_nextSave = urand(m_nextSave/2,m_nextSave*3/2);
 
     // the instance id is not needed at character enum
 
@@ -14567,13 +14570,7 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
 
     InitPrimaryProfessions();                               // to max set before any spell loaded
 
-    // init saved position, and fix it later if problematic
-    uint32 transGUID = fields[31].GetUInt32();
-    Relocate(fields[13].GetFloat(),fields[14].GetFloat(),fields[15].GetFloat(),fields[17].GetFloat());
-    SetLocationMapId(fields[16].GetUInt32());
     SetDifficulty(fields[39].GetUInt32());                  // may be changed in _LoadGroup
-
-    SetLocationInstanceId(fields[47].GetFloat());
 
     _LoadGroup(holder->GetResult(PLAYER_LOGIN_QUERY_LOADGROUP));
 
@@ -14603,35 +14600,42 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
 
     _LoadBoundInstances(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));
 
+    // load player map related values
+    uint32 transGUID = fields[31].GetUInt32();
+    Relocate(fields[13].GetFloat(),fields[14].GetFloat(),fields[15].GetFloat(),fields[17].GetFloat());
+    uint32 mapId = fields[16].GetUInt32();
+    uint32 instanceId = fields[41].GetFloat();
+    std::string taxi_nodes = fields[38].GetCppString();
+
+    MapEntry const * mapEntry = sMapStore.LookupEntry(mapId);
     if(!IsPositionValid())
     {
         sLog.outError("Player (guidlow %d) have invalid coordinates (X: %f Y: %f Z: %f O: %f). Teleport to default race/class locations.",guid,GetPositionX(),GetPositionY(),GetPositionZ(),GetOrientation());
-        RelocateToHomebind();
+        RelocateToHomebind(mapId);
 
         transGUID = 0;
+        instanceId = 0;
 
         m_movementInfo.t_x = 0.0f;
         m_movementInfo.t_y = 0.0f;
         m_movementInfo.t_z = 0.0f;
         m_movementInfo.t_o = 0.0f;
     }
-
-    uint32 bgid = fields[41].GetUInt32();
-    uint32 bgteam = fields[42].GetUInt32();
-
-    if(bgid)                                                //saved in BattleGround
+    // Player was saved in Arena or Bg
+    else if (mapEntry && mapEntry->IsBattleGroundOrArena())
     {
+        // Get Entry Point(bg master) or Homebind
         SetBattleGroundEntryPoint(fields[43].GetUInt32(),fields[44].GetFloat(),fields[45].GetFloat(),fields[46].GetFloat(),fields[47].GetFloat());
 
-        // check entry point and fix to homebind if need
-        MapEntry const* mapEntry = sMapStore.LookupEntry(m_bgEntryPoint.mapid);
-        if(!mapEntry || mapEntry->Instanceable() || !MapManager::IsValidMapCoord(m_bgEntryPoint))
+        MapEntry const* bgEntry = sMapStore.LookupEntry(m_bgEntryPoint.mapid);
+        if(!bgEntry || bgEntry->Instanceable() || !MapManager::IsValidMapCoord(m_bgEntryPoint))
             SetBattleGroundEntryPoint(m_homebindMapId,m_homebindX,m_homebindY,m_homebindZ,0.0f);
 
-        BattleGround *currentBg = sBattleGroundMgr.GetBattleGround(bgid, BATTLEGROUND_TYPE_NONE);
-
+        // Bg still exists - join it!
+        BattleGround *currentBg = sBattleGroundMgr.GetBattleGround(instanceId, BATTLEGROUND_TYPE_NONE);
         if(currentBg && currentBg->IsPlayerInBattleGround(GetGUID()))
         {
+            uint32 bgteam = fields[42].GetUInt32();
             BattleGroundQueueTypeId bgQueueTypeId = sBattleGroundMgr.BGQueueTypeId(currentBg->GetTypeID(), currentBg->GetArenaType());
             AddBattleGroundQueueId(bgQueueTypeId);
 
@@ -14644,34 +14648,21 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
 
             SetInviteForBattleGroundQueueType(bgQueueTypeId,currentBg->GetInstanceID());
         }
+        // Bg was not found - go to Entry Point
         else
         {
+            // Do not look for instance if bg not found
+            instanceId = 0;
             const WorldLocation& _loc = GetBattleGroundEntryPoint();
-            SetLocationMapId(_loc.mapid);
+            mapId = _loc.mapid;
             Relocate(_loc.coord_x, _loc.coord_y, _loc.coord_z, _loc.orientation);
-            //RemoveArenaAuras(true);
         }
     }
-    else
+    else if (transGUID != 0)
     {
-        MapEntry const* mapEntry = sMapStore.LookupEntry(GetMapId());
-        // if server restart after player save in BG or area
-        // player can have current coordinates in to BG/Arean map, fix this
-        if(!mapEntry || mapEntry->IsBattleGroundOrArena())
-        {
-            // return to BG master
-            SetLocationMapId(fields[43].GetUInt32());
-            Relocate(fields[44].GetFloat(),fields[45].GetFloat(),fields[46].GetFloat(),fields[47].GetFloat());
+        // There are no transports on instances
+        assert (!instanceId);
 
-            // check entry point and fix to homebind if need
-            mapEntry = sMapStore.LookupEntry(GetMapId());
-            if(!mapEntry || mapEntry->IsBattleGroundOrArena() || !IsPositionValid())
-                RelocateToHomebind();
-        }
-    }
-
-    if (transGUID != 0)
-    {
         m_movementInfo.t_x = fields[27].GetFloat();
         m_movementInfo.t_y = fields[28].GetFloat();
         m_movementInfo.t_z = fields[29].GetFloat();
@@ -14687,7 +14678,7 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
                 guid,GetPositionX()+m_movementInfo.t_x,GetPositionY()+m_movementInfo.t_y,
                 GetPositionZ()+m_movementInfo.t_z,GetOrientation()+m_movementInfo.t_o);
 
-            RelocateToHomebind();
+            RelocateToHomebind(mapId);
 
             m_movementInfo.t_x = 0.0f;
             m_movementInfo.t_y = 0.0f;
@@ -14695,112 +14686,136 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
             m_movementInfo.t_o = 0.0f;
 
             transGUID = 0;
-        }
-    }
-
-    if (transGUID != 0)
-    {
-        for (MapManager::TransportSet::iterator iter = MapManager::Instance().m_Transports.begin(); iter != MapManager::Instance().m_Transports.end(); ++iter)
-        {
-            if( (*iter)->GetGUIDLow() == transGUID)
-            {
-                MapEntry const* transMapEntry = sMapStore.LookupEntry((*iter)->GetMapId());
-                // client without expansion support
-                if(GetSession()->Expansion() < transMapEntry->Expansion())
-                {
-                    sLog.outDebug("Player %s using client without required expansion tried login at transport at non accessible map %u", GetName(), (*iter)->GetMapId());
-                    break;
-                }
-
-                m_transport = *iter;
-                m_transport->AddPassenger(this);
-                SetLocationMapId(m_transport->GetMapId());
-                break;
-            }
-        }
-
-        if(!m_transport)
-        {
-            sLog.outError("Player (guidlow %d) have problems with transport guid (%u). Teleport to default race/class locations.",
-                guid,transGUID);
-
-            RelocateToHomebind();
-
-            m_movementInfo.t_x = 0.0f;
-            m_movementInfo.t_y = 0.0f;
-            m_movementInfo.t_z = 0.0f;
-            m_movementInfo.t_o = 0.0f;
-
-            transGUID = 0;
-        }
-    }
-    else                                                    // not transport case
-    {
-        MapEntry const* mapEntry = sMapStore.LookupEntry(GetMapId());
-        // client without expansion support
-        if(GetSession()->Expansion() < mapEntry->Expansion())
-        {
-            sLog.outDebug("Player %s using client without required expansion tried login at non accessible map %u", GetName(), GetMapId());
-            RelocateToHomebind();
-        }
-    }
-
-    // In some old saves players' instance id are not correctly ordered
-    // This fixes the crash. But it is not needed for a new db
-    if(InstanceSave *pSave = GetInstanceSave(GetMapId()))
-        if(pSave->GetInstanceId() != GetInstanceId())
-            SetLocationInstanceId(pSave->GetInstanceId());
-
-    // NOW player must have valid map
-    // load the player's map here if it's not already loaded
-    Map *map = MapManager::Instance().CreateMap(GetMapId(), this);
-
-    if (!map)
-    {
-        AreaTrigger const* at = objmgr.GetGoBackTrigger(GetMapId());
-        if(at)
-        {
-            SetLocationMapId(at->target_mapId);
-            Relocate(at->target_X, at->target_Y, at->target_Z, GetOrientation());
-            sLog.outError("Player (guidlow %d) is teleported to gobacktrigger (Map: %u X: %f Y: %f Z: %f O: %f).",guid,GetMapId(),GetPositionX(),GetPositionY(),GetPositionZ(),GetOrientation());
         }
         else
         {
-            RelocateToHomebind();
-            sLog.outError("Player (guidlow %d) is teleported to home (Map: %u X: %f Y: %f Z: %f O: %f).",guid,GetMapId(),GetPositionX(),GetPositionY(),GetPositionZ(),GetOrientation());
+            for (MapManager::TransportSet::iterator iter = MapManager::Instance().m_Transports.begin(); iter != MapManager::Instance().m_Transports.end(); ++iter)
+            {
+                if( (*iter)->GetGUIDLow() == transGUID)
+                {
+                    m_transport = *iter;
+                    m_transport->AddPassenger(this);
+                    mapId = (m_transport->GetMapId());
+                    break;
+                }
+            }
+            if(!m_transport)
+            {
+                sLog.outError("Player (guidlow %d) have problems with transport guid (%u). Teleport to default race/class locations.",
+                    guid,transGUID);
+
+                RelocateToHomebind(mapId);
+
+                m_movementInfo.t_x = 0.0f;
+                m_movementInfo.t_y = 0.0f;
+                m_movementInfo.t_z = 0.0f;
+                m_movementInfo.t_o = 0.0f;
+
+                transGUID = 0;
+            }
+        }
+    }
+    else if (!taxi_nodes.empty()) // Taxi Flight path loaded from db
+    {
+        // There are no flightpaths in instances
+        assert (!instanceId);
+
+        if(!m_taxi.LoadTaxiDestinationsFromString(taxi_nodes,GetTeam()))
+        {
+            // problems with taxi path loading
+            TaxiNodesEntry const* nodeEntry = NULL;
+            if(uint32 node_id = m_taxi.GetTaxiSource())
+                nodeEntry = sTaxiNodesStore.LookupEntry(node_id);
+
+            if(!nodeEntry)                                      // don't know taxi start node, to homebind
+            {
+                sLog.outError("Character %u have wrong data in taxi destination list, teleport to homebind.",GetGUIDLow());
+                RelocateToHomebind(mapId);
+            }
+            else                                                // have start node, to it
+            {
+                sLog.outError("Character %u have too short taxi destination list, teleport to original node.",GetGUIDLow());
+                mapId = nodeEntry->map_id;
+                Relocate(nodeEntry->x, nodeEntry->y, nodeEntry->z,0.0f);
+            }
+        }
+        // Taxi path loading succesfull
+        else if(uint32 node_id = m_taxi.GetTaxiSource())
+        {
+            // save source node as recall coord to prevent recall and fall from sky
+            TaxiNodesEntry const* nodeEntry = sTaxiNodesStore.LookupEntry(node_id);
+            assert(nodeEntry);                                  // checked in m_taxi.LoadTaxiDestinationsFromString
+            Relocate(nodeEntry->x,nodeEntry->y,nodeEntry->z,0);
+            mapId = nodeEntry->map_id;
+            // flight will started later
+        }
+    }
+    // Map could be changed before
+    mapEntry = sMapStore.LookupEntry(mapId);
+    // client without expansion support
+    if(GetSession()->Expansion() < mapEntry->Expansion())
+    {
+        sLog.outDebug("Player %s using client without required expansion tried login at non accessible map %u", GetName(), mapId);
+        RelocateToHomebind(mapId);
+        instanceId = 0;
+    }
+
+    // NOW player must have valid map
+    // load the player's map here if it's not already loaded
+    Map *map = MapManager::Instance().CreateMap(mapId, this, instanceId);
+
+    if (!map)
+    {
+        instanceId = 0;
+        AreaTrigger const* at = objmgr.GetGoBackTrigger(mapId);
+        if(at)
+        {
+            sLog.outError("Player (guidlow %d) is teleported to gobacktrigger (Map: %u X: %f Y: %f Z: %f O: %f).",guid,mapId,GetPositionX(),GetPositionY(),GetPositionZ(),GetOrientation());
+            Relocate(at->target_X, at->target_Y, at->target_Z, GetOrientation());
+            mapId = at->target_mapId;
+        }
+        else
+        {
+            sLog.outError("Player (guidlow %d) is teleported to home (Map: %u X: %f Y: %f Z: %f O: %f).",guid,mapId,GetPositionX(),GetPositionY(),GetPositionZ(),GetOrientation());
+            RelocateToHomebind(mapId);
         }
 
-        map = MapManager::Instance().CreateMap(GetMapId(), this);
+        map = MapManager::Instance().CreateMap(mapId, this, 0);
         if(!map)
         {
-            sLog.outError("ERROR: Player (guidlow %d) have invalid coordinates (X: %f Y: %f Z: %f O: %f). Teleport to default race/class locations.",guid,GetPositionX(),GetPositionY(),GetPositionZ(),GetOrientation());
-            delete result;
-            return false;
-
-            /*SetMapId(info->mapId);
+            PlayerInfo const *info = objmgr.GetPlayerInfo(getRace(), getClass());
+            mapId = info->mapId;
             Relocate(info->positionX,info->positionY,info->positionZ,0.0f);
-
-            map = GetMap();
-            if(!map)
+            sLog.outError("ERROR: Player (guidlow %d) have invalid coordinates (X: %f Y: %f Z: %f O: %f). Teleport to default race/class locations.",guid,GetPositionX(),GetPositionY(),GetPositionZ(),GetOrientation());
+            map = MapManager::Instance().CreateMap(mapId, this, 0);
+            if (!map)
             {
-                sLog.outError("ERROR: Player (guidlow %d) have invalid coordinates (X: %f Y: %f Z: %f O: %f). Teleport to default race/class locations.",guid,GetPositionX(),GetPositionY(),GetPositionZ(),GetOrientation());
-                sLog.outError("CRASH.");
-                assert(false);
-            }*/
+                sLog.outError("ERROR: Player (guidlow %d) has invalid default map coordinates (X: %f Y: %f Z: %f O: %f). or instance couldn't be created",guid,GetPositionX(),GetPositionY(),GetPositionZ(),GetOrientation());
+                delete result;
+                return false;
+            }
+        }
+    }
+
+    // if the player is in an instance and it has been reset in the meantime teleport him to the entrance
+    if(instanceId && !sInstanceSaveManager.GetInstanceSave(instanceId))
+    {
+        AreaTrigger const* at = objmgr.GetMapEntranceTrigger(mapId);
+        if(at)
+            Relocate(at->target_X, at->target_Y, at->target_Z, at->target_Orientation);
+        else
+        {
+            sLog.outError("Player %s(GUID: %u) logged in to a reset instance (map: %u) and there is no area-trigger leading to this map. Thus he can't be ported back to the entrance. This _might_ be an exploit attempt.", GetName(), GetGUIDLow(), mapId);
+            RelocateToHomebind(mapId);
+            instanceId = 0;
         }
     }
 
     SetMap(map);
 
-    // if the player is in an instance and it has been reset in the meantime teleport him to the entrance
-    if(GetInstanceId() && !sInstanceSaveManager.GetInstanceSave(GetInstanceId()))
-    {
-        AreaTrigger const* at = objmgr.GetMapEntranceTrigger(GetMapId());
-        if(at)
-            Relocate(at->target_X, at->target_Y, at->target_Z, at->target_Orientation);
-        else
-            sLog.outError("Player %s(GUID: %u) logged in to a reset instance (map: %u) and there is no area-trigger leading to this map. Thus he can't be ported back to the entrance. This _might_ be an exploit attempt.", GetName(), GetGUIDLow(), GetMapId());
-    }
+    // randomize first save time in range [CONFIG_INTERVAL_SAVE] around [CONFIG_INTERVAL_SAVE]
+    // this must help in case next save after mass player load after server startup
+    m_nextSave = urand(m_nextSave/2,m_nextSave*3/2);
 
     SaveRecallPosition();
 
@@ -14869,8 +14884,6 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     m_deathExpireTime = (time_t)fields[37].GetUInt64();
     if(m_deathExpireTime > now+MAX_DEATH_COUNT*DEATH_EXPIRE_STEP)
         m_deathExpireTime = now+MAX_DEATH_COUNT*DEATH_EXPIRE_STEP-1;
-
-    std::string taxi_nodes = fields[38].GetCppString();
 
     delete result;
 
@@ -14955,46 +14968,6 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     {
         if(!HasTitle(curTitle))
             SetUInt32Value(PLAYER_CHOSEN_TITLE, 0);
-    }
-
-    // Not finish taxi flight path
-    if(!m_taxi.LoadTaxiDestinationsFromString(taxi_nodes,GetTeam()))
-    {
-        // problems with taxi path loading
-        TaxiNodesEntry const* nodeEntry = NULL;
-        if(uint32 node_id = m_taxi.GetTaxiSource())
-            nodeEntry = sTaxiNodesStore.LookupEntry(node_id);
-
-        if(!nodeEntry)                                      // don't know taxi start node, to homebind
-        {
-            sLog.outError("Character %u have wrong data in taxi destination list, teleport to homebind.",GetGUIDLow());
-            RelocateToHomebind();
-        }
-        else                                                // have start node, to it
-        {
-            sLog.outError("Character %u have too short taxi destination list, teleport to original node.",GetGUIDLow());
-            SetLocationMapId(nodeEntry->map_id);
-            Relocate(nodeEntry->x, nodeEntry->y, nodeEntry->z,0.0f);
-        }
-
-        //we can be relocated from taxi and still have an outdated Map pointer!
-        //so we need to get a new Map pointer!
-        SetMap(MapManager::Instance().CreateMap(GetMapId(), this));
-        SaveRecallPosition();                           // save as recall also to prevent recall and fall from sky
-
-        m_taxi.ClearTaxiDestinations();
-    }
-    else if(uint32 node_id = m_taxi.GetTaxiSource())
-    {
-        // save source node as recall coord to prevent recall and fall from sky
-        TaxiNodesEntry const* nodeEntry = sTaxiNodesStore.LookupEntry(node_id);
-        assert(nodeEntry);                                  // checked in m_taxi.LoadTaxiDestinationsFromString
-        m_recallMap = nodeEntry->map_id;
-        m_recallX = nodeEntry->x;
-        m_recallY = nodeEntry->y;
-        m_recallZ = nodeEntry->z;
-
-        // flight will started later
     }
 
     // has to be called after last Relocate() in Player::LoadFromDB
@@ -16327,7 +16300,7 @@ void Player::_SaveAuras()
             continue;
         bool isCaster = itr->second->GetCasterGUID() == GetGUID();
         if (!isCaster)
-            if (itr->second->IsSingleTarget()
+            if (IsSingleTargetSpell(itr->second->GetSpellProto())
                 || itr->second->IsAreaAura())
                 continue;
 
@@ -16723,10 +16696,10 @@ void Player::SendAttackSwingBadFacingAttack()
     GetSession()->SendPacket( &data );
 }
 
-void Player::SendAutoRepeatCancel()
+void Player::SendAutoRepeatCancel(Unit *target)
 {
-    WorldPacket data(SMSG_CANCEL_AUTO_REPEAT, GetPackGUID().size());
-    data.append(GetPackGUID());                             // may be it's target guid
+    WorldPacket data(SMSG_CANCEL_AUTO_REPEAT, target->GetPackGUID().size());
+    data.append(target->GetPackGUID());                     // may be it's target guid
     GetSession()->SendPacket( &data );
 }
 
@@ -17559,19 +17532,38 @@ void Player::HandleStealthedUnitsDetection()
     Trinity::UnitListSearcher<Trinity::AnyStealthedCheck > searcher(this, stealthedUnits, u_check);
     VisitNearbyObject(World::GetMaxVisibleDistance(), searcher);
 
-    for (std::list<Unit*>::iterator i = stealthedUnits.begin(); i != stealthedUnits.end(); ++i)
+    for (std::list<Unit*>::const_iterator i = stealthedUnits.begin(); i != stealthedUnits.end(); ++i)
     {
-        if (!HaveAtClient(*i) && canSeeOrDetect(*i, true))
+        if((*i)==this)
+            continue;
+
+        bool hasAtClient = HaveAtClient((*i));
+        bool hasDetected = canSeeOrDetect(*i, true);
+
+        if (hasDetected)
         {
-            (*i)->SendUpdateToPlayer(this);
-            m_clientGUIDs.insert((*i)->GetGUID());
+            if(!hasAtClient)
+            {
+                (*i)->SendUpdateToPlayer(this);
+                m_clientGUIDs.insert((*i)->GetGUID());
 
-            #ifdef TRINITY_DEBUG
-            if((sLog.getLogFilter() & LOG_FILTER_VISIBILITY_CHANGES)==0)
-                sLog.outDebug("Object %u (Type: %u) is detected in stealth by player %u. Distance = %f",(*i)->GetGUIDLow(),(*i)->GetTypeId(),GetGUIDLow(),GetDistance(*i));
-            #endif
+                #ifdef MANGOS_DEBUG
+                if((sLog.getLogFilter() & LOG_FILTER_VISIBILITY_CHANGES)==0)
+                    sLog.outDebug("Object %u (Type: %u) is detected in stealth by player %u. Distance = %f",(*i)->GetGUIDLow(),(*i)->GetTypeId(),GetGUIDLow(),GetDistance(*i));
+                #endif
 
-            SendInitialVisiblePackets(*i);
+                // target aura duration for caster show only if target exist at caster client
+                // send data at target visibility change (adding to client)
+                SendInitialVisiblePackets(*i);
+            }
+        }
+        else
+        {
+            if(hasAtClient)
+            {
+                (*i)->DestroyForPlayer(this);
+                m_clientGUIDs.erase((*i)->GetGUID());
+            }
         }
     }
 }
@@ -18779,7 +18771,7 @@ void Player::UpdateVisibilityOf(WorldObject* target)
 {
     if(HaveAtClient(target))
     {
-        if(!target->isVisibleForInState(this,true))
+        if(!target->isVisibleForInState(this, true))
         {
             target->DestroyForPlayer(this);
             m_clientGUIDs.erase(target->GetGUID());
@@ -20366,11 +20358,30 @@ bool Player::HasTitle(uint32 bitIndex)
     return HasFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag);
 }
 
-void Player::SetTitle(CharTitlesEntry const* title)
+void Player::SetTitle(CharTitlesEntry const* title, bool lost)
 {
     uint32 fieldIndexOffset = title->bit_index / 32;
     uint32 flag = 1 << (title->bit_index % 32);
-    SetFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag);
+
+    if(lost)
+    {
+        if(!HasFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag))
+            return;
+
+        RemoveFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag);
+    }
+    else
+    {
+        if(HasFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag))
+            return;
+
+        SetFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag);
+    }
+
+    WorldPacket data(SMSG_TITLE_EARNED, 4 + 4);
+    data << uint32(title->bit_index);
+    data << uint32(lost ? 0 : 1);                           // 1 - earned, 0 - lost
+    GetSession()->SendPacket(&data);
 }
 
 /*-----------------------TRINITY--------------------------*/
@@ -21380,4 +21391,22 @@ void Player::SendClearCooldown( uint32 spell_id, Unit* target )
     data << uint32(spell_id);
     data << uint64(target->GetGUID());
     SendDirectMessage(&data);
+}
+
+void Player::ResetMap()
+{
+    // this may be called during Map::Update
+    // after decrement+unlink, ++m_mapRefIter will continue correctly
+    // when the first element of the list is being removed
+    // nocheck_prev will return the padding element of the RefManager
+    // instead of NULL in the case of prev
+    GetMap()->UpdateIteratorBack(this);
+    Unit::ResetMap();
+    GetMapRef().unlink();
+}
+
+void Player::SetMap(Map * map)
+{
+    Unit::SetMap(map);
+    m_mapRef.link(map, this);
 }

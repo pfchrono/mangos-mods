@@ -137,15 +137,16 @@ void GameObject::RemoveFromWorld()
 bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, uint32 phaseMask, float x, float y, float z, float ang, float rotation0, float rotation1, float rotation2, float rotation3, uint32 animprogress, GOState go_state, uint32 ArtKit)
 {
     ASSERT(map);
-    Relocate(x,y,z,ang);
     SetMap(map);
-    SetPhaseMask(phaseMask,false);
 
+    Relocate(x,y,z,ang);
     if(!IsPositionValid())
     {
         sLog.outError("Gameobject (GUID: %u Entry: %u ) not created. Suggested coordinates isn't valid (X: %f Y: %f)",guidlow,name_id,x,y);
         return false;
     }
+
+    SetPhaseMask(phaseMask,false);
 
     GameObjectInfo const* goinfo = objmgr.GetGameObjectInfo(name_id);
     if (!goinfo)
@@ -949,7 +950,7 @@ void GameObject::Use(Unit* user)
             UseDoorOrButton();
 
             // activate script
-            sWorld.ScriptsStart(sGameObjectScripts, GetDBTableGUIDLow(), spellCaster, this);
+            GetMap()->ScriptsStart(sGameObjectScripts, GetDBTableGUIDLow(), spellCaster, this);
             return;
 
         case GAMEOBJECT_TYPE_QUESTGIVER:                    //2
@@ -1070,7 +1071,7 @@ void GameObject::Use(Unit* user)
                 player->CastedCreatureOrGO(info->id, GetGUID(), 0);
 
                 if (info->goober.eventId)
-                    sWorld.ScriptsStart(sEventScripts, info->goober.eventId, player, this);
+                    GetMap()->ScriptsStart(sEventScripts, info->goober.eventId, player, this);
             }
 
             // cast this spell later if provided
@@ -1093,7 +1094,7 @@ void GameObject::Use(Unit* user)
                 player->SendCinematicStart(info->camera.cinematicId);
 
             if (info->camera.eventID)
-                sWorld.ScriptsStart(sEventScripts, info->camera.eventID, player, this);
+                GetMap()->ScriptsStart(sEventScripts, info->camera.eventID, player, this);
 
             return;
         }

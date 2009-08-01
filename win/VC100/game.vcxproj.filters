@@ -111,6 +111,9 @@
     <ClCompile Include="..\..\src\game\ChannelHandler.cpp">
       <Filter>World/Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\game\ChannelMgr.cpp">
+      <Filter>World/Handlers</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\game\CharacterHandler.cpp">
       <Filter>World/Handlers</Filter>
     </ClCompile>

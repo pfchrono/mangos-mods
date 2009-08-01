@@ -499,8 +499,8 @@ bool ChatHandler::HandleGMTicketAssignToCommand(const char* args)
     }
     uint64 tarGUID = objmgr.GetPlayerGUIDByName(targm.c_str());
     uint64 accid = objmgr.GetPlayerAccountIdByGUID(tarGUID);
-    QueryResult *result = LoginDatabase.PQuery("SELECT `gmlevel` FROM `account` WHERE `id` = '%u'", accid);
-    if(!tarGUID|| !result || result->Fetch()->GetUInt32() < SEC_GAMEMASTER)
+    QueryResult *result = loginDatabase.PQuery("SELECT `gmlevel` FROM `account` WHERE `id` = '%u'", accid);
+    if(!tarGUID|| !result || result->Fetch()->GetUInt32() < SEC_MODERATOR)
     {
         SendSysMessage(LANG_COMMAND_TICKETASSIGNERROR_A);
         return true;

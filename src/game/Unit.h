@@ -1012,6 +1012,7 @@ enum ReactiveType
 
 // delay time next attack to prevent client attack animation problems
 #define ATTACK_DISPLAY_DELAY 200
+#define MAX_PLAYER_STEALTH_DETECT_RANGE 45.0f               // max distance for detection targets by player
 
 struct SpellProcEventEntry;                                 // used only privately
 
@@ -1022,6 +1023,7 @@ class TRINITY_DLL_SPEC Unit : public WorldObject
         typedef std::set<Unit*> ControlList;
         typedef std::pair<uint32, uint8> spellEffectPair;
         typedef std::multimap<uint32,  Aura*> AuraMap;
+        typedef std::multimap<AuraState,  Aura*> AuraStateAurasMap;
         typedef std::list<AuraEffect *> AuraEffectList;
         typedef std::list<Aura *> AuraList;
         typedef std::list<DiminishingReturn> Diminishing;
@@ -1657,6 +1659,7 @@ class TRINITY_DLL_SPEC Unit : public WorldObject
         uint32 CalculateDamage(WeaponAttackType attType, bool normalized);
         float GetAPMultiplier(WeaponAttackType attType, bool normalized);
         void ModifyAuraState(AuraState flag, bool apply);
+        uint32 BuildAuraStateUpdateForTarget(Unit * target) const;
         bool HasAuraState(AuraState flag, SpellEntry const *spellProto = NULL, Unit * Caster = NULL) const ;
         void UnsummonAllTotems();
         Unit* SelectMagnetTarget(Unit *victim, SpellEntry const *spellInfo = NULL);
@@ -1854,12 +1857,12 @@ class TRINITY_DLL_SPEC Unit : public WorldObject
         AuraList m_scAuras;                        // casted singlecast auras
         AuraList m_interruptableAuras;
         AuraList m_removedAuras;
+        AuraStateAurasMap m_auraStateAuras;                 // Used for improve performance of aura state checks on aura apply/remove
         uint32 m_interruptMask;
 
         float m_auraModifiersGroup[UNIT_MOD_END][MODIFIER_TYPE_END];
         float m_weaponDamage[MAX_ATTACK][2];
         bool m_canModifyStats;
-        //std::list< spellEffectPair > AuraSpells[TOTAL_AURAS];  // TODO: use this if ok for mem
         VisibleAuraMap m_visibleAuras;
 
         float m_speed_rate[MAX_MOVE_TYPE];

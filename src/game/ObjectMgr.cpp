@@ -635,7 +635,7 @@ void ObjectMgr::LoadCreatureTemplates()
 
         // used later for scale
         CreatureDisplayInfoEntry const* displayScaleEntry = NULL;
-        
+
         if (cInfo->DisplayID_A[0])
         {
             CreatureDisplayInfoEntry const* displayEntry = sCreatureDisplayInfoStore.LookupEntry(cInfo->DisplayID_A[0]);
@@ -6483,14 +6483,16 @@ void ObjectMgr::LoadCorpses()
 
         uint32 guid = fields[result->GetFieldCount()-1].GetUInt32();
 
+        uint32 mapId;
+        uint32 instanceId;
         Corpse *corpse = new Corpse;
-        if(!corpse->LoadFromDB(guid,fields))
+        if(!corpse->LoadFromDB(guid,fields,mapId,instanceId))
         {
             delete corpse;
             continue;
         }
 
-        ObjectAccessor::Instance().AddCorpse(corpse);
+        ObjectAccessor::Instance().AddCorpse(corpse,mapId,instanceId);
 
         ++count;
     }
@@ -7111,7 +7113,7 @@ uint8 ObjectMgr::CheckPlayerName( const std::string& name, bool create )
     uint32 strictMask = sWorld.getConfig(CONFIG_STRICT_PLAYER_NAMES);
     if(!isValidString(wname,strictMask,false,create))
         return CHAR_NAME_MIXED_LANGUAGES;
-    
+
     return CHAR_NAME_SUCCESS;
 }
 

@@ -797,6 +797,9 @@ void Spell::prepareDataForTriggerSystem(AuraEffect * triggeredByAura)
     if (m_spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && (m_spellInfo->SpellFamilyFlags[1] & 0x00002000 || m_spellInfo->SpellFamilyFlags[0] & 0x1C))
     {
         m_procAttacker |= PROC_FLAG_ON_TRAP_ACTIVATION;
+        // Trigger only from spells originally casted by hunter(trap activation) to prevent multiple trigger from trap triggered spells
+        if (m_originalCasterGUID != m_caster->GetGUID() && m_originalCasterGUID)
+            return;
     }
     /*
         Effects which are result of aura proc from triggered spell cannot proc
@@ -2219,6 +2222,7 @@ void Spell::SetTargetMap(uint32 i, uint32 cur)
             case TARGET_UNIT_AREA_ENEMY_DST:
             case TARGET_UNIT_CONE_ENEMY:
             case TARGET_UNIT_CONE_ENEMY_UNKNOWN:
+            case TARGET_UNIT_AREA_PATH:
                 radius = GetSpellRadius(m_spellInfo, i, false);
                 targetType = SPELL_TARGETS_ENEMY;
                 break;
@@ -4200,13 +4204,14 @@ void Spell::HandleThreatSpells(uint32 spellId)
     if(!m_targets.getUnitTarget()->CanHaveThreatList())
         return;
 
-    SpellThreatEntry const *threatSpell = sSpellThreatStore.LookupEntry<SpellThreatEntry>(spellId);
-    if(!threatSpell)
+    uint16 threat = spellmgr.GetSpellThreat(spellId);
+
+    if(!threat)
         return;
 
-    m_targets.getUnitTarget()->AddThreat(m_caster, float(threatSpell->threat));
+    m_targets.getUnitTarget()->AddThreat(m_caster, float(threat));
 
-    DEBUG_LOG("Spell %u, rank %u, added an additional %i threat", spellId, spellmgr.GetSpellRank(spellId), threatSpell->threat);
+    DEBUG_LOG("Spell %u, rank %u, added an additional %i threat", spellId, spellmgr.GetSpellRank(spellId), threat);
 }
 
 void Spell::HandleEffects(Unit *pUnitTarget,Item *pItemTarget,GameObject *pGOTarget,uint32 i)

@@ -2868,6 +2868,8 @@ SpellMissInfo Unit::MeleeSpellHitResult(Unit *pVictim, SpellEntry const *spell)
     if (canBlock)
     {
         int32 blockChance = int32(pVictim->GetUnitBlockChance()*100.0f)  - skillDiff * 4;
+        if ( blockChance < 0 )
+            blockChance = 0;
         tmp += blockChance;
 
         if (roll < tmp)
@@ -3477,8 +3479,8 @@ void Unit::InterruptSpell(uint32 spellType, bool withDelayed, bool withInstant)
         // send autorepeat cancel message for autorepeat spells
         if (spellType == CURRENT_AUTOREPEAT_SPELL)
         {
-            if(GetTypeId()==TYPEID_PLAYER)
-                ((Player*)this)->SendAutoRepeatCancel();
+            if(GetTypeId() == TYPEID_PLAYER)
+                ((Player*)this)->SendAutoRepeatCancel(this);
         }
 
         if (spell->getState() != SPELL_STATE_FINISHED)
@@ -3883,6 +3885,16 @@ bool Unit::AddAura(Aura *Aur, bool handleEffects)
 
     // add aura, register in lists and arrays
     Aur->_AddAura();
+
+    //*****************************************************
+    // Update target aura state flag
+    //*****************************************************
+    if(AuraState aState = GetSpellAuraState(Aur->GetSpellProto()))
+    {
+        m_auraStateAuras.insert(AuraStateAurasMap::value_type(aState, Aur));
+        ModifyAuraState(aState, true);
+    }
+
     m_Auras.insert(AuraMap::value_type(aurId, Aur));
 
     if(aurSpellInfo->AuraInterruptFlags)
@@ -4213,6 +4225,28 @@ void Unit::RemoveAura(AuraMap::iterator &i, AuraRemoveMode mode)
     m_removedAuras.push_back(Aur);
 
     Aur->_RemoveAura();
+
+    bool auraStateFound = false;
+    if (AuraState auraState = GetSpellAuraState(Aur->GetSpellProto()))
+    {
+        bool canBreak = false;
+        // Get mask of all aurastates from remaining auras
+        for(AuraStateAurasMap::iterator itr = m_auraStateAuras.lower_bound(auraState); itr != m_auraStateAuras.upper_bound(auraState) && !(auraStateFound && canBreak);)
+        {
+            if (itr->second == Aur)
+            {
+                m_auraStateAuras.erase(itr);
+                itr = m_auraStateAuras.lower_bound(auraState);
+                canBreak = true;
+                continue;
+            }
+            auraStateFound = true;
+            ++itr;
+        }
+        // Remove only aurastates which were not found
+        if (!auraStateFound)
+            ModifyAuraState(auraState, false);
+    }
 
     // Remove totem at next update if totem looses its aura
     if (Aur->GetRemoveMode() == AURA_REMOVE_BY_EXPIRE && GetTypeId()==TYPEID_UNIT && ((Creature*)this)->isTotem()&& ((TempSummon*)this)->GetSummonerGUID()==Aur->GetCasterGUID())
@@ -4891,6 +4925,18 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
         {
             switch (dummySpell->Id)
             {
+                // BloodWorms Health Leech
+                case 50453:
+                {
+                    if (Unit *owner = this->GetOwner())
+                    {
+                        basepoints0 = int32(damage*1.50);
+                        target = owner;
+                        triggered_spell_id = 50454;
+                        break;
+                    } 
+                    return false;
+                }
                 // Improved Divine Spirit
                 case 33174:
                 case 33182:
@@ -6158,8 +6204,6 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
             // Judgements of the Wise
             if (dummySpell->SpellIconID == 3017)
             {
-                // hardcoded amount
-                basepoints0 = 25 * GetCreatePowers(POWER_MANA)/100;
                 target = this;
                 triggered_spell_id = 31930;
                 // replenishment
@@ -7008,6 +7052,7 @@ bool Unit::HandleObsModEnergyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* 
 
     SpellEntry const* triggerEntry = sSpellStore.LookupEntry(triggered_spell_id);
 
+    // Try handle unknown trigger spells
     if(!triggerEntry)
     {
         sLog.outError("Unit::HandleObsModEnergyAuraProc: Spell %u have not existed triggered spell %u",dummySpell->Id,triggered_spell_id);
@@ -7828,9 +7873,15 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                 ((Player*)this)->RemoveSpellCategoryCooldown(1209, true);
             break;
         }
-        case 63375: // Improved Stormstrike
+        // Maelstrom Weapon
+        case 53817:
         {
-            basepoints0 = GetCreateMana() * 0.20f;
+            // have rank dependent proc chance, ignore too often cases
+            // PPM = 2.5 * (rank of talent), 
+            uint32 rank = spellmgr.GetSpellRank(auraSpellInfo->Id);
+            // 5 rank -> 100% 4 rank -> 80% and etc from full rate
+            if(!roll_chance_i(20*rank))
+                return false;
             break;
         }
         // Brain Freeze
@@ -8581,15 +8632,42 @@ void Unit::ModifyAuraState(AuraState flag, bool apply)
     }
 }
 
+uint32 Unit::BuildAuraStateUpdateForTarget(Unit * target) const
+{
+    uint32 auraStates = GetUInt32Value(UNIT_FIELD_AURASTATE) &~(PER_CASTER_AURA_STATE_MASK);
+    for(AuraStateAurasMap::const_iterator itr = m_auraStateAuras.begin(); itr != m_auraStateAuras.end();++itr)
+    {
+        if ((1<<(itr->first-1)) & PER_CASTER_AURA_STATE_MASK)
+        {
+            if (itr->second->GetCasterGUID() == target->GetGUID())
+                auraStates |= (1<<(itr->first-1));
+        }
+    }
+    return auraStates;
+}
+
 bool Unit::HasAuraState(AuraState flag, SpellEntry const *spellProto, Unit * Caster) const
 {
-    if (Caster && spellProto)
+    if (Caster)
     {
-        AuraEffectList const& stateAuras = Caster->GetAurasByType(SPELL_AURA_ABILITY_IGNORE_AURASTATE);
-        for(AuraEffectList::const_iterator j = stateAuras.begin();j != stateAuras.end(); ++j)
-            if((*j)->isAffectedOnSpell(spellProto))
-                return true;
+        if(spellProto)
+        {
+            AuraEffectList const& stateAuras = Caster->GetAurasByType(SPELL_AURA_ABILITY_IGNORE_AURASTATE);
+            for(AuraEffectList::const_iterator j = stateAuras.begin();j != stateAuras.end(); ++j)
+                if((*j)->isAffectedOnSpell(spellProto))
+                    return true;
+        }
+        // Check per caster aura state
+        // If aura with aurastate by caster not found return false
+        if ((1<<(flag-1)) & PER_CASTER_AURA_STATE_MASK)
+        {
+            for(AuraStateAurasMap::const_iterator itr = m_auraStateAuras.lower_bound(flag); itr != m_auraStateAuras.upper_bound(flag);++itr)
+                if (itr->second->GetCasterGUID() == Caster->GetGUID())
+                    return true;
+            return false;
+        }
     }
+
     return HasFlag(UNIT_FIELD_AURASTATE, 1<<(flag-1));
 }
 
@@ -9241,7 +9319,8 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
                 }
                 else // Tundra Stalker
                 {
-                    if (pVictim->GetAura(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DEATHKNIGHT,0, 0x4000000,0))
+                    // Frost Fever (target debuff)
+                    if (pVictim->GetAura(SPELL_AURA_MOD_HASTE, SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DEATHKNIGHT, 0, 0, 0x2))
                         DoneTotalMod *= ((*i)->GetAmount()+100.0f)/100.0f;
                     break;
                 }
@@ -10875,6 +10954,7 @@ bool Unit::canDetectStealthOf(Unit const* target, float distance) const
     //-Stealth Mod(positive like Master of Deception) and Stealth Detection(negative like paranoia)
     //based on wowwiki every 5 mod we have 1 more level diff in calculation
     visibleDistance += (float)(GetTotalAuraModifier(SPELL_AURA_MOD_DETECT) - target->GetTotalAuraModifier(SPELL_AURA_MOD_STEALTH_LEVEL)) / 5.0f;
+    visibleDistance = visibleDistance > MAX_PLAYER_STEALTH_DETECT_RANGE ? MAX_PLAYER_STEALTH_DETECT_RANGE : visibleDistance;
 
     return distance < visibleDistance;
 }
@@ -11404,16 +11484,11 @@ Unit* Creature::SelectVictim()
     // it in combat but attacker not make any damage and not enter to aggro radius to have record in threat list
     // for example at owner command to pet attack some far away creature
     // Note: creature not have targeted movement generator but have attacker in this case
-    if(m_attackers.size() && CanHaveThreatList() && m_ThreatManager.isThreatListEmpty()) //there are some cases null target are always returned,so creature evade can not be called at all. such as pull creature at a distance beyond the attackdist to the attacker
-        return NULL;
-    /*if( GetMotionMaster()->GetCurrentMovementGeneratorType() != TARGETED_MOTION_TYPE )
+    for(AttackerSet::const_iterator itr = m_attackers.begin(); itr != m_attackers.end(); ++itr)
     {
-        for(AttackerSet::const_iterator itr = m_attackers.begin(); itr != m_attackers.end(); ++itr)
-        {
-            if( (*itr)->IsInMap(this) && canAttack(*itr) && (*itr)->isInAccessiblePlaceFor((Creature*)this) )
-                return NULL;
-        }
-    }*/
+        if( (*itr)->IsInMap(this) && canAttack(*itr) && (*itr)->isInAccessiblePlaceFor((Creature*)this) && ((*itr)->GetTypeId() != TYPEID_PLAYER && (!((Creature*)(*itr))->HasSummonMask(SUMMON_MASK_CONTROLABLE_GUARDIAN))))
+            return NULL;
+    }
 
     // search nearby enemy before enter evade mode
     if(HasReactState(REACT_AGGRESSIVE))
@@ -12196,7 +12271,6 @@ void Unit::RemoveFromWorld()
         ExitVehicle();
         UnsummonAllTotems();
         RemoveAllControlled();
-        GetMotionMaster()->Clear(false);                    // remove different non-standard movement generators.
 
         if(m_NotifyListPos >= 0)
         {
@@ -12229,6 +12303,7 @@ void Unit::CleanupsBeforeDelete()
     getHostilRefManager().setOnlineOfflineState(false);
     RemoveAllGameObjects();
     RemoveAllDynObjects();
+    GetMotionMaster()->Clear(false);                    // remove different non-standard movement generators.
 
     if(IsInWorld())
         RemoveFromWorld();

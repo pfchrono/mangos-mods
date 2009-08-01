@@ -354,7 +354,7 @@ pAuraHandler AuraHandler[TOTAL_AURAS]=
 Aura::Aura(SpellEntry const* spellproto, uint32 effMask, int32 *currentBasePoints, Unit *target, WorldObject *source, Unit *caster, Item* castItem) :
 m_caster_guid(0), m_castItemGuid(castItem?castItem->GetGUID():0), m_target(target),
 m_timeCla(0), m_removeMode(AURA_REMOVE_BY_DEFAULT), m_AuraDRGroup(DIMINISHING_NONE),
-m_auraSlot(MAX_AURAS), m_auraLevel(1), m_procCharges(0), m_stackAmount(1),m_auraStateMask(0), m_updated(false), m_isRemoved(false)
+m_auraSlot(MAX_AURAS), m_auraLevel(1), m_procCharges(0), m_stackAmount(1), m_updated(false), m_isRemoved(false)
 {
     assert(target);
 
@@ -368,8 +368,6 @@ m_auraSlot(MAX_AURAS), m_auraLevel(1), m_procCharges(0), m_stackAmount(1),m_aura
         m_timeCla = 1000;
 
     m_isPassive = IsPassiveSpell(GetId());
-
-    m_auraStateMask = 0;
 
     m_isSingleTargetAura = IsSingleTargetSpell(m_spellProto);
 
@@ -1195,65 +1193,6 @@ void Aura::_AddAura()
             }
     }
 
-    //*****************************************************
-    // Update target aura state flag
-    //*****************************************************
-
-    // Update Seals information
-    if (IsSealSpell(m_spellProto))
-        SetAuraState(AURA_STATE_JUDGEMENT);
-
-    // Conflagrate aura state on Immolate and Shadowflame
-    if (m_spellProto->SpellFamilyName == SPELLFAMILY_WARLOCK &&
-        // Immolate
-        ((m_spellProto->SpellFamilyFlags[0] & 4) ||
-        // Shadowflame
-        (m_spellProto->SpellFamilyFlags[2] & 2)))
-        SetAuraState(AURA_STATE_CONFLAGRATE);
-
-    // Faerie Fire (druid versions)
-    if (m_spellProto->SpellFamilyName == SPELLFAMILY_DRUID && m_spellProto->SpellFamilyFlags[0] & 0x400)
-        SetAuraState(AURA_STATE_FAERIE_FIRE);
-
-    // Sting (hunter's pet ability)
-    if (m_spellProto->Category == 1133)
-        SetAuraState(AURA_STATE_FAERIE_FIRE);
-
-    // Victorious
-    if (m_spellProto->SpellFamilyName == SPELLFAMILY_WARRIOR &&  m_spellProto->SpellFamilyFlags[1] & 0x00040000)
-        SetAuraState(AURA_STATE_WARRIOR_VICTORY_RUSH);
-
-    // Swiftmend state on Regrowth & Rejuvenation
-    if (m_spellProto->SpellFamilyName == SPELLFAMILY_DRUID && m_spellProto->SpellFamilyFlags[0] & 0x50 )
-        SetAuraState(AURA_STATE_SWIFTMEND);
-
-    // Deadly poison aura state
-    if(m_spellProto->SpellFamilyName == SPELLFAMILY_ROGUE && m_spellProto->SpellFamilyFlags[0] & 0x10000)
-        SetAuraState(AURA_STATE_DEADLY_POISON);
-
-    // Enrage aura state
-    if(m_spellProto->Dispel == DISPEL_ENRAGE)
-        SetAuraState(AURA_STATE_ENRAGE);
-
-    // Bleeding aura state
-    if (GetAllSpellMechanicMask(m_spellProto) & 1<<MECHANIC_BLEED)
-        SetAuraState(AURA_STATE_BLEEDING);
-
-    if(GetSpellSchoolMask(m_spellProto) & SPELL_SCHOOL_MASK_FROST)
-    {
-        for (uint8 i = 0;i<MAX_SPELL_EFFECTS;++i)
-        {
-            if (m_spellProto->EffectApplyAuraName[i]==SPELL_AURA_MOD_STUN
-                || m_spellProto->EffectApplyAuraName[i]==SPELL_AURA_MOD_ROOT)
-            {
-                SetAuraState(AURA_STATE_FROZEN);
-                break;
-            }
-        }
-    }
-
-    m_target->ApplyModFlag(UNIT_FIELD_AURASTATE, GetAuraStateMask(), true);
-
     HandleAuraSpecificMods(true);
 }
 
@@ -1299,22 +1238,6 @@ void Aura::_RemoveAura()
     // unregister aura diminishing (and store last time)
     if (getDiminishGroup() != DIMINISHING_NONE )
         m_target->ApplyDiminishingAura(getDiminishGroup(),false);
-
-    // Check needed only if aura applies aurastate
-    if(GetAuraStateMask())
-    {
-        uint32 foundMask = 0;
-        Unit::AuraMap& Auras = m_target->GetAuras();
-        // Get mask of all aurastates from remaining auras
-        for(Unit::AuraMap::iterator i = Auras.begin(); i != Auras.end(); ++i)
-        {
-            foundMask|=(*i).second->GetAuraStateMask();
-        }
-        // Remove only aurastates which were not found
-        foundMask = GetAuraStateMask() &~foundMask;
-        if (foundMask)
-            m_target->ApplyModFlag(UNIT_FIELD_AURASTATE, foundMask, false);
-    }
 
     // since now aura cannot apply/remove it's modifiers
     m_isRemoved = true;
@@ -3312,13 +3235,37 @@ void AuraEffect::HandleAuraModShapeshift(bool apply, bool Real, bool changeAmoun
         case FORM_FLIGHT_EPIC:
         case FORM_FLIGHT:
         case FORM_MOONKIN:
+        {
             // remove movement affects
             m_target->RemoveMovementImpairingAuras();
+/*
+            m_target->RemoveSpellsCausingAura(SPELL_AURA_MOD_ROOT);
+            Unit::AuraList const& slowingAuras = m_target->GetAurasByType(SPELL_AURA_MOD_DECREASE_SPEED);
+            for (Unit::AuraList::const_iterator iter = slowingAuras.begin(); iter != slowingAuras.end();)
+            {
+                SpellEntry const* aurSpellInfo = (*iter)->GetSpellProto();
+
+                // If spell that caused this aura has Croud Control or Daze effect
+                if((GetAllSpellMechanicMask(aurSpellInfo) & MECHANIC_NOT_REMOVED_BY_SHAPESHIFT) ||
+                    // some Daze spells have these parameters instead of MECHANIC_DAZE
+                    (aurSpellInfo->SpellIconID == 15 && aurSpellInfo->Dispel == 0))
+                {
+                    ++iter;
+                    continue;
+                }
+
+                // All OK, remove aura now
+                m_target->RemoveAurasDueToSpellByCancel(aurSpellInfo->Id);
+                iter = slowingAuras.begin();
+            }
+*/
 
             // and polymorphic affects
             if(m_target->IsPolymorphed())
                 m_target->RemoveAurasDueToSpell(m_target->getTransForm());
+
             break;
+        }
         default:
            break;
     }
@@ -6357,7 +6304,17 @@ void AuraEffect::PeriodicTick()
             if(m_auraName==SPELL_AURA_OBS_MOD_HEALTH)
                 pdamage = uint32(m_target->GetMaxHealth() * pdamage * GetParentAura()->GetStackAmount() / 100);
             else
+            {
+                // Wild Growth (1/7 - 6 + 2*ramainTicks) %
+                if (m_spellProto->SpellFamilyName == SPELLFAMILY_DRUID && m_spellProto->SpellIconID == 2864)
+                {
+                    int32 ticks = GetParentAura()->GetAuraMaxDuration()/m_amplitude;
+                    int32 remainingTicks = int32(float(GetParentAura()->GetAuraDuration()) / m_amplitude + 0.5);
+                    pdamage = int32(pdamage) + int32(pdamage)*ticks*(-6+2*remainingTicks)/100;
+                }
+
                 pdamage = pCaster->SpellHealingBonus(m_target, GetSpellProto(), pdamage, DOT, GetParentAura()->GetStackAmount());
+            }
 
             bool crit = false;
             Unit::AuraEffectList const& mPeriodicCritAuras= pCaster->GetAurasByType(SPELL_AURA_ABILITY_PERIODIC_CRIT);
