@@ -110,7 +110,7 @@
 #include <ace/RW_Thread_Mutex.h>
 #include <ace/Thread_Mutex.h>
 
-#define FORCED_SERVER_KEEPALIVE 1
+//#define FORCED_SERVER_KEEPALIVE 1
 #if PLATFORM == PLATFORM_WINDOWS
 #  define FD_SETSIZE 4096
 #  include <ace/config-all.h>

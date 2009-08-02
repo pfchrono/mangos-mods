@@ -487,7 +487,7 @@ Player::~Player ()
     // it must be unloaded already in PlayerLogout and accessed only for loggined player
     //m_social = NULL;
 
-    // Remove reference to map if still exists
+    // Player may still set map - remove it to correctly unload instances
     if (FindMap())
         ResetMap();
 

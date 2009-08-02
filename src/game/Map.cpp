@@ -806,7 +806,6 @@ void Map::Update(const uint32 &t_diff)
     ///- Process necessary scripts
 	#pragma omp task
 	{
-		if (!m_scriptSchedule.empty())
 			ScriptsProcess();
 	}
 }
@@ -821,10 +820,12 @@ void Map::Remove(Player *player, bool remove)
 
         // invalid coordinates
         player->RemoveFromWorld();
-        player->ResetMap();
 
         if( remove )
+        {
+            player->ResetMap();
             DeleteFromWorld(player);
+        }
 
         return;
     }

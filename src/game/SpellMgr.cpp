@@ -33,7 +33,6 @@ bool IsAreaEffectTarget[TOTAL_SPELL_TARGETS];
 
 SpellMgr::SpellMgr()
 {
-	#pragma omp for
     for(int i = 0; i < TOTAL_SPELL_EFFECTS; ++i)
     {
         switch(i)
@@ -98,7 +97,6 @@ SpellMgr::SpellMgr()
         }
     }
 
-	#pragma omp for
     for(int i = 0; i < TOTAL_SPELL_TARGETS; ++i)
     {
         switch(i)
@@ -212,7 +210,6 @@ SpellMgr::SpellMgr()
         }
     }
 
-	#pragma omp for
     for(int i = 0; i < TOTAL_SPELL_TARGETS; ++i)
     {
         switch(i)
@@ -254,7 +251,6 @@ SpellMgr& SpellMgr::Instance()
 
 bool SpellMgr::IsSrcTargetSpell(SpellEntry const *spellInfo) const
 {
-	#pragma omp for
     for (uint8 i = 0; i< MAX_SPELL_EFFECTS; ++i)
     {
         if(SpellTargetType[spellInfo->EffectImplicitTargetA[i]] == TARGET_TYPE_AREA_SRC || SpellTargetType[spellInfo->EffectImplicitTargetB[i]] == TARGET_TYPE_AREA_SRC)
@@ -608,7 +604,6 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
             break;
     }
 
-	#pragma omp for
     for(int i = 0; i < 3; ++i)
     {
         if(spellInfo->Effect[i] == SPELL_EFFECT_APPLY_AURA)
@@ -715,6 +710,7 @@ bool IsPositiveEffect(uint32 spellId, uint32 effIndex, bool deep)
 
     switch(spellId)
     {
+        case  1852:                                         // Silenced (GM)
         case 46392:                                         // Focused Assault
         case 46393:                                         // Brutal Assault
         case 28441:                                         // not positive dummy spell

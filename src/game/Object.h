@@ -439,7 +439,7 @@ class TRINITY_DLL_SPEC WorldObject : public Object
 
         void GetRandomPoint( float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z ) const;
 
-        uint32 GetMapId() const { return m_currMap ? m_currMap->GetId() : 0; }
+        virtual uint32 GetMapId() const { return m_currMap ? m_currMap->GetId() : 0; }
         uint32 GetInstanceId() const { return m_currMap ? m_currMap->GetInstanceId() : 0; }
 
         virtual void SetPhaseMask(uint32 newPhaseMask, bool update);
@@ -560,12 +560,11 @@ class TRINITY_DLL_SPEC WorldObject : public Object
         bool IsTempWorldObject;
 
 #ifdef MAP_BASED_RAND_GEN
-        // Object may not have map assigned - use global scope rand in that case
-        int32 irand(int32 min, int32 max) const     { return FindMap() ? int32 (GetMap()->mtRand.randInt(max - min)) + min : ::irand(min, max); }
-        uint32 urand(uint32 min, uint32 max) const  { return FindMap() ? GetMap()->mtRand.randInt(max - min) + min : ::urand(min, max); }
-        int32 rand32() const                        { return FindMap() ? GetMap()->mtRand.randInt(): ::rand32(); }
-        double rand_norm() const                    { return FindMap() ? GetMap()->mtRand.randExc(): ::rand_norm(); }
-        double rand_chance() const                  { return FindMap() ? GetMap()->mtRand.randExc(100.0): ::rand_chance(); }
+        int32 irand(int32 min, int32 max) const     { int32 (GetMap()->mtRand.randInt(max - min)) + min; }
+        uint32 urand(uint32 min, uint32 max) const  { GetMap()->mtRand.randInt(max - min) + min}
+        int32 rand32() const                        { GetMap()->mtRand.randInt()}
+        double rand_norm() const                    { GetMap()->mtRand.randExc()}
+        double rand_chance() const                  { GetMap()->mtRand.randExc(100.0)}
 #endif
 
     protected:
