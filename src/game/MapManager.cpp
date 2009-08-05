@@ -117,9 +117,13 @@ MapManager::_createBaseMap(uint32 id)
         {
             m = new MapInstanced(id, i_gridCleanUpDelay);
         }
-        else
+        else if (entry)
         {
             m = new Map(id, i_gridCleanUpDelay, 0, 0);
+        }
+        else
+        {
+            assert(false);
         }
         i_maps[id] = m;
     }
@@ -303,7 +307,8 @@ void MapManager::DoDelayedMovesAndRemoves()
     
 #pragma omp parallel for schedule(dynamic) private(i) shared(update_queue)
     for(i=0;i<i_maps.size();i++)
-	update_queue[i]->DoDelayedMovesAndRemoves();*/
+	update_queue[i]->DoDelayedMovesAndRemoves();
+    */
 }
 
 bool MapManager::ExistMapAndVMap(uint32 mapid, float x,float y)

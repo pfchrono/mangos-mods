@@ -1014,10 +1014,10 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
                 default:
                 {
                     //40% damage bonus
-                    float val = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_NORMAL) * 0.4;
-                    if(val < 0)
-                        val = 15;
-                    SetBonusDamage( int32(val * 3));
+                    //float val = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_NORMAL) * 0.4;
+                    //if(val < 0)
+                    //    val = 15;
+                    //SetBonusDamage( int32(val * 3));
                     if(!pInfo)
                     {
                         SetCreateMana(28 + 10*petlevel);

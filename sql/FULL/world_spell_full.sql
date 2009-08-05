@@ -1,4 +1,4 @@
--- Up to TC2 4321
+-- Up to TC2 4748
 
 -- --------
 -- LINKED
@@ -143,9 +143,15 @@ INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comm
 -- --------
 -- TARGET
 -- --------
--- Mirror Image
-DELETE FROM `spell_script_target` WHERE `entry` IN (58836);
-INSERT INTO `spell_script_target` VALUES (58836, 1, 31216);
+
+DELETE FROM `spell_script_target` WHERE `entry` IN (58836, 50524, 50515, 52173, 60243);
+INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`) VALUES
+(58836, 3, 31216), -- Mirror Image
+(50524, 3, 27829), -- Runic Power Feed
+(52173, 3, 28267), -- Coyote Spirit Despawn
+(60243, 3, 11236), -- Blood Parrot Despawn
+(50515, 3, 27829); -- Dismiss Gargoyle
+
 -- zulaman
 DELETE FROM `spell_script_target` WHERE `entry` IN
 (42577,42471,43734,42631);
@@ -509,6 +515,12 @@ INSERT INTO `spell_target_position` (`id`, `target_map`, `target_position_x`, `t
 DELETE FROM `playercreateinfo_spell` WHERE Spell = 56816;
 INSERT INTO `playercreateinfo_spell` (`race`, `class`, `Spell`, `Note`) VALUES
 (0, 6, 56816, 'Rune Strike');
+DELETE FROM `playercreateinfo_spell` WHERE `spell` = 60091;
+INSERT INTO `playercreateinfo_spell` (`race`, `class`, `Spell`, `Note`) VALUES 
+(1, 2,  60091, 'Judgement Anti-Parry/Dodge Passive'),
+(3, 2,  60091, 'Judgement Anti-Parry/Dodge Passive'),
+(10, 2,  60091, 'Judgement Anti-Parry/Dodge Passive'),
+(11, 2,  60091, 'Judgement Anti-Parry/Dodge Passive');
 
 -- --------
 -- PROC
@@ -1342,8 +1354,8 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 58647, 0x00,  15, 0x00000000, 0x00000004, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Glyph of Frost Strike 
 ( 58676, 0x00,  15, 0x00000000, 0x00000008, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Glyph of Vampiric Blood 
 ( 58677, 0x00,  15, 0x00002000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Glyph of Death's Embrace 
-( 58872, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000040,   0,   0,   0), -- Damage Shield (Rank 1)
-( 58874, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000040,   0,   0,   0), -- Damage Shield (Rank 2)
+( 58872, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000043,   0,   0,   0), -- Damage Shield (Rank 1)
+( 58874, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000043,   0,   0,   0), -- Damage Shield (Rank 2)
 ( 58901, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002,   0,   0,  45), -- Tears of Anguish 
 ( 59088, 0x00,   4, 0x00000000, 0x00000002, 0x00000000, 0x00000400, 0x00000000,   0,   0,   0), -- Improved Spell Reflection (Rank 1)
 ( 59089, 0x00,   4, 0x00000000, 0x00000002, 0x00000000, 0x00000400, 0x00000000,   0,   0,   0), -- Improved Spell Reflection (Rank 2)
@@ -1403,7 +1415,6 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 64343, 0x00,   3, 0x00000002, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Impact
 ( 64976, 0x00,   4, 0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Juggernaut
 ( 64914, 0x00,   8, 0x00010000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Item - Rogue T8 2P Bonus
-( 64928, 0x00,  11, 0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Item - Shaman T8 Elemental 4P Bonus
 ( 64938, 0x00,   4, 0x00200040, 0x00000000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Item - Warrior T8 Melee 2P Bonus
 ( 64952, 0x00,   7, 0x00000000, 0x00000440, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Item - Druid T8 Feral Relic
 ( 64964, 0x00,  15, 0x00000000, 0x20000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Item - Death Knight T8 Tank Relic
@@ -1443,6 +1454,7 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 64786, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,  15), -- Comet's Trail
 ( 64792, 0x00,   0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002,   0,   0,  45), -- Blood of the Old God
 ( 64824, 0x00,   7, 0x00200000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Item - Druid T8 Balance 4P Bonus
+( 64928, 0x00,  11, 0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000002,   0,   0,   0), -- Item - Shaman T8 Elemental
 ( 64860, 0x00,   9, 0x00000000, 0x00000001, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Item - Hunter T8 4P Bonus
 ( 64867, 0x00,   3, 0x20000021, 0x00001000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Item - Mage T8 2P Bonus
 ( 64882, 0x00,  10, 0x00000000, 0x00100000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Item - Paladin T8 Protection 4P Bonus
@@ -1496,7 +1508,16 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 53238, 0x00,   9, 0x00020000, 0x00000001, 0x00000001, 0x00000000, 0x00000002,   0,   0,   0), -- Piercing Shots (Rank 3)
 ( 56636, 0x00,   4, 0x00000020, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   6), -- Taste for Blood (Rank 1)
 ( 56637, 0x00,   4, 0x00000020, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   6), -- Taste for Blood (Rank 2)
-( 56638, 0x00,   4, 0x00000020, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   6); -- Taste for Blood (Rank 3) 
+( 56638, 0x00,   4, 0x00000020, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   6), -- Taste for Blood (Rank 3) 
+( 56375, 0x00,   3, 0x01000000, 0x00000000, 0x00000000, 0x00010000, 0x00000000,   0,   0,   0), -- Glyphs of Polymorph
+( 54639, 0x00,  15, 0x00400000, 0x00010000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Blood of the north
+( 54638, 0x00,  15, 0x00400000, 0x00010000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Blood of the north
+( 54637, 0x00,  15, 0x00400000, 0x00010000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Blood of the north
+( 61433, 0x00,  15, 0x00400000, 0x00010000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Blood of the north
+( 61434, 0x00,  15, 0x00400000, 0x00010000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Blood of the north
+( 49467, 0x00,  15, 0x00000010, 0x00020000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Death Rune Mastery
+( 50033, 0x00,  15, 0x00000010, 0x00020000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Death Rune Mastery
+( 50034, 0x00,  15, 0x00000010, 0x00020000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0); -- Death Rune Mastery
 
 -- --------
 -- ENCHANT PROC
@@ -1554,6 +1575,7 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (47476, -1, -1, 0.06, -1, 'Death Knight - Strangulate'),
 (50536, -1, -1, 0.013, -1, 'Death Knight - Unholy Blight (Rank1)'),
 (339, -1, 0.1, -1, -1, 'Druid - Entangling Roots'),
+(60089, -1, -1, 0.05, -1, 'Druid - Faerie Fire (feral)'),
 (5185, 1.611, -1, -1, -1, 'Druid - Healing Touch'),
 (42231, 0.12898, -1, -1, -1, 'Druid - Hurricane Triggered'),
 (5570, -1, 0.2, -1, -1, 'Druid - Insect Swarm'),
@@ -1580,7 +1602,6 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (61391, 0.193, -1, -1, -1, 'Druid - Typhoon'),
 (48438, -1, 0.11505, -1, -1, 'Druid - Wild Growth'),
 (5176, 0.5714, -1, -1, -1, 'Druid - Wrath'),
-(60089, -1, -1, 0.05, -1, 'Faerie Fire (feral)'),
 (3044, -1, -1, 0.15, -1, 'Hunter - Arcane Shot'),
 (3674, -1, -1, -1, 0.02, 'Hunter - Black Arrow($RAP*0.1 / number of ticks)'),
 (19306, -1, -1, 0.2, -1, 'Hunter - Counterattack'),
@@ -1589,6 +1610,7 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (1495, -1, -1, 0.2, -1, 'Hunter - Mongoose Bite'),
 (1978, -1, -1, -1, 0.04, 'Hunter - Serpent Sting($RAP*0.2 / number of ticks)'),
 (56641, -1, -1, 0.1, -1, 'Hunter - Steady Shot'),
+(42243, -1, -1, 0.07, -1, 'Hunter - Volley'),
 (55039, 0, 0, 0, 0, 'Item - Gnomish Lightning Generator'),
 (44425, 0.7143, -1, -1, -1, 'Mage - Arcane Barrage'),
 (30451, 0.7143, -1, -1, -1, 'Mage - Arcane Blast'),
@@ -1621,6 +1643,7 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (19750, 1, -1, -1, -1, 'Paladin - Flash of Light'),
 (53595, 0, 0, 0, 0, 'Paladin - Hammer of the Righteous'),
 (24275, 0.15, -1, 0.15, -1, 'Paladin - Hammer of Wrath'),
+(62124, 0.085, -1, -1, -1, 'Paladin - Hand of Reckoning'),
 (635, 1.66, -1, -1, -1, 'Paladin - Holy Light'),
 (20925, 0.09, -1, 0.056, -1, 'Paladin - Holy Shield'),
 (25914, 0.81, -1, -1, -1, 'Paladin - Holy Shock Triggered Heal Rank 1'),
@@ -1646,7 +1669,6 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (25742, 0.07, -1, 0.039, -1, 'Paladin - Seal of Righteousness Dummy Proc'),
 (53719, 0, 0, 0, 0, 'Paladin - Seal of the Martyr Proc Enemy'),
 (53718, 0, 0, 0, 0, 'Paladin - Seal of the Martyr Proc Self'),
-(62124, 0.085, -1, -1, -1, 'Paladin - Hand of Reckoning'),
 (50256, -1, -1, 0.08, -1, 'Pet Skills - Bear (Swipe)'),
 (32546, 0.8068, -1, -1, -1, 'Priest - Binding Heal'),
 (27813, 0, 0, 0, 0, 'Priest - Blessed Recovery Rank 1'),
@@ -1799,8 +1821,8 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (20253, -1, -1, 0.12, -1, 'Warrior - Intercept'),
 (61491, -1, -1, 0.12, -1, 'Warrior - Intercept'),
 (6572, -1, -1, 0.207, -1, 'Warrior - Revenge'),
-(6343, -1, -1, 0.12, -1, 'Warrior - Thunder Clap'),
-(64382, -1, -1, 0.5, -1, 'Warrior - Shattering Throw');
+(64382, -1, -1, 0.5, -1, 'Warrior - Shattering Throw'),
+(6343, -1, -1, 0.12, -1, 'Warrior - Thunder Clap');
 
 -- --------
 -- SPELL ELIXIR
@@ -1945,8 +1967,7 @@ INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`) VALUES
 (52479, 1, 28822),
 (52576, 1, 28834), -- Electro-magnetic Pulse
 (52576, 1, 28886),
-(53110, 1, 28940), -- Devour Humanoid
-(48743, 1, 26125); -- Death pact
+(53110, 1, 28940); -- Devour Humanoid
 
 -- Eye of Acherus
 DELETE FROM `spell_target_position` WHERE `id`=51852;

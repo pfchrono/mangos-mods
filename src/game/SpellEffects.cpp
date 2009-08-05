@@ -585,8 +585,14 @@ void Spell::SpellDamageSchoolDmg(uint32 effect_idx)
             }
             case SPELLFAMILY_HUNTER:
             {
+                //Gore
+                if (m_spellInfo->SpellIconID == 1578)
+                {
+                    if (m_caster->HasAura(57627))           // Charge 6 sec post-affect
+                        damage *= 2;
+                }
                 // Steady Shot
-                if(m_spellInfo->SpellFamilyFlags[1] & 0x1)
+                else if(m_spellInfo->SpellFamilyFlags[1] & 0x1)
                 {
                     bool found = false;
                     // check dazed affect
@@ -1930,10 +1936,29 @@ void Spell::EffectDummy(uint32 i)
                     bp = damage;
                 }
                 m_caster->CastCustomSpell(unitTarget,m_spellInfo->CalculateSimpleValue(1),&bp,NULL,NULL,true);
-                // Suicide
+                // Corpse Explosion (Suicide)
                 unitTarget->CastCustomSpell(unitTarget,43999,&bp,NULL,NULL,true);
                 // Set corpse look
                 unitTarget->SetDisplayId(25537+urand(0,3));
+            }
+            // Runic Power Feed ( keeping Gargoyle alive )
+            else if (m_spellInfo->Id == 50524)
+            {
+                // No power, dismiss Gargoyle
+                if (m_caster->GetPower(POWER_RUNIC_POWER)<30)
+                    m_caster->CastSpell((Unit*)NULL,50515,true);
+                else
+                    m_caster->ModifyPower(POWER_RUNIC_POWER,-30);
+
+                return;
+            }
+            // Dismiss Gargoyle
+            else if (m_spellInfo->Id == 50515)
+            {
+                // FIXME: gargoyle should fly away
+                unitTarget->setDeathState(JUST_DIED);
+                m_caster->RemoveAurasDueToSpell(50514);
+                return;
             }
             break;
     }
@@ -2041,7 +2066,7 @@ void Spell::EffectTriggerSpell(uint32 i)
     // special cases
     switch(triggered_spell_id)
     {
-        // Vanish
+        // Vanish (not exist)
         case 18461:
         {
             m_caster->RemoveMovementImpairingAuras();
@@ -2102,7 +2127,8 @@ void Spell::EffectTriggerSpell(uint32 i)
         // Brittle Armor - (need add max stack of 24575 Brittle Armor)
         case 29284:
         {
-            const SpellEntry *spell = sSpellStore.LookupEntry(24575);
+            // Brittle Armor
+            SpellEntry const* spell = sSpellStore.LookupEntry(24575);
             if (!spell)
                 return;
 
@@ -2113,7 +2139,8 @@ void Spell::EffectTriggerSpell(uint32 i)
         // Mercurial Shield - (need add max stack of 26464 Mercurial Shield)
         case 29286:
         {
-            const SpellEntry *spell = sSpellStore.LookupEntry(26464);
+            // Mercurial Shield
+            SpellEntry const* spell = sSpellStore.LookupEntry(26464);
             if (!spell)
                 return;
 
@@ -2128,7 +2155,7 @@ void Spell::EffectTriggerSpell(uint32 i)
             return;
         }
         // Cloak of Shadows
-        case 35729 :
+        case 35729:
         {
             uint32 dispelMask = GetDispellMask(DISPEL_ALL);
             Unit::AuraMap& Auras = m_caster->GetAuras();
@@ -3565,26 +3592,12 @@ void Spell::EffectDispel(uint32 i)
             }
             m_caster->SendMessageToSet(&dataSuccess, true);
 
-            // On succes dispel
+            // On success dispel
             // Devour Magic
             if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARLOCK && m_spellInfo->Category == SPELLCATEGORY_DEVOUR_MAGIC)
             {
-                uint32 heal_spell = 0;
-                switch (m_spellInfo->Id)
-                {
-                    case 19505: heal_spell = 19658; break;
-                    case 19731: heal_spell = 19732; break;
-                    case 19734: heal_spell = 19733; break;
-                    case 19736: heal_spell = 19735; break;
-                    case 27276: heal_spell = 27278; break;
-                    case 27277: heal_spell = 27279; break;
-                    case 48011: heal_spell = 48010; break;
-                    default:
-                        sLog.outDebug("Spell for Devour Magic %d not handled in Spell::EffectDispel", m_spellInfo->Id);
-                        break;
-                }
-                if (heal_spell)
-                    m_caster->CastSpell(m_caster, heal_spell, true);
+                int32 heal_amount = m_spellInfo->CalculateSimpleValue(1);
+                m_caster->CastCustomSpell(m_caster, 19658, &heal_amount, NULL, NULL, true);
             }
         }
     }
@@ -4633,7 +4646,6 @@ void Spell::EffectScriptEffect(uint32 effIndex)
                 {
                     if(!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
                         return;
-                    
                     ((Creature*)unitTarget)->ForcedDespawn();
                     return;
                 }
@@ -4997,6 +5009,11 @@ void Spell::EffectScriptEffect(uint32 effIndex)
                     }
                     break;
                 }
+                case 52173: // Coyote Spirit Despawn
+                case 60243: // Blood Parrot Despawn
+                    if (unitTarget->GetTypeId() == TYPEID_UNIT && ((Creature*)unitTarget)->isSummon())
+                        ((TempSummon*)unitTarget)->UnSummon();
+                    return;
                 // Sky Darkener Assault
                 case 52124:
                     if(unitTarget)
@@ -5072,6 +5089,24 @@ void Spell::EffectScriptEffect(uint32 effIndex)
                         }
                     }
                     return;
+                case 58983: // Big Blizzard Bear
+                {
+                    if(!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    // Prevent stacking of mounts
+                    unitTarget->RemoveAurasByType(SPELL_AURA_MOUNTED);
+
+                    // Triggered spell id dependent of riding skill
+                    if(uint16 skillval = ((Player*)unitTarget)->GetSkillValue(SKILL_RIDING))
+                    {
+                        if (skillval >= 150)
+                            unitTarget->CastSpell(unitTarget, 58999, true);
+                        else
+                            unitTarget->CastSpell(unitTarget, 58997, true);
+                    }
+                    return;
+                }
                 case 59317:                                 // Teleporting
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
                         return;

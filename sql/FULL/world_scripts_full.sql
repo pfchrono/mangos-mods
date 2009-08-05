@@ -1,4 +1,4 @@
--- Up to TC2 4321
+-- Up to TC2 4748
 
 /* WORLD BOSS */
 UPDATE `creature_template` SET `ScriptName`='boss_ysondre' WHERE `entry`=14887;
@@ -36,6 +36,7 @@ UPDATE `gameobject_template` SET `ScriptName`='go_tele_to_dalaran_crystal' WHERE
 UPDATE `gameobject_template` SET `ScriptName`='go_tele_to_violet_stand' WHERE `entry`=191229;
 UPDATE `gameobject_template` SET `ScriptName`='go_orb_of_the_blue_flight' WHERE `entry`=188415;
 UPDATE `gameobject_template` SET `ScriptName`='go_acherus_soul_prison' WHERE `entry` IN (191577,191580,191581,191582,191583,191584,191585,191586,191587,191588,191589,191590);
+UPDATE `gameobject_template` SET `ScriptName`='go_shrine_of_the_birds' WHERE `entry` IN (185547,185553,185551);
 
 /* GUARD */
 UPDATE `creature_template` SET `ScriptName`='guard_azuremyst' WHERE `entry`=18038;
@@ -84,6 +85,8 @@ UPDATE `item_template` SET `ScriptName`='item_zezzaks_shard' WHERE `entry`=31463
 UPDATE `item_template` SET `ScriptName`='item_only_for_flight' WHERE `entry` IN (34475, 34489, 24538);
 UPDATE `item_template` SET `ScriptName`='item_inoculating_crystal' WHERE `entry`=22962;
 UPDATE `item_template` SET `ScriptName`='item_incendiary_explosives' WHERE (`entry`=35704);
+UPDATE `item_template` SET `ScriptName`='item_mysterious_egg' WHERE `entry` IN(39878);
+UPDATE `item_template` SET `ScriptName`='item_disgusting_jar' WHERE `entry` IN(44717);
 
 /* NPC (usually creatures to be found in more than one specific zone) */
 UPDATE `creature_template` SET `ScriptName`='npc_air_force_bots' WHERE `entry` IN (2614, 2615, 21974, 21993, 21996, 21997, 21999, 22001, 22002, 22003, 22063, 22065, 22066, 22068, 22069, 22070, 22071, 22078, 22079, 22080, 22086, 22087, 22088, 22090, 22124, 22125, 22126);
@@ -119,6 +122,7 @@ UPDATE `creature_template` SET `ScriptName`='npc_a_special_surprise' WHERE `entr
 UPDATE `creature_template` SET `ScriptName`='npc_demolisher_engineerer' WHERE `entry` IN (30400, 30499);
 UPDATE `creature_template` SET `ScriptName`='npc_valkyr_battle_maiden' WHERE `entry`=28534;
 UPDATE `creature_template` SET `ScriptName`='npc_mirror_image' WHERE `entry`=31216;
+UPDATE `creature_template` SET `ScriptName`='npc_training_dummy' WHERE `entry` IN (17578, 24792, 32543, 32546, 32542, 32545, 30527, 31143, 31144, 31146, 32541, 32666, 32667);
 
 /*  */
 /* ZONE */
@@ -1086,6 +1090,7 @@ UPDATE `creature_template` SET `ScriptName`='boss_zuljin' WHERE `entry` =23863;
 UPDATE `creature_template` SET `ScriptName`='do_nothing' WHERE `entry`=24187;
 UPDATE `creature_template` SET `ScriptName`='mob_zuljin_vortex' WHERE `entry`=24136;
 UPDATE `creature_template` SET `ScriptName`='npc_zulaman_hostage' WHERE `entry` IN (23790, 23999, 24024, 24001);
+UPDATE `creature_template` SET `ScriptName`='mob_mojo' WHERE `entry`=24480;
 
 /* ZUL'DRAK */
 UPDATE `creature_template` SET `ScriptName`='npc_captured_rageclaw' WHERE (`entry`='29686');

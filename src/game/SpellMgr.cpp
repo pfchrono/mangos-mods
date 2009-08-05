@@ -562,8 +562,8 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
             if (spellInfo->Dispel == DISPEL_POISON)
                 return SPELL_STING;
 
-            // only hunter aspects have this
-            if( spellInfo->SpellFamilyFlags[1] & 0x00440000 || spellInfo->SpellFamilyFlags[0] & 0x00380000 || spellInfo->SpellFamilyFlags[2] & 0x00001010)
+            // only hunter aspects have this (but not all aspects in hunter family)
+            if( spellInfo->SpellFamilyFlags.HasFlag(0x00380000, 0x00440000, 0x00001010))
                 return SPELL_ASPECT;
 
             break;
@@ -579,12 +579,10 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
             if (spellInfo->Id == 20184 || spellInfo->Id == 20185 || spellInfo->Id == 20186)
                 return SPELL_JUDGEMENT;
 
-            for (int i = 0; i < 3; ++i)
-            {
-                // only paladin auras have this (for palaldin class family)
-                if (spellInfo->Effect[i] == SPELL_EFFECT_APPLY_AREA_AURA_RAID)
-                    return SPELL_AURA;
-            }
+            // only paladin auras have this (for palaldin class family)
+            if( spellInfo->SpellFamilyFlags[2] & 0x00000020 )
+                return SPELL_AURA;
+
             break;
         }
         case SPELLFAMILY_SHAMAN:
@@ -600,6 +598,7 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
 
         case SPELLFAMILY_DEATHKNIGHT:
             if (spellInfo->Id == SPELL_ID_BLOOD_PRESENCE || spellInfo->Id == SPELL_ID_FROST_PRESENCE || spellInfo->Id == SPELL_ID_UNHOLY_PRESENCE)
+            //if (spellInfo->Category == 47)
                 return SPELL_PRESENCE;
             break;
     }
@@ -721,6 +720,7 @@ bool IsPositiveEffect(uint32 spellId, uint32 effIndex, bool deep)
         case 31719:                                         // Suspension
         case 61987:                                         // Avenging Wrath Marker
         case 11196:                                         // Recently Bandadged
+        case 50524:                                         // Runic Power Feed
             return false;
         case 12042:                                         // Arcane Power
             return true;
@@ -1934,6 +1934,9 @@ void SpellMgr::LoadSpellScriptTarget()
                 }
                 break;
             }
+            case SPELL_TARGET_TYPE_CONTROLLED:
+                if( targetEntry==0 )
+                    sLog.outErrorDb("Table `spell_script_target`: creature template entry %u does not exist.",targetEntry);
             default:
             {
                 //players
@@ -3680,6 +3683,9 @@ void SpellMgr::LoadSpellCustomAttr()
             break;
         case 51852:    // The Eye of Acherus (no spawn in phase 2 in db)
             spellInfo->EffectMiscValue[0] |= 1;
+            break;
+        case 52025:    // Cleansing Totem Effect
+            spellInfo->EffectDieSides[1] = 1;
             break;
         case 51904:     // Summon Ghouls On Scarlet Crusade (core does not know the triggered spell is summon spell)
             spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;

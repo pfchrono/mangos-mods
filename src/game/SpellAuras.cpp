@@ -944,6 +944,67 @@ void Aura::ApplyAllModifiers(bool apply, bool Real)
 
 void Aura::HandleAuraSpecificMods(bool apply)
 {
+    if (apply)
+    {
+        if (m_spellProto->SpellFamilyName == SPELLFAMILY_MAGE)
+        {
+            if (m_spellProto->SpellFamilyFlags[0] & 0x00000001 && m_spellProto->SpellFamilyFlags[2] & 0x00000008)
+            {
+                // Glyph of Fireball
+                if (Unit * caster = GetCaster())
+                    if (caster->HasAura(56368))
+                        SetAuraDuration(0);
+            }
+            else if (m_spellProto->SpellFamilyFlags[0] & 0x00000020 && m_spellProto->SpellVisual[0] == 13)
+            {
+                // Glyph of Frostbolt
+                if (Unit * caster = GetCaster())
+                    if (caster->HasAura(56370))
+                        SetAuraDuration(0);
+            }
+            // Todo: This should be moved to similar function in spell::hit
+            else if (m_spellProto->SpellFamilyFlags[0] & 0x01000000)
+            {
+                Unit * caster = GetCaster();
+                if (!caster)
+                    return;
+
+                // Polymorph Sound - Sheep && Penguin
+                if (m_spellProto->SpellIconID == 82 && m_spellProto->SpellVisual[0] == 12978)
+                {
+                    // Glyph of the Penguin
+                    if (caster->HasAura(52648))
+                        caster->CastSpell(m_target,61635,true);
+                    else
+                        caster->CastSpell(m_target,61634,true);
+                }
+            }
+        }
+    }
+
+    // Aura Mastery Triggered Spell Handler
+    // If apply Concentration Aura -> trigger -> apply Aura Mastery Immunity
+    // If remove Concentration Aura -> trigger -> remove Aura Mastery Immunity
+    // If remove Aura Mastery -> trigger -> remove Aura Mastery Immunity
+    if (m_spellProto->Id == 19746 || m_spellProto->Id == 31821)
+    {
+        if (GetCasterGUID() != m_target->GetGUID())
+            return;
+        if (apply)
+        {
+            if ((m_spellProto->Id == 31821 && m_target->HasAura(19746, GetCasterGUID())) || (m_spellProto->Id == 19746 && m_target->HasAura(31821)))
+            {
+                m_target->CastSpell(m_target,64364,true);
+                return;
+            }  
+        }
+        else
+        {
+            m_target->RemoveAurasDueToSpell(64364, GetCasterGUID());
+            return;
+        }
+    }
+
     if (GetSpellSpecific(m_spellProto->Id) == SPELL_PRESENCE)
     {
         AuraEffect *bloodPresenceAura=0;  // healing by damage done
@@ -2722,7 +2783,11 @@ void AuraEffect::HandleAuraDummy(bool apply, bool Real, bool changeAmount)
                         return;
                     case 46308: // Burning Winds casted only at creatures at spawn
                         m_target->CastSpell(m_target,47287,true,NULL,this);
-                        return;        
+                        return;
+                    case 52173:  // Coyote Spirit Despawn Aura
+                    case 60244:  // Blood Parrot Despawn Aura
+                        m_target->CastSpell((Unit*)NULL, GetAmount(), true, NULL, this);
+                        return;
                 }
                 break;
             case SPELLFAMILY_WARLOCK:
@@ -2749,6 +2814,14 @@ void AuraEffect::HandleAuraDummy(bool apply, bool Real, bool changeAmount)
                 if(GetId()==34477)
                 {
                     m_target->SetReducedThreatPercent(0, 0);
+                    return;
+                }
+                break;
+            case SPELLFAMILY_DEATHKNIGHT:
+                // Summon Gargoyle ( will start feeding gargoyle )
+                if(GetId()==61777)
+                {
+                    m_target->CastSpell(m_target,m_spellProto->EffectTriggerSpell[m_effIndex],true);
                     return;
                 }
                 break;
@@ -3513,6 +3586,13 @@ void AuraEffect::HandleAuraTransform(bool apply, bool Real, bool /*changeAmount*
                 // Dragonmaw Illusion (set mount model also)
                 if(GetId()==42016 && m_target->GetMountID() && !m_target->GetAurasByType(SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED).empty())
                     m_target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID,16314);
+
+                // Polymorph (sheep)
+                if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_MAGE && GetSpellProto()->SpellIconID == 82 && GetSpellProto()->SpellVisual[0] == 12978)
+                    if (Unit * caster = GetCaster())
+                        // Glyph of the Penguin
+                        if (caster->HasAura(52648))
+                            m_target->SetDisplayId(26452);
             }
         }
 
@@ -4395,7 +4475,7 @@ void AuraEffect::HandleModStateImmunityMask(bool apply, bool Real, bool /*change
     if (GetMiscValue() & (1<<7))
         immunity_list.push_back(SPELL_AURA_MOD_DISARM);
     if (GetMiscValue() & (1<<1))
-        immunity_list.push_back(SPELL_AURA_MOD_TAUNT);
+        immunity_list.push_back(SPELL_AURA_TRANSFORM);
 
     // These flag can be recognized wrong:
     if (GetMiscValue() & (1<<6))
@@ -4739,6 +4819,12 @@ void AuraEffect::HandleAuraPeriodicDummy(bool apply, bool Real, bool changeAmoun
             // Explosive Shot
             if (apply && !loading && caster)
                 m_amount += int32(caster->GetTotalAttackPowerValue(RANGED_ATTACK) * 14 / 100);
+            break;
+        }
+        case SPELLFAMILY_DEATHKNIGHT:
+        {
+            if (spell->SpellIconID == 3041 || spell->SpellIconID == 22 || spell->SpellIconID == 2622)
+                m_amount = 0;
             break;
         }
     }
@@ -7146,11 +7232,9 @@ void AuraEffect::PeriodicDummyTick()
                 return;
             }
             // Summon Gargoyle
-//            if (spell->SpellFamilyFlags & 0x0000008000000000LL)
-//                return;
-            // Death Rune Mastery
-//            if (spell->SpellFamilyFlags & 0x0000000000004000LL)
-//                return;
+            // Being pursuaded by Gargoyle - AI related?
+            // if (spell->SpellFamilyFlags[1] & 0x00000080)
+            // break;
             // Bladed Armor
             if (spell->SpellIconID == 2653)
             {
@@ -7160,12 +7244,43 @@ void AuraEffect::PeriodicDummyTick()
                 m_target->CastCustomSpell(m_target, 61217, &apBonus, &apBonus, 0, true, 0, this);
                 return;
             }
-            // Reaping
-//            if (spell->SpellIconID == 22)
-//                return;
             // Blood of the North
-//            if (spell->SpellIconID == 30412)
-//                return;
+            // Reaping
+            // Death Rune Mastery
+            if (spell->SpellIconID == 3041 || spell->SpellIconID == 22 || spell->SpellIconID == 2622)
+            {
+                if (m_target->GetTypeId() != TYPEID_PLAYER)
+                    return;
+                // Aura not used - prevent removing death runes from other effects
+                if (!GetAmount())
+                    return;
+                if(((Player*)m_target)->getClass() != CLASS_DEATH_KNIGHT)
+                    return;
+
+                // Remove death rune added on proc
+                for (uint8 i=0;i<MAX_RUNES && m_amount;++i)
+                {
+                    if (m_spellProto->SpellIconID == 2622)
+                    {
+                        if (((Player*)m_target)->GetCurrentRune(i) != RUNE_DEATH ||
+                            ((Player*)m_target)->GetBaseRune(i) == RUNE_BLOOD )
+                            continue;
+                    }
+                    else
+                    {
+                        if (((Player*)m_target)->GetCurrentRune(i) != RUNE_DEATH ||
+                            ((Player*)m_target)->GetBaseRune(i) != RUNE_BLOOD )
+                            continue;
+                    }
+
+                    if (!(m_amount & (1<<i)))
+                        continue;
+
+                    ((Player*)m_target)->ConvertRune(i,((Player*)m_target)->GetBaseRune(i));
+                }
+                m_amount = 0;
+                return;
+            }
             break;
         }
         default:
@@ -7286,26 +7401,32 @@ void AuraEffect::HandleAuraConvertRune(bool apply, bool Real, bool /*changeAmoun
     if(plr->getClass() != CLASS_DEATH_KNIGHT)
         return;
 
-    // how to determine what rune need to be converted?
-    for(uint32 i = 0; i < MAX_RUNES; ++i)
+    uint32 runes = 0;
+    // convert number of runes specified in aura amount of rune type in miscvalue to runetype in miscvalueb
+    for(uint32 i = 0; i < MAX_RUNES && m_amount; ++i)
     {
         if(apply)
         {
+            if (GetMiscValue() != plr->GetCurrentRune(i))
+                continue;
             if(!plr->GetRuneCooldown(i))
             {
                 plr->ConvertRune(i, GetSpellProto()->EffectMiscValueB[m_effIndex]);
-                break;
+                runes |= 1<<i;
+                --m_amount;
             }
         }
         else
         {
             if(plr->GetCurrentRune(i) == GetSpellProto()->EffectMiscValueB[m_effIndex])
             {
-                plr->ConvertRune(i, plr->GetBaseRune(i));
-                break;
+                if (m_amount & (1<<i))
+                    plr->ConvertRune(i, plr->GetBaseRune(i));
             }
         }
     }
+    if (apply)
+        m_amount = runes;
 }
 
 // Control Auras
@@ -7544,6 +7665,7 @@ void AuraEffect::HandleAuraCloneCaster( bool Apply, bool Real , bool /*changeAmo
 {
     if (!Real)
         return;
+
     if (Apply)
     {
         Unit * caster = GetCaster();

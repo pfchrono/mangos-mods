@@ -20,6 +20,7 @@
 
 #include "Common.h"
 #include "Language.h"
+#include "Config/ConfigEnv.h"
 #include "Database/DatabaseEnv.h"
 #include "Log.h"
 #include "Opcodes.h"
@@ -731,7 +732,6 @@ bool Player::Create( uint32 guidlow, const std::string& name, uint8 race, uint8 
 
             uint32 item_id = oEntry->ItemId[j];
 
-
             // Hack for not existed item id in dbc 3.0.3
             if(item_id==40582)
                 continue;
@@ -743,9 +743,10 @@ bool Player::Create( uint32 guidlow, const std::string& name, uint8 race, uint8 
                 continue;
             }
 
-            // max stack by default (mostly 1), 1 for infinity stackable
-            uint32 count = iProto->Stackable > 0 ? uint32(iProto->Stackable) : 1;
+            // BuyCount by default
+            uint32 count = iProto->BuyCount;
 
+            // special amount for foor/drink
             if(iProto->Class==ITEM_CLASS_CONSUMABLE && iProto->SubClass==ITEM_SUBCLASS_FOOD)
             {
                 switch(iProto->Spells[0].SpellCategory)
@@ -4365,7 +4366,7 @@ void Player::CreateCorpse()
         corpse->SaveToDB();
 
     // register for player, but not show
-    ObjectAccessor::Instance().AddCorpse(corpse, corpse->GetMapId(), corpse->GetInstanceId());
+    ObjectAccessor::Instance().AddCorpse(corpse);
 }
 
 void Player::SpawnCorpseBones()
@@ -4537,7 +4538,7 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod, bool g
             uint32 dmultiplier = dcost->multiplier[ItemSubClassToDurabilityMultiplierId(ditemProto->Class,ditemProto->SubClass)];
             uint32 costs = uint32(LostDurability*dmultiplier*double(dQualitymodEntry->quality_mod));
 
-            costs = uint32(costs * discountMod);
+            costs = uint32(costs * discountMod) * sConfig.GetFloatDefault("Rate.RepairCost", 1);
 
             if (costs==0)                                   //fix for ITEM_QUALITY_ARTIFACT
                 costs = 1;
@@ -5292,6 +5293,9 @@ void Player::UpdateWeaponSkill (WeaponAttackType attType)
 
     if(m_form == FORM_TREE)
         return;                                             // use weapon but not skill up
+
+    if(pVictim && pVictim->GetTypeId() == TYPEID_UNIT && (((Creature*)pVictim)->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_SKILLGAIN))
+        return;
 
     uint32 weapon_skill_gain = sWorld.getConfig(CONFIG_SKILL_GAIN_WEAPON);
 
@@ -10608,7 +10612,7 @@ Item* Player::_StoreItem( uint16 pos, Item *pItem, uint32 count, bool clone, boo
     uint8 bag = pos >> 8;
     uint8 slot = pos & 255;
 
-    sLog.outDebug( "STORAGE: StoreItem bag = %u, slot = %u, item = %u, count = %u", bag, slot, pItem->GetEntry(), count);
+    sLog.outDebug( "STORAGE: StoreItem bag = %u, slot = %u, item = %u, count = %u, guid = %u", bag, slot, pItem->GetEntry(), count, pItem->GetGUIDLow());
 
     Item *pItem2 = GetItemByPos( bag, slot );
 
@@ -14661,7 +14665,7 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     else if (transGUID != 0)
     {
         // There are no transports on instances
-        assert (!instanceId);
+        instanceId = 0;
 
         m_movementInfo.t_x = fields[27].GetFloat();
         m_movementInfo.t_y = fields[28].GetFloat();
@@ -14718,7 +14722,7 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     else if (!taxi_nodes.empty()) // Taxi Flight path loaded from db
     {
         // There are no flightpaths in instances
-        assert (!instanceId);
+        instanceId = 0;
 
         if(!m_taxi.LoadTaxiDestinationsFromString(taxi_nodes,GetTeam()))
         {
@@ -15939,8 +15943,7 @@ bool Player::Satisfy(AccessRequirement const *ar, uint32 target_map, bool report
         {
             if(ar->levelMin && getLevel() < ar->levelMin)
                 LevelMin = ar->levelMin;
-            else if(ar->heroicLevelMin && GetDifficulty() == DIFFICULTY_HEROIC
-                && getLevel() < ar->heroicLevelMin)
+            if(ar->heroicLevelMin && GetDifficulty() == DIFFICULTY_HEROIC && getLevel() < ar->heroicLevelMin)
                 LevelMin = ar->heroicLevelMin;
             if(ar->levelMax && getLevel() > ar->levelMax)
                 LevelMax = ar->levelMax;
@@ -15982,7 +15985,7 @@ bool Player::Satisfy(AccessRequirement const *ar, uint32 target_map, bool report
             if(report)
             {
                 if(missingItem)
-                    GetSession()->SendAreaTriggerMessage(GetSession()->GetTrinityString(LANG_LEVEL_MINREQUIRED_AND_ITEM), ar->levelMin, objmgr.GetItemPrototype(missingItem)->Name1);
+                    GetSession()->SendAreaTriggerMessage(GetSession()->GetTrinityString(LANG_LEVEL_MINREQUIRED_AND_ITEM), LevelMin, objmgr.GetItemPrototype(missingItem)->Name1);
                 else if(missingKey)
                     SendTransferAborted(target_map, TRANSFER_ABORT_DIFFICULTY);
                 else if(missingHeroicQuest)
@@ -18974,11 +18977,6 @@ void Player::SendInitialPacketsBeforeAddToMap()
     m_reputationMgr.SendInitialReputations();
     m_achievementMgr.SendAllAchievementData();
 
-    // update zone
-    uint32 newzone, newarea;
-    GetZoneAndAreaId(newzone,newarea);
-    UpdateZone(newzone,newarea);                            // also call SendInitWorldStates();
-
     SendEquipmentSetList();
 
     data.Initialize(SMSG_LOGIN_SETTIMESPEED, 4 + 4 + 4);
@@ -18990,6 +18988,11 @@ void Player::SendInitialPacketsBeforeAddToMap()
 
 void Player::SendInitialPacketsAfterAddToMap()
 {
+    // update zone
+    uint32 newzone, newarea;
+    GetZoneAndAreaId(newzone,newarea);
+    UpdateZone(newzone,newarea);                            // also call SendInitWorldStates();
+
     WorldPacket data(SMSG_TIME_SYNC_REQ, 4);                // new 2.0.x, enable movement
     data << uint32(0x00000000);                             // on blizz it increments periodically
     GetSession()->SendPacket(&data);
@@ -19856,7 +19859,7 @@ bool Player::IsAtGroupRewardDistance(WorldObject const* pRewardSource) const
     const WorldObject* player = GetCorpse();
     if(!player || isAlive())
         player = this;
-    
+
     if(player->GetMapId() != pRewardSource->GetMapId() || player->GetInstanceId() != pRewardSource->GetInstanceId())
         return false;
 
@@ -20477,6 +20480,7 @@ void Player::InitRunes()
     m_runes = new Runes;
 
     m_runes->runeState = 0;
+    m_runes->lastUsedRune = RUNE_BLOOD;
 
     for(uint32 i = 0; i < MAX_RUNES; ++i)
     {

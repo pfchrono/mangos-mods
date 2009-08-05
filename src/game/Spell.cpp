@@ -82,7 +82,7 @@ struct PrioritizeMana
 {
     int operator()( PrioritizeManaUnitWraper const& x, PrioritizeManaUnitWraper const& y ) const
     {
-        return x.getPercent() < y.getPercent();
+        return x.getPercent() > y.getPercent();
     }
 };
 
@@ -106,7 +106,7 @@ struct PrioritizeHealth
 {
     int operator()( PrioritizeHealthUnitWraper const& x, PrioritizeHealthUnitWraper const& y ) const
     {
-        return x.getPercent() < y.getPercent();
+        return x.getPercent() > y.getPercent();
     }
 };
 
@@ -1730,6 +1730,15 @@ WorldObject* Spell::SearchNearbyTarget(float range, SpellTargets TargetType)
             {
                 switch(i_spellST->second.type)
                 {
+                    case SPELL_TARGET_TYPE_CONTROLLED:
+                        for(Unit::ControlList::iterator itr = m_caster->m_Controlled.begin(); itr != m_caster->m_Controlled.end(); ++itr)
+                            if ((*itr)->GetEntry() == i_spellST->second.targetEntry && (*itr)->IsWithinDistInMap(m_caster, range))
+                            {
+                                goScriptTarget = NULL;
+                                range = m_caster->GetDistance(creatureScriptTarget);
+                                creatureScriptTarget = ((Creature *)*itr);
+                            }
+                        break;
                     case SPELL_TARGET_TYPE_GAMEOBJECT:
                         if(i_spellST->second.targetEntry)
                         {
@@ -2261,8 +2270,6 @@ void Spell::SetTargetMap(uint32 i, uint32 cur)
                 {
                     case 46584: // Raise Dead
                     {
-                        // TODO: change visual of corpses which gave ghoul?
-                        // Allow corpses to be ghouled only once?
                         m_targets.m_targetMask &= ~TARGET_FLAG_DEST_LOCATION;
                         WorldObject* result = FindCorpseUsing<MaNGOS::RaiseDeadObjectCheck> ();
                         if(result)
@@ -2332,6 +2339,13 @@ void Spell::SetTargetMap(uint32 i, uint32 cur)
                 {
                     if(i_spellST->second.type == SPELL_TARGET_TYPE_CREATURE)
                         SearchAreaTarget(unitList, radius, pushType, SPELL_TARGETS_ENTRY, i_spellST->second.targetEntry);
+                    else if (i_spellST->second.type == SPELL_TARGET_TYPE_CONTROLLED)
+                    {
+                        for(Unit::ControlList::iterator itr = m_caster->m_Controlled.begin(); itr != m_caster->m_Controlled.end(); ++itr)
+                            if ((*itr)->GetEntry() == i_spellST->second.targetEntry && 
+                                /*(*itr)->IsWithinDistInMap(m_caster, radius)*/ (*itr)->IsInMap(m_caster)) // For 60243 and 52173 need skip radius check or use range (no radius entry for effect)
+                                unitList.push_back(*itr);
+                    }
                 }
             }
         }
@@ -2438,7 +2452,7 @@ void Spell::SetTargetMap(uint32 i, uint32 cur)
                     case 59725: // Improved Spell Reflection - aoe aura
                         unitList.remove(m_caster);
                         break;
-                    case 57699: //Replenishment (special target selection) 10 targets with lowest mana
+                    case 57669: //Replenishment (special target selection) 10 targets with lowest mana
                     {
                         typedef std::priority_queue<PrioritizeManaUnitWraper, std::vector<PrioritizeManaUnitWraper>, PrioritizeMana> TopMana;
                         TopMana manaUsers;
@@ -4115,6 +4129,7 @@ void Spell::TakeRunePower()
         if((plr->GetRuneCooldown(i) == 0) && (runeCost[rune] > 0))
         {
             plr->SetRuneCooldown(i, RUNE_COOLDOWN);         // 5*2=10 sec
+            plr->SetLastUsedRune(RuneType(rune));
             runeCost[rune]--;
         }
     }
@@ -4129,8 +4144,52 @@ void Spell::TakeRunePower()
             if((plr->GetRuneCooldown(i) == 0) && (rune == RUNE_DEATH))
             {
                 plr->SetRuneCooldown(i, RUNE_COOLDOWN);     // 5*2=10 sec
+                plr->SetLastUsedRune(RuneType(rune));
                 runeCost[rune]--;
+                bool auraFound = false;
                 plr->ConvertRune(i, plr->GetBaseRune(i));
+                // * * * * * * * * * * *
+                // update convert rune auras
+                // * * * * * * * * * * *
+                // Remove rune from SPELL_AURA_CONVERT_RUNE when rune is used
+                // To prevent overriding other rune convert effects
+                Unit::AuraEffectList const& runeconvert = m_caster->GetAurasByType(SPELL_AURA_CONVERT_RUNE);
+                for(Unit::AuraEffectList::const_iterator itr = runeconvert.begin(); itr != runeconvert.end(); ++itr)
+                {
+                    // Remove rune of aura if avalible
+                    if ((*itr)->GetAmount() & (1<<i))
+                    {
+                        (*itr)->SetAmount((*itr)->GetAmount() & ~(1<<i));
+                        auraFound = true;
+                    }
+                    // All runes from aura used - remove aura
+                    if (!(*itr)->GetAmount())
+                        plr->RemoveAura((*itr)->GetParentAura(), AURA_REMOVE_BY_EXPIRE);
+                    break;
+                }
+                if (!auraFound)
+                {
+                // Decrease used rune count for dk talent auras
+                // To prevent overriding other rune convert effects
+                Unit::AuraEffectList const& runeconvert = m_caster->GetAurasByType(SPELL_AURA_CONVERT_RUNE);
+                for(Unit::AuraEffectList::const_iterator itr = runeconvert.begin(); itr != runeconvert.end(); ++itr)
+                {
+                    if (plr->GetBaseRune(i) != RUNE_DEATH)
+                    {
+                        if ((*itr)->GetSpellProto()->SpellIconID != 2622)
+                            continue;
+                    }
+                    else if ((*itr)->GetSpellProto()->SpellIconID != 3041 && 
+                        (*itr)->GetSpellProto()->SpellIconID != 22)
+                        continue;
+
+                    // Remove rune of aura if avalible
+                    if ((*itr)->GetAmount() & (1<<i))
+                        (*itr)->SetAmount((*itr)->GetAmount() & ~(1<<i));
+                    break;
+                }
+                }
+
                 if(runeCost[RUNE_DEATH] == 0)
                     break;
             }
@@ -4354,7 +4413,9 @@ SpellCastResult Spell::CheckCast(bool strict)
         if(!m_IsTriggeredSpell && target == m_caster && m_spellInfo->AttributesEx & SPELL_ATTR_EX_CANT_TARGET_SELF)
             return SPELL_FAILED_BAD_TARGETS;
 
-        if(target != m_caster)
+        bool non_caster_target = target != m_caster && !spellmgr.IsSpellWithCasterSourceTargetsOnly(m_spellInfo);
+
+        if(non_caster_target)
         {
             // target state requirements (apply to non-self only), to allow cast affects to self like Dirty Deeds
             if(!m_IsTriggeredSpell && m_spellInfo->TargetAuraState && !target->HasAuraState(AuraState(m_spellInfo->TargetAuraState), m_spellInfo, m_caster))
@@ -4402,7 +4463,7 @@ SpellCastResult Spell::CheckCast(bool strict)
 
         //check creature type
         //ignore self casts (including area casts when caster selected as target)
-        if(target != m_caster)
+        if(non_caster_target)
         {
             if(!CheckTargetCreatureType(target))
             {
@@ -4415,7 +4476,7 @@ SpellCastResult Spell::CheckCast(bool strict)
 
         // TODO: this check can be applied and for player to prevent cheating when IsPositiveSpell will return always correct result.
         // check target for pet/charmed casts (not self targeted), self targeted cast used for area effects and etc
-        if(m_caster != target && m_caster->GetTypeId() == TYPEID_UNIT && m_caster->GetCharmerOrOwnerGUID())
+        if(non_caster_target && m_caster->GetTypeId() == TYPEID_UNIT && m_caster->GetCharmerOrOwnerGUID())
         {
             // check correctness positive/negative cast target (pet cast real check and cheating check)
             if(IsPositiveSpell(m_spellInfo->Id))
@@ -4454,7 +4515,7 @@ SpellCastResult Spell::CheckCast(bool strict)
         }
 
         // check if target is in combat
-        if (target != m_caster && (m_spellInfo->AttributesEx & SPELL_ATTR_EX_NOT_IN_COMBAT_TARGET) && target->isInCombat())
+        if (non_caster_target && (m_spellInfo->AttributesEx & SPELL_ATTR_EX_NOT_IN_COMBAT_TARGET) && target->isInCombat())
             return SPELL_FAILED_TARGET_AFFECTING_COMBAT;
     }
 

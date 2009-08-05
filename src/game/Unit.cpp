@@ -865,7 +865,9 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
             if(!cVictim->isPet())
             {
                 cVictim->DeleteThreatList();
-                cVictim->SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                // only lootable if it has loot or can drop gold
+                if(cVictim->GetCreatureInfo()->lootid || cVictim->GetCreatureInfo()->maxgold > 0)
+                    cVictim->SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
             }
             // Call creature just died function
             if (cVictim->AI())
@@ -5445,11 +5447,20 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
             }
             switch(dummySpell->Id)
             {
+                // Glyph of Polymorph
+                case 56375:
+                {
+                    target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
+                    target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE_PERCENT);
+                    return true;
+                }
                 // Glyph of Icy Veins
                 case 56374:
+                {
                     RemoveAurasByType(SPELL_AURA_MOD_HASTE, 0, 0, true, false);
                     RemoveAurasByType(SPELL_AURA_MOD_DECREASE_SPEED);
-                return true;
+                    return true;
+                }
                 // Ignite
                 case 11119:
                 case 11120:
@@ -6432,6 +6443,13 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
         {
             switch(dummySpell->Id)
             {
+               // Shaman T8 Elemental 4P Bonus
+                case 64928:
+                {
+                    basepoints0 = int32( triggerAmount * damage / 100 );
+                    triggered_spell_id = 64930;
+                    break;
+                }
                 // Improved fire nova totem
                 case 16544:
                 {
@@ -7146,12 +7164,66 @@ bool Unit::HandleAuraProc(Unit *pVictim, uint32 damage, Aura* triggeredByAura, S
     {
         case SPELLFAMILY_DEATHKNIGHT:
         {
+            // Blood of the North
+            // Reaping
+            // Death Rune Mastery
+            if (dummySpell->SpellIconID == 3041 || dummySpell->SpellIconID == 22 || dummySpell->SpellIconID == 2622)
+            {
+                *handled = true;
+                // Convert recently used Blood Rune to Death Rune
+                if (GetTypeId() == TYPEID_PLAYER)
+                {
+                    if(((Player*)this)->getClass() != CLASS_DEATH_KNIGHT)
+                        return false;
+                    RuneType rune = ((Player*)this)->GetLastUsedRune();
+                    // can't proc from death rune use
+                    if (rune == RUNE_DEATH)
+                        return false;
+                    AuraEffect * aurEff = triggeredByAura->GetPartAura(0);
+                    if (!aurEff)
+                        return false;
+                    // Reset amplitude - set death rune remove timer to 30s
+                    aurEff->ResetPeriodicTimer();
+                    uint32 runesLeft;
+
+                    if (dummySpell->SpellIconID == 2622)
+                        runesLeft = 2;
+                    else
+                        runesLeft = 1;
+
+                    for (uint8 i=0;i<MAX_RUNES && runesLeft;++i)
+                    {
+                        if (dummySpell->SpellIconID == 2622)
+                        {
+                            if (((Player*)this)->GetCurrentRune(i) == RUNE_DEATH ||
+                                ((Player*)this)->GetBaseRune(i) == RUNE_BLOOD )
+                                continue;
+                        }
+                        else
+                        {
+                            if (((Player*)this)->GetCurrentRune(i) == RUNE_DEATH ||
+                                ((Player*)this)->GetBaseRune(i) != RUNE_BLOOD )
+                                continue;
+                        }
+                        if (((Player*)this)->GetRuneCooldown(i) != RUNE_COOLDOWN)
+                            continue;
+
+                        --runesLeft;
+                        // Mark aura as used
+                        aurEff->SetAmount(aurEff->GetAmount() | (1<<i));
+                        ((Player*)this)->ConvertRune(i,RUNE_DEATH);
+                    }
+                    return true;
+                }
+                return false;
+            }
+
             switch(dummySpell->Id)
             {
                 // Hungering Cold aura drop
                 case 51209:
                     *handled = true;
-                    // Drop only in disease case
+                    // Drop only in not disease case
                     if (procSpell && procSpell->Dispel == DISPEL_DISEASE)
                         return false;
                     return true;
@@ -12636,6 +12708,7 @@ bool InitTriggerAuraData()
     isTriggerAura[SPELL_AURA_MOD_STEALTH] = true;
     isTriggerAura[SPELL_AURA_MOD_FEAR] = true; // Aura not have charges but need remove him on trigger
     isTriggerAura[SPELL_AURA_MOD_ROOT] = true;
+    isTriggerAura[SPELL_AURA_TRANSFORM] = true;
     isTriggerAura[SPELL_AURA_REFLECT_SPELLS] = true;
     isTriggerAura[SPELL_AURA_DAMAGE_IMMUNITY] = true;
     isTriggerAura[SPELL_AURA_PROC_TRIGGER_SPELL] = true;
@@ -13859,7 +13932,6 @@ void Unit::SetToNotify()
 
 void Unit::Kill(Unit *pVictim, bool durabilityLoss)
 {
-    assert(pVictim->IsInWorld() && pVictim->FindMap());
     // Prevent killing unit twice (and giving reward from kill twice)
     if (!pVictim->GetHealth())
         return;

@@ -270,6 +270,7 @@ bool IsDispelableBySpell(SpellEntry const * dispelSpell, uint32 spellId, bool de
 bool IsSingleTargetSpell(SpellEntry const *spellInfo);
 bool IsSingleTargetSpells(SpellEntry const *spellInfo1, SpellEntry const *spellInfo2);
 
+
 extern bool IsAreaEffectTarget[TOTAL_SPELL_TARGETS];
 
 inline bool IsAreaOfEffectSpell(SpellEntry const *spellInfo)
@@ -532,10 +533,11 @@ enum SpellScriptTargetType
 {
     SPELL_TARGET_TYPE_GAMEOBJECT = 0,
     SPELL_TARGET_TYPE_CREATURE   = 1,
-    SPELL_TARGET_TYPE_DEAD       = 2
+    SPELL_TARGET_TYPE_DEAD       = 2,
+    SPELL_TARGET_TYPE_CONTROLLED = 3,
 };
 
-#define MAX_SPELL_TARGET_TYPE 3
+#define MAX_SPELL_TARGET_TYPE 4
 
 struct SpellTargetEntry
 {
@@ -1050,6 +1052,28 @@ class SpellMgr
         }
 
         bool IsSrcTargetSpell(SpellEntry const *spellInfo) const;
+
+        inline bool IsCasterSourceTarget(uint32 target)
+        {
+            switch (SpellTargetType[target])
+            {
+                case TARGET_TYPE_UNIT_TARGET:
+                case TARGET_TYPE_DEST_TARGET:
+                    return false;
+                default:
+                    break;
+            }
+            return true;
+        }
+
+        inline bool IsSpellWithCasterSourceTargetsOnly(SpellEntry const* spellInfo)
+        {
+            for(int i = 0; i < 3; ++i)
+                if(uint32 target = spellInfo->EffectImplicitTargetA[i])
+                    if(!IsCasterSourceTarget(target))
+                        return false;
+            return true;
+        }
 
     // Modifiers
     public:

@@ -48,7 +48,7 @@ struct TRINITY_DLL_DECL boss_heiganAI : public BossAI
     boss_heiganAI(Creature *c) : BossAI(c, BOSS_HEIGAN) {}
 
     uint32 eruptSection;
-    bool eruptDirection;
+    //bool eruptDirection;
     Phases phase;
 
     void KilledUnit(Unit* Victim)
@@ -74,13 +74,13 @@ struct TRINITY_DLL_DECL boss_heiganAI : public BossAI
     {
         phase = newPhase;
         events.Reset();
-        eruptSection = 3;
+        //eruptSection = 3;
         if(phase == PHASE_FIGHT)
         {
             events.ScheduleEvent(EVENT_DISRUPT, 0);
             events.ScheduleEvent(EVENT_FEVER, 20000);
             events.ScheduleEvent(EVENT_PHASE, 85000);
-            events.ScheduleEvent(EVENT_ERUPT, 10000);
+            //events.ScheduleEvent(EVENT_ERUPT, 10000);
         }
         else
         {
@@ -89,7 +89,7 @@ struct TRINITY_DLL_DECL boss_heiganAI : public BossAI
             me->NearTeleportTo(x, y, z, o);
             DoCastAOE(SPELL_PLAGUE_CLOUD);
             events.ScheduleEvent(EVENT_PHASE, 45000);
-            events.ScheduleEvent(EVENT_ERUPT, 5000);
+            //events.ScheduleEvent(EVENT_ERUPT, 5000);
         }
     }
 
@@ -114,8 +114,8 @@ struct TRINITY_DLL_DECL boss_heiganAI : public BossAI
                     return;
                 case EVENT_PHASE:
                     EnterPhase(phase == PHASE_FIGHT ? PHASE_DANCE : PHASE_FIGHT);
-                    return;
-                case EVENT_ERUPT:
+                    //return;
+                /*case EVENT_ERUPT:
                     instance->SetData(DATA_HEIGAN_ERUPT, eruptSection);
                     TeleportCheaters();
 
@@ -126,7 +126,7 @@ struct TRINITY_DLL_DECL boss_heiganAI : public BossAI
 
                     eruptDirection ? ++eruptSection : --eruptSection;
 
-                    events.ScheduleEvent(EVENT_ERUPT, phase == PHASE_FIGHT ? 10000 : 3000);
+                    events.ScheduleEvent(EVENT_ERUPT, phase == PHASE_FIGHT ? 10000 : 3000);*/
                     break;
             }
         }
