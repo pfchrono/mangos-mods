@@ -16,3 +16,6 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 56638, 0x00,   4, 0x00000020, 0x00000000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   6); -- Taste for Blood (Rank 3) 
 
 DELETE FROM `spell_proc_event` WHERE `entry` = 50453;
+
+DELETE FROM `trinity_string` WHERE `entry` = 6616;
+INSERT INTO `trinity_string` (`entry`,`content_default`) VALUES ('6616','Silence is ON for %s');

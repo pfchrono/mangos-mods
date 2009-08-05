@@ -862,9 +862,9 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
         SetCreateStat(STAT_INTELLECT, s_intellect);
         SetCreateStat(STAT_SPIRIT, s_spirit);
     }
-	// FIXME: using a preset damage, will find a better forumal soon
-	uint32 minbasedam = (petlevel * 4 - petlevel * 5 * 0.5);
-	uint32 maxbasedam = (petlevel * 4 - petlevel * 5);
+	// FIXED: Based on Wowwiki: http://www.wowwiki.com/Formulas:Damage_Per_Second
+	uint32 mindamage = (((cinfo->mindmg / cinfo->speed) + (cinfo->attackpower * 0.12)));
+	uint32 maxdamage = (((cinfo->maxdmg / cinfo->speed) + (cinfo->attackpower * 0.12)));
     m_bonusdamage = 0;
     switch(petType)
     {
@@ -878,10 +878,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
             uint32 val  = (fire > shadow) ? fire : shadow;
             SetBonusDamage(int32 (val + val2 * 0.15f + val3 * 2));
 
-			uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-			uint32 apwr = bonusd + cinfo->attackpower;
-            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 4 + apwr) );
-            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 4 + apwr * 2) );
+	        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage) );
+			SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage) );
             break;
         }
         case HUNTER_PET:
@@ -890,8 +888,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
             SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, objmgr.GetXPForLevel(petlevel)*PET_XP_FACTOR);
 			// FIXME: using a preset damage, will find a better forumal soon
 			uint32 bonusd = (2 + petlevel * 0.15f + irand(75,150));
-			SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg + bonusd) );
-			SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg + bonusd * 2) );
+	        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage + bonusd) );
+			SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage + bonusd) );
             break;
         }
         default:
@@ -908,10 +906,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
 		            uint32 shadow = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW);
             		uint32 val  = (fire > shadow) ? fire : shadow;
 		            SetBonusDamage(int32 (val + val2 * 0.15f + val3 * 2));
-					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-					uint32 apwr = bonusd + cinfo->attackpower;
-					SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 2 + apwr) );
-					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 2 + apwr) );
+			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage) );
                     break;
                 }
                 case 1860: // Voidwalker
@@ -924,10 +920,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
 		            uint32 shadow = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW);
             		uint32 val  = (fire > shadow) ? fire : shadow;
 		            SetBonusDamage(int32 (val + val2 * 0.15f + val3 * 2));
-					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-					uint32 apwr = bonusd + cinfo->attackpower;
-					SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 2 + apwr + petlevel) );
-					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 2 + apwr + petlevel) );
+			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage) );
                     break;
                 }
                 case 1863: // Succubus
@@ -940,10 +934,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
 		            uint32 shadow = m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW);
             		uint32 val  = (fire > shadow) ? fire : shadow;
 		            SetBonusDamage(int32 (val + val2 * 0.15f + val3 * 2));
-					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-					uint32 apwr = bonusd + cinfo->attackpower;
-					SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 2 + apwr + petlevel) );
-					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 2 + apwr + petlevel) );
+			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage) );
                     break;
                 }
                 case 510: // mage Water Elemental
@@ -953,6 +945,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
                     if(val < 0)
                         val = 15;
                     SetBonusDamage( int32(val * 3));
+			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage) );
                     break;
                 }
                 case 1964: //force of nature
@@ -966,10 +960,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
 					{
                         SetCreateHealth(urand(30,100) + (urand(30,55) * petlevel));
 					}
-					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-					uint32 apwr = bonusd + cinfo->attackpower;
-					SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * petlevel / 6 + apwr) );
-					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * petlevel / 6 + apwr) );
+			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage) );
                     break;
                 }
                 case 15352: //earth elemental 36213
@@ -983,10 +975,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
 					{
                         SetCreateHealth(urand(100,500) + 120 * petlevel);
 					}
-					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-					uint32 apwr = bonusd + cinfo->attackpower;
-					SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 2 + apwr) );
-					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 2 + apwr) );
+			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage) );
                     break;
                 }
                 case 15438: //fire elemental
@@ -1001,10 +991,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
                         SetCreateHealth(urand(100,500) + 120 * petlevel);
                         SetCreateMana(urand(100,500) + 120 * petlevel * 0.5f);
                     }
-					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-					uint32 apwr = bonusd + cinfo->attackpower;
-			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(cinfo->mindmg * 2 + apwr) );
-					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(cinfo->maxdmg * 2 + apwr) );
+			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage) );
                     break;
                 }
                 case 31216: // Mirror Image
@@ -1019,10 +1007,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
                         SetCreateMana(omana);
                         SetCreateHealth(ohealth);
                     }
-					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-					uint32 apwr = bonusd + cinfo->attackpower;
-			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(35 + apwr) );
-					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(95 + apwr) );
+			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage) );
 					break;
                 }
                 default:
@@ -1038,12 +1024,8 @@ bool Guardian::InitStatsForLevel(uint32 petlevel)
                         SetCreateHealth(28 + 30*petlevel);
                     }
                     // FIXME: using a preset damage, will find a better forumal soon
-					uint32 bonusd = (2 + petlevel * 0.45f + urand(75,150));
-					uint32 apwr = bonusd + cinfo->attackpower;
-					uint32 mindamage = urand(28 + 10 * petlevel,28 + 15 * petlevel);
-					uint32 maxdamage = urand(28 + 25 * petlevel,28 + 35 * petlevel);
-			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage + apwr) );
-					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage + apwr) );
+			        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(mindamage) );
+					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(maxdamage) );
                     break;
                 }
             }
