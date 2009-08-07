@@ -5359,8 +5359,8 @@ void Spell::EffectScriptEffect(uint32 effIndex)
         }
         case SPELLFAMILY_PALADIN:
         {
-            // Judgement
-            if (m_spellInfo->SpellFamilyFlags[0] & 0x800000 || m_spellInfo->SpellFamilyFlags[2] & 0x8)
+            // Judgement (seal trigger)
+            if (m_spellInfo->Category == SPELLCATEGORY_JUDGEMENT)
             {
                 if(!unitTarget || !unitTarget->isAlive())
                     return;
@@ -5370,12 +5370,12 @@ void Spell::EffectScriptEffect(uint32 effIndex)
                 // Judgement self add switch
                 switch (m_spellInfo->Id)
                 {
-                    case 41467: break;                      // Judgement
                     case 53407: spellId1 = 20184; break;    // Judgement of Justice
                     case 20271:                             // Judgement of Light
                     case 57774: spellId1 = 20185; break;    // Judgement of Light
                     case 53408: spellId1 = 20186; break;    // Judgement of Wisdom
                     default:
+                        sLog.outError("Unsupported Judgement (seal trigger) spell (Id: %u) in Spell::EffectScriptEffect",m_spellInfo->Id);
                         return;
                 }
                 // all seals have aura dummy in 2 effect
@@ -5690,8 +5690,10 @@ void Spell::EffectStuck(uint32 /*i*/)
     if(pTarget->isInFlight())
         return;
 
+    PlayerInfo const *info = objmgr.GetPlayerInfo(pTarget->getRace(), pTarget->getClass());
+    pTarget->TeleportTo(info->mapId, info->positionX, info->positionY, info->positionZ, pTarget->GetOrientation(), (unitTarget==m_caster ? TELE_TO_SPELL : 0));
     // homebind location is loaded always
-    pTarget->TeleportTo(pTarget->m_homebindMapId,pTarget->m_homebindX,pTarget->m_homebindY,pTarget->m_homebindZ,pTarget->GetOrientation(), (unitTarget==m_caster ? TELE_TO_SPELL : 0));
+    // pTarget->TeleportTo(pTarget->m_homebindMapId,pTarget->m_homebindX,pTarget->m_homebindY,pTarget->m_homebindZ,pTarget->GetOrientation(), (unitTarget==m_caster ? TELE_TO_SPELL : 0));
 
     // Stuck spell trigger Hearthstone cooldown
     SpellEntry const *spellInfo = sSpellStore.LookupEntry(8690);
@@ -6854,7 +6856,6 @@ void Spell::SummonGuardian(uint32 entry, SummonPropertiesEntry const *properties
         TempSummon *summon = map->SummonCreature(entry, px, py, pz, m_caster->GetOrientation(), properties, duration, caster);
         if(!summon)
             return;
-
         if(summon->HasSummonMask(SUMMON_MASK_GUARDIAN))
             ((Guardian*)summon)->InitStatsForLevel(level);
 
