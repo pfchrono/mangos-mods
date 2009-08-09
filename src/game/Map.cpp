@@ -657,6 +657,8 @@ void Map::RemoveUnitFromNotify(Unit *unit, int32 slot)
             i_unitsToNotifyBacklog[slot] = NULL;
         else if(slot < i_unitsToNotify.size() && i_unitsToNotify[slot] == unit)
             i_unitsToNotify[slot] = NULL;
+        else
+            assert(false);
     }
     else
     {
@@ -805,10 +807,8 @@ void Map::Update(const uint32 &t_diff)
     }
 
     ///- Process necessary scripts
-	#pragma omp task
-	{
-			ScriptsProcess();
-	}
+    if (!m_scriptSchedule.empty())
+        ScriptsProcess();
 }
 
 void Map::Remove(Player *player, bool remove)
