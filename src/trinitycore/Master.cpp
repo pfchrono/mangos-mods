@@ -198,7 +198,7 @@ Master::~Master()
 }
 
 /// Main function
-bool Master::Run()
+int Master::Run()
 {
     sLog.outString( "%s (core-daemon)", _FULLVERSION );
     sLog.outString( "<Ctrl-C> to stop.\n" );
@@ -238,11 +238,13 @@ bool Master::Run()
     _HookSignals();
 
     ///- Launch WorldRunnable thread
-    ACE_Based::Thread t(*new WorldRunnable);
-    t.setPriority ((ACE_Based::Priority )2);
+    ACE_Based::Thread world_thread(new WorldRunnable);
+    world_thread.setPriority(ACE_Based::Highest);
 
     // set server online
     loginDatabase.PExecute("UPDATE realmlist SET color = 0, population = 0 WHERE id = '%d'",realmID);
+
+    ACE_Based::Thread* cliThread = NULL;
 
 #ifdef WIN32
     if (sConfig.GetBoolDefault("Console.Enable", true) && (m_ServiceStatus == -1)/* need disable console in service mode*/)
@@ -251,10 +253,10 @@ bool Master::Run()
 #endif
     {
         ///- Launch CliRunnable thread
-        ACE_Based::Thread td1(*new CliRunnable);
+        cliThread = new ACE_Based::Thread(new CliRunnable);
     }
 
-    ACE_Based::Thread td2(*new RARunnable);
+    ACE_Based::Thread rar_thread(new RARunnable);
 
     ///- Handle affinity for multiple processors and process priority on Windows
     #ifdef WIN32
@@ -310,13 +312,12 @@ bool Master::Run()
     uint32 loopCounter = 0;
 
     ///- Start up freeze catcher thread
-    uint32 freeze_delay = sConfig.GetIntDefault("MaxCoreStuckTime", 0);
-    if(freeze_delay)
+    if(uint32 freeze_delay = sConfig.GetIntDefault("MaxCoreStuckTime", 0))
     {
         FreezeDetectorRunnable *fdr = new FreezeDetectorRunnable();
         fdr->SetDelayTime(freeze_delay*1000);
-        ACE_Based::Thread t(*fdr);
-        t.setPriority(ACE_Based::High);
+        ACE_Based::Thread freeze_thread(fdr);
+        freeze_thread.setPriority(ACE_Based::Highest);
     }
 
     ///- Launch the world listener socket
@@ -340,8 +341,8 @@ bool Master::Run()
 
     // when the main thread closes the singletons get unloaded
     // since worldrunnable uses them, it will crash if unloaded after master
-    t.wait();
-    td2.wait ();
+    world_thread.wait();
+    rar_thread.wait ();
 
     ///- Clean database before leaving
     clearOnlineAccounts();
@@ -353,9 +354,10 @@ bool Master::Run()
 
     sLog.outString( "Halting process..." );
 
-    #ifdef WIN32
-    if (sConfig.GetBoolDefault("Console.Enable", true))
+    if (cliThread)
     {
+        #ifdef WIN32
+
         // this only way to terminate CLI thread exist at Win32 (alt. way exist only in Windows Vista API)
         //_exit(1);
         // send keyboard input to safely unblock the CLI thread
@@ -390,8 +392,17 @@ bool Master::Run()
         b[3].Event.KeyEvent.wRepeatCount = 1;
         DWORD numb;
         BOOL ret = WriteConsoleInput(hStdIn, b, 4, &numb);
+
+        cliThread->wait();
+
+        #else 
+
+        cliThread->destroy();
+
+        #endif
+
+        delete cliThread;
     }
-    #endif
 
     // for some unknown reason, unloading scripts here and not in worldrunnable
     // fixes a memory leak related to detaching threads from the module

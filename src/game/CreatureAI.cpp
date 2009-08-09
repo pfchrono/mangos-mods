@@ -91,6 +91,13 @@ void CreatureAI::DoZoneInCombat(Creature* creature)
                 pPlayer->SetInCombatWith(creature);
                 creature->AddThreat(pPlayer, 0.0f);
             }
+
+            for(Unit::ControlList::const_iterator itr = pPlayer->m_Controlled.begin(); itr != pPlayer->m_Controlled.end(); ++itr)
+            {
+                creature->SetInCombatWith(*itr);
+                (*itr)->SetInCombatWith(creature);
+                creature->AddThreat(*itr, 0.0f);
+            }
         }
     }
 }
@@ -193,13 +200,16 @@ void CreatureAI::EnterEvadeMode()
     if(!_EnterEvadeMode())
         return;
 
-    if(Unit *owner = me->GetCharmerOrOwner())
+    if(!me->m_Vehicle) // otherwise me will be in evade mode forever
     {
-        me->GetMotionMaster()->Clear(false);
-        me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST, m_creature->GetFollowAngle(), MOTION_SLOT_ACTIVE);
+        if(Unit *owner = me->GetCharmerOrOwner())
+        {
+            me->GetMotionMaster()->Clear(false);
+            me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST, m_creature->GetFollowAngle(), MOTION_SLOT_ACTIVE);
+        }
+        else
+            me->GetMotionMaster()->MoveTargetedHome();
     }
-    else
-        me->GetMotionMaster()->MoveTargetedHome();
 
     Reset();
 }

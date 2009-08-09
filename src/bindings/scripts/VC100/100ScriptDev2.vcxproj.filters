@@ -1729,6 +1729,9 @@
     <ClCompile Include="..\scripts\zone\vault_of_archavon\boss_archavon.cpp">
       <Filter>Scripts\zone\Northrend\Dungeon\Vault of Archavon</Filter>
     </ClCompile>
+    <ClCompile Include="..\scripts\zone\vault_of_archavon\boss_emalon.cpp">
+      <Filter>Scripts\zone\Northrend\Dungeon\Vault of Archavon</Filter>
+    </ClCompile>
     <ClCompile Include="..\scripts\zone\vault_of_archavon\instance_vault_of_archavon.cpp">
       <Filter>Scripts\zone\Northrend\Dungeon\Vault of Archavon</Filter>
     </ClCompile>

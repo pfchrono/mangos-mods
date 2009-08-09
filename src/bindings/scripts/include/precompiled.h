@@ -15,6 +15,7 @@
 #include "sc_creature.h"
 #include "sc_gossip.h"
 #include "sc_instance.h"
+#include "sc_npc_teleport.h"
 #include "AggressorAI.h"
 #include "NullCreatureAI.h"
 

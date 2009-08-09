@@ -345,7 +345,8 @@ INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content
 (-1000427, 'Something tells me this $r wants the mysterious fossil too. Help!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 7, 0, 'remtravel SAY_REM_AGGRO'),
 (-1000428, 'Ah...the wondrous sound of kodos. I love the way they make the ground shake... inspect the beast for me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0,'kodo round SAY_SMEED_HOME_1'),
 (-1000429, 'Hey, look out with that kodo! You had better inspect that beast before i give you credit!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0,'kodo round SAY_SMEED_HOME_2'),
-(-1000430, 'That kodo sure is a beauty. Wait a minute, where are my bifocals? Perhaps you should inspect the beast for me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 'kodo round SAY_SMEED_HOME_3');
+(-1000430, 'That kodo sure is a beauty. Wait a minute, where are my bifocals? Perhaps you should inspect the beast for me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 'kodo round SAY_SMEED_HOME_3'),
+(-1000431, 'Okay, okay... gimme a minute to rest now. You gone and beat me up good.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 1, 14, 'calvin SAY_COMPLETE');
 
 -- -1 033 000 SHADOWFANG KEEP
 INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, `sound`, `type`, `language`, `emote`, `comment`) VALUES
@@ -1712,6 +1713,12 @@ INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content
 (-1585028, 'Do not... get too comfortable.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 12420, 1, 0, 0, 'kaelthas MT SAY_RECAST_GRAVITY'),
 (-1585029, 'My demise accomplishes nothing! The Master will have you! You will drown in your own blood! This world shall burn! Aaaghh!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 12421, 1, 0, 0, 'kaelthas MT SAY_DEATH');
 
+-- 1 590 000 VAULT OF ARCHAVON
+INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, `sound`, `type`, `language`, `emote`, `comment`) VALUES
+(-1590000, 'Emalon the Storm Watcher overcharges a Tempest Minion!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 3, 0, 0, 'emalon EMOTE_OVERCHARGE_TEMPEST_MINION'),
+(-1590001, 'A Tempest Minion appears to defend Emalon!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 3, 0, 0, 'emalon EMOTE_MINION_RESPAWN'),
+(-1590002, 'Archavon the Stone Watcher goes into a berserker rage!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 2, 0, 0, 'archavon EMOTE_BERSERK');
+
 -- -1 615 000 OBSIDIAN SANCTUM
 INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, `sound`, `type`, `language`, `emote`, `comment`) VALUES
 (-1615000,'I fear nothing! Least of all you!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14111,1,0,0,'shadron SAY_SHADRON_AGGRO'),
@@ -1817,6 +1824,12 @@ INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content
 (-1609014, 'Sate your hunger on cold steel\, $R', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 'unworthy_initiate SAY_EVENT_ATTACK_7'),
 (-1609015, 'It ends here!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 'unworthy_initiate SAY_EVENT_ATTACK_8'),
 (-1609016, 'Death is the only cure!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 'unworthy_initiate SAY_EVENT_ATTACK_9'),
+(-1609017,'No potions!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_A'),
+(-1609018,'Remember this day, $n, for it is the day that you will be thoroughly owned.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_B'),
+(-1609019,'I\'m going to tear your heart out, cupcake!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_C'),
+(-1609020,'Don\'t make me laugh.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_D'),
+(-1609021,'Here come the tears...', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_E'),
+(-1609022,'You have challenged death itself!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_F'),
 (-1609025,'Come to finish the job, have you?', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,0,0,1,'special_surprise SAY_EXEC_START_1'),
 (-1609026,'Come to finish the job, have ye?', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,0,0,1,'special_surprise SAY_EXEC_START_2'),
 (-1609027,'Come ta finish da job, mon?', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,0,0,1,'special_surprise SAY_EXEC_START_3'),

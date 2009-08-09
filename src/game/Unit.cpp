@@ -1282,6 +1282,9 @@ void Unit::CalculateSpellDamageTaken(SpellNonMeleeDamage *damageInfo, int32 dama
     if (damage < 0)
         return;
 
+    if(spellInfo->AttributesEx4 & SPELL_ATTR_EX4_FIXED_DAMAGE)
+        return;
+
     Unit *pVictim = damageInfo->target;
     if(!pVictim || !pVictim->isAlive())
         return;
@@ -2046,6 +2049,22 @@ void Unit::CalcAbsorbResist(Unit *pVictim,SpellSchoolMask schoolMask, DamageEffe
             }
             case SPELLFAMILY_DEATHKNIGHT:
             {
+                // Unbreakable Armor
+                if (spellProto->Id == 51271)
+                {
+                    Unit* caster = (*i)->GetCaster();
+                    if (!caster)
+                        continue;
+
+                    uint32 absorbed = uint32( currentAbsorb * caster->GetArmor() * 0.01f );
+
+                    // Glyph of Unbreakable Armor
+                    if (AuraEffect *aurEff = caster->GetAuraEffect(58635, 0))
+                        absorbed += uint32( absorbed * aurEff->GetAmount() / 100 );
+
+                    RemainingDamage -= absorbed;
+                    continue;
+                }
                 // Anti-Magic Shell (on self)
                 if (spellProto->Id == 48707)
                 {
@@ -3502,15 +3521,17 @@ bool Unit::IsNonMeleeSpellCasted(bool withDelayed, bool skipChanneled, bool skip
     if ( m_currentSpells[CURRENT_GENERIC_SPELL] &&
         (m_currentSpells[CURRENT_GENERIC_SPELL]->getState() != SPELL_STATE_FINISHED) &&
         (withDelayed || m_currentSpells[CURRENT_GENERIC_SPELL]->getState() != SPELL_STATE_DELAYED) )
+    {
         if (!isAutoshoot || !(m_currentSpells[CURRENT_GENERIC_SPELL]->m_spellInfo->AttributesEx2 & SPELL_ATTR_EX2_NOT_RESET_AUTOSHOT))
             return(true);
-
+    }
     // channeled spells may be delayed, but they are still considered casted
     else if ( !skipChanneled && m_currentSpells[CURRENT_CHANNELED_SPELL] &&
         (m_currentSpells[CURRENT_CHANNELED_SPELL]->getState() != SPELL_STATE_FINISHED) )
+    {
         if (!isAutoshoot || !(m_currentSpells[CURRENT_CHANNELED_SPELL]->m_spellInfo->AttributesEx2 & SPELL_ATTR_EX2_NOT_RESET_AUTOSHOT))
             return(true);
-
+    }
     // autorepeat spells may be finished or delayed, but they are still considered casted
     else if ( !skipAutorepeat && m_currentSpells[CURRENT_AUTOREPEAT_SPELL] )
         return(true);
@@ -3782,6 +3803,7 @@ bool Unit::AddAura(Aura *Aur, bool handleEffects)
 
     // ghost spell check, allow apply any auras at player loading in ghost mode (will be cleanup after load)
     if( !isAlive() && !IsDeathPersistentSpell(aurSpellInfo) &&
+        //Aur->GetId() != 2584 &&                             // Waiting to Resurrect (not have death persistence flag)
         (GetTypeId()!=TYPEID_PLAYER || !((Player*)this)->GetSession()->PlayerLoading()) )
     {
         delete Aur;
@@ -6918,21 +6940,6 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 triggered_spell_id = 50526;
                 break;
             }
-            // Death Strike healing effect
-            if (dummySpell->Id == 45469)
-            {
-                if (!pVictim)
-                    return false;
-                basepoints0=pVictim->GetDiseasesByCaster(GetGUID()) * GetMaxHealth()* procSpell->DmgMultiplier[0] / 100.0f;
-                // Do not heal when no diseases on target
-                if (!basepoints0)
-                    return true;
-                // Improved Death Strike
-                if (AuraEffect const * aurEff = GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_DEATHKNIGHT, 2751, 0))
-                    basepoints0 = basepoints0 * (CalculateSpellDamage(aurEff->GetSpellProto(), 2, aurEff->GetSpellProto()->EffectBasePoints[2], this) + 100.0f) / 100.0f;
-                triggered_spell_id = 45470;
-                break;
-            }
             // Sudden Doom
             if (dummySpell->SpellIconID == 1939 && GetTypeId() == TYPEID_PLAYER)
             {
@@ -7611,9 +7618,9 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                     // stacking
                     CastSpell(this, 37658, true, NULL, triggeredByAura);
 
-                    AuraEffect * dummy = GetDummyAura(37658);
+                    Aura * dummy = GetAura(37658);
                     // release at 3 aura in stack (cont contain in basepoint of trigger aura)
-                    if(!dummy || dummy->GetParentAura()->GetStackAmount() < triggerAmount)
+                    if(!dummy || dummy->GetStackAmount() < triggerAmount)
                         return false;
 
                     RemoveAurasDueToSpell(37658);
@@ -7629,9 +7636,9 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                     CastSpell(this, 54842, true, NULL, triggeredByAura);
 
                     // counting
-                    AuraEffect * dummy = GetDummyAura(54842);
+                    Aura * dummy = GetAura(54842);
                     // release at 3 aura in stack (cont contain in basepoint of trigger aura)
-                    if(!dummy || dummy->GetParentAura()->GetStackAmount() < triggerAmount)
+                    if(!dummy || dummy->GetStackAmount() < triggerAmount)
                         return false;
 
                     RemoveAurasDueToSpell(54842);
@@ -7910,7 +7917,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
         case 22959:
         {
             // Glyph of Improved Scorch
-            if (AuraEffect * aurEff = GetDummyAura(56371))
+            if (AuraEffect * aurEff = GetAuraEffect(56371,0))
             {
                 for (int32 count = aurEff->GetAmount();count>0;count--)
                     CastSpell(pVictim, 22959, true);
@@ -9131,9 +9138,7 @@ void Unit::RemoveAllControlled()
             && target->GetTypeId() == TYPEID_UNIT
             && ((Creature*)target)->HasSummonMask(SUMMON_MASK_SUMMON))
         {
-
-            if(!((TempSummon*)target)->isPet())
-                ((TempSummon*)target)->UnSummon();
+            ((TempSummon*)target)->UnSummon();
         }
         else
         {
@@ -9476,7 +9481,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
             if (spellProto->SpellFamilyFlags[0] & 0x800000)
             {
                 // Increase Mind Flay damage
-                if (AuraEffect * aurEff = GetDummyAura(55687))
+                if (AuraEffect * aurEff = GetAuraEffect(55687, 0))
                     // if Shadow Word: Pain present
                     if (pVictim->GetAura(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_PRIEST, 0x8000, 0,0, GetGUID()))
                         DoneTotalMod *= (aurEff->GetAmount() + 100.0f) / 100.f;
@@ -9530,7 +9535,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
     if (pVictim->GetTypeId() == TYPEID_PLAYER)
     {
         //Cheat Death
-        if (AuraEffect *dummy = pVictim->GetDummyAura(45182))
+        if (AuraEffect *dummy = pVictim->GetAuraEffect(45182, 0))
         {
             float mod = -((Player*)pVictim)->GetRatingBonusValue(CR_CRIT_TAKEN_SPELL)*2*4;
             if (mod < dummy->GetAmount())
@@ -9801,16 +9806,15 @@ bool Unit::isSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolM
                         // Sacred Shield
                         if (spellProto->SpellFamilyFlags[0] & 0x40000000)
                         {
-                            AuraEffect const* aura = pVictim->GetDummyAura(58597);
+                            AuraEffect const* aura = pVictim->GetAuraEffect(58597,1);
                             if (aura && aura->GetCasterGUID() == GetGUID())
                                 crit_chance+=aura->GetAmount();
                             break;
                         }
-                        // Exorcism - "If the target is Undead or Demon, it will always critically hit"
-                        else if(spellProto->SpellFamilyFlags[1]&0x2)
+                        // Exorcism
+                        else if (spellProto->Category == 19)
                         {
-                            if(pVictim->GetCreatureType() == CREATURE_TYPE_DEMON
-                                || pVictim->GetCreatureType() == CREATURE_TYPE_UNDEAD)
+                            if (pVictim->GetCreatureTypeMask() & CREATURE_TYPEMASK_DEMON_OR_UNDEAD)
                                 return true;
                             break;
                         }
@@ -10840,6 +10844,9 @@ bool Unit::canAttack(Unit const* target, bool force) const
     }
     else if(!IsHostileTo(target))
         return false;
+
+    //if(m_Vehicle && m_Vehicle == target->m_Vehicle)
+    //    return true;
 
     if(!target->isAttackableByAOE() || target->hasUnitState(UNIT_STAT_DIED))
         return false;
@@ -12357,7 +12364,7 @@ void Unit::RemoveFromWorld()
 
         if(m_NotifyListPos >= 0)
         {
-            GetMap()->RemoveUnitFromNotify(m_NotifyListPos);
+            GetMap()->RemoveUnitFromNotify(this, m_NotifyListPos);
             m_NotifyListPos = -1;
         }
 
@@ -13616,16 +13623,6 @@ float Unit::GetAPMultiplier(WeaponAttackType attType, bool normalized)
     }
 }
 
-AuraEffect* Unit::GetDummyAura( uint32 spell_id ) const
-{
-    Unit::AuraEffectList const& mDummy = GetAurasByType(SPELL_AURA_DUMMY);
-    for(Unit::AuraEffectList::const_iterator itr = mDummy.begin(); itr != mDummy.end(); ++itr)
-        if ((*itr)->GetId() == spell_id)
-            return *itr;
-
-    return NULL;
-}
-
 AuraEffect* Unit::GetAuraEffect(AuraType type, SpellFamilyNames name, uint32 iconId, uint8 effIndex) const
 {
     Unit::AuraEffectList const& mDummy = GetAurasByType(type);
@@ -14016,10 +14013,10 @@ void Unit::Kill(Unit *pVictim, bool durabilityLoss)
         ((Player*)pVictim)->SetPvPDeath(player!=NULL);
 
         // only if not player and not controlled by player pet. And not at BG
-        if (durabilityLoss && !player && !((Player*)pVictim)->InBattleGround())
+        if ( (durabilityLoss && !player && !((Player*)pVictim)->InBattleGround()) || ( player && sWorld.getConfig(CONFIG_DURABILITY_LOSS_IN_PVP) ) )
         {
-            DEBUG_LOG("We are dead, loosing 10 percents durability");
-            ((Player*)pVictim)->DurabilityLossAll(0.10f,false);
+            DEBUG_LOG("We are dead, losing %u percent durability", sWorld.getRate(RATE_DURABILITY_LOSS_ON_DEATH));
+            ((Player*)pVictim)->DurabilityLossAll(sWorld.getRate(RATE_DURABILITY_LOSS_ON_DEATH),false);
             // durability lost message
             WorldPacket data(SMSG_DURABILITY_DAMAGE_DEATH, 0);
             ((Player*)pVictim)->GetSession()->SendPacket(&data);
@@ -14304,11 +14301,13 @@ bool Unit::SetCharmedBy(Unit* charmer, CharmType type)
     assert(type != CHARM_TYPE_POSSESS || charmer->GetTypeId() == TYPEID_PLAYER);
     assert(type != CHARM_TYPE_VEHICLE || GetTypeId() == TYPEID_UNIT && ((Creature*)this)->isVehicle());
 
+    sLog.outDebug("SetCharmedBy: charmer %u, charmed %u, type %u.", charmer->GetEntry(), GetEntry(), (uint32)type);
+
     if(this == charmer)
         return false;
 
-    if(hasUnitState(UNIT_STAT_UNATTACKABLE))
-        return false;
+    //if(hasUnitState(UNIT_STAT_UNATTACKABLE))
+    //    return false;
 
     if(GetTypeId() == TYPEID_PLAYER && ((Player*)this)->GetTransport())
         return false;
@@ -14948,7 +14947,6 @@ void Unit::EnterVehicle(Vehicle *vehicle, int8 seatId)
         return;
     }
 
-    addUnitState(UNIT_STAT_ONVEHICLE);
     SetControlled(true, UNIT_STAT_ROOT);
     //movementInfo is set in AddPassenger
     //packets are sent in AddPassenger
@@ -14993,7 +14991,6 @@ void Unit::ExitVehicle()
     Vehicle *vehicle = m_Vehicle;
     m_Vehicle = NULL;
 
-    clearUnitState(UNIT_STAT_ONVEHICLE);
     SetControlled(false, UNIT_STAT_ROOT);
 
     RemoveUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT);
@@ -15003,6 +15000,8 @@ void Unit::ExitVehicle()
     m_movementInfo.t_o = 0;
     m_movementInfo.t_time = 0;
     m_movementInfo.t_seat = 0;
+
+    Relocate(vehicle->GetPositionX(), vehicle->GetPositionY(), vehicle->GetPositionZ(), GetOrientation());
 
     //Send leave vehicle, not correct
     if(GetTypeId() == TYPEID_PLAYER)

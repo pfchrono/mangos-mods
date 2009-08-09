@@ -19,7 +19,7 @@
 #include "precompiled.h"
 #include "def_naxxramas.h"
 
-#define EMOTE_BREATH            -1533082
+//#define EMOTE_BREATH            -1533082
 #define EMOTE_ENRAGE            -1533083
 
 #define SPELL_FROST_AURA        HEROIC(28531,55799)
@@ -28,7 +28,7 @@
 #define SPELL_SUMMON_BLIZZARD   28560
 #define SPELL_LIFE_DRAIN        HEROIC(28542,55665)
 #define SPELL_ICEBOLT           28522
-#define SPELL_FROST_BREATH      29318
+//#define SPELL_FROST_BREATH      29318
 #define SPELL_FROST_EXPLOSION   28524
 #define SPELL_FROST_MISSILE     30101
 #define SPELL_BERSERK           26662
@@ -57,7 +57,7 @@ enum Events
     EVENT_FLIGHT,
     EVENT_LIFTOFF,
     EVENT_ICEBOLT,
-    EVENT_BREATH,
+    //EVENT_BREATH,
     EVENT_EXPLOSION,
     EVENT_LAND,
     EVENT_GROUND,
@@ -256,17 +256,17 @@ struct TRINITY_DLL_DECL boss_sapphironAI : public BossAI
 
                         if(iceboltCount)
                             events.ScheduleEvent(EVENT_ICEBOLT, 1000);
-                        else
-                            events.ScheduleEvent(EVENT_BREATH, 1000);
+                        /*else
+                            events.ScheduleEvent(EVENT_BREATH, 1000);*/
                         return;
                     }
-                    case EVENT_BREATH:
+                    /*case EVENT_BREATH:
                     {
                         DoScriptText(EMOTE_BREATH, me);
                         DoCastAOE(SPELL_FROST_MISSILE);
                         events.ScheduleEvent(EVENT_EXPLOSION, 8000);
                         return;
-                    }
+                    }*/
                     case EVENT_EXPLOSION:
                         CastExplosion();
                         ClearIceBlock();

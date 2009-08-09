@@ -637,6 +637,7 @@
     <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_pinnacle\boss_ymiron.cpp" />
     <ClCompile Include="..\scripts\zone\utgarde_keep\utgarde_pinnacle\instance_pinnacle.cpp" />
     <ClCompile Include="..\scripts\zone\vault_of_archavon\boss_archavon.cpp" />
+    <ClCompile Include="..\scripts\zone\vault_of_archavon\boss_emalon.cpp" />
     <ClCompile Include="..\scripts\zone\vault_of_archavon\instance_vault_of_archavon.cpp" />
     <ClCompile Include="..\scripts\zone\violet_hold\boss_cyanigosa.cpp" />
     <ClCompile Include="..\scripts\zone\violet_hold\boss_erekem.cpp" />
