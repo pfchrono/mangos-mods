@@ -30,7 +30,7 @@ CREATE TABLE `script_texts` (
 
 INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, `sound`, `type`, `language`, `emote`, `comment`) VALUES
 (-1000000, '<TrinityScript Text Entry Missing!>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 'DEFAULT_TEXT'),
-(-1000001, 'goes into a killing frenzy!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 2, 0, 0, 'EMOTE_GENERIC_FRENZY_KILL'),
+(-1000001, '%s goes into a killing frenzy!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 2, 0, 0, 'EMOTE_GENERIC_FRENZY_KILL'),
 (-1000004, 'goes into a berserker rage!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 2, 0, 0, 'EMOTE_GENERIC_BERSERK'),
 (-1000005, 'UNUSED', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 'REUSE ME');
 
@@ -367,6 +367,25 @@ INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content
 (-1036001, 'We''re under attack! A vast, ye swabs! Repel the invaders!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5777, 1, 7, 0, 'smite INST_SAY_ALARM2');
 
 -- -1 043 000 WAILING CAVERNS
+INSERT INTO script_texts (entry,content_default,sound,type,language,emote,comment) VALUES
+(-1043000,'At last! Naralex can be awakened! Come aid me, brave adventurers!',0,1,0,0,'Disciple SAY_AT_LAST'),
+(-1043001,'I must make the necessary preparations before the awakening ritual can begin. You must protect me!',0,0,0,0,'Disciple SAY_MAKE_PREPARATIONS'),
+(-1043002,'These caverns were once a temple of promise for regrowth in the Barrens. Now, they are the halls of nightmares.',0,0,0,0,'Disciple SAY_TEMPLE_OF_PROMISE'),
+(-1043003,'Come. We must continue. There is much to be done before we can pull Naralex from his nightmare.',0,0,0,0,'Disciple SAY_MUST_CONTINUE'),
+(-1043004,'Within this circle of fire I must cast the spell to banish the spirits of the slain Fanglords.',0,0,0,0,'Disciple SAY_BANISH_THE_SPIRITS'),
+(-1043005,'The caverns have been purified. To Naralex\'s chamber we go!',0,0,0,0,'Disciple SAY_CAVERNS_PURIFIED'),
+(-1043006,'Beyond this corridor, Naralex lies in fitful sleep. Let us go awaken him before it is too late.',0,0,0,0,'Disciple SAY_BEYOND_THIS_CORRIDOR'),
+(-1043007,'Protect me brave souls as I delve into this Emerald Dream to rescue Naralex and put an end to this corruption!',0,0,0,0,'Disciple SAY_EMERALD_DREAM'),
+(-1043008,'%s begins to perform the awakening ritual on Naralex.',0,2,0,0,'Disciple EMOTE_AWAKENING_RITUAL'),
+(-1043009,'%s tosses fitfully in troubled sleep.',0,2,0,0,'Naralex EMOTE_TROUBLED_SLEEP'),
+(-1043010,'%s writhes in agony. The Disciple seems to be breaking through.',0,2,0,0,'Naralex EMOTE_WRITHE_IN_AGONY'),
+(-1043011,'%s dreams up a horrendous vision. Something stirs beneath the murky waters.',0,2,0,0,'Naralex EMOTE_HORRENDOUS_VISION'),
+(-1043012,'This Mutanus the Devourer is a minion from Naralex\'s nightmare no doubt!',0,0,0,0,'Disciple SAY_MUTANUS_THE_DEVOURER'),
+(-1043013,'I AM AWAKE, AT LAST!',0,1,0,0,'Naralex SAY_I_AM_AWAKE'),
+(-1043014,'At last! Naralex awakes from the nightmare.',0,0,0,0,'Disciple SAY_NARALEX_AWAKES'),
+(-1043015,'Ah, to be pulled from the dreaded nightmare! I thank you, my loyal Disciple, along with your brave companions.',0,0,0,0,'Naralex SAY_THANK_YOU'),
+(-1043016,'We must go and gather with the other Disciples. There is much work to be done before I can make another attempt to restore the Barrens. Farewell, brave souls!',0,0,0,0,'Naralex SAY_FAREWELL'),
+(-1043017,'Attacked! Help get this $N off of me!',0,0,0,0,'Disciple SAY_ATTACKED');
 
 -- -1 047 000 RAZORFEN KRAUL
 INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, `sound`, `type`, `language`, `emote`, `comment`) VALUES
@@ -1719,6 +1738,53 @@ INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content
 (-1590001, 'A Tempest Minion appears to defend Emalon!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 3, 0, 0, 'emalon EMOTE_MINION_RESPAWN'),
 (-1590002, 'Archavon the Stone Watcher goes into a berserker rage!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 2, 0, 0, 'archavon EMOTE_BERSERK');
 
+-- 1 602 000 HALLS OF LIGHTNING
+/* Bjarngrim */
+INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, `sound`, `type`, `language`, `emote`, `comment`) VALUES
+(-1602000,'I am the greatest of my father\'s sons! Your end has come!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14149,1,0,0,'bjarngrim SAY_AGGRO'),
+(-1602001,'So ends your curse!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14153,1,0,0,'bjarngrim SAY_SLAY_1'),
+(-1602002,'Flesh... is... weak!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14154,1,0,0,'bjarngrim SAY_SLAY_2'),
+(-1602003,'...', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14155,1,0,0,'bjarngrim SAY_SLAY_3'),
+(-1602004,'How can it be...? Flesh is not... stronger!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14156,1,0,0,'bjarngrim SAY_DEATH'),
+(-1602005,'Defend yourself, for all the good it will do!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14151,1,0,0,'bjarngrim SAY_BATTLE_STANCE'),
+(-1602006,'%s switches to Battle Stance!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,3,0,0,'bjarngrim EMOTE_BATTLE_STANCE'),
+(-1602007,'GRAAAAAH! Behold the fury of iron and steel!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14152,1,0,0,'bjarngrim SAY_BERSEKER_STANCE'),
+(-1602008,'%s switches to Berserker Stance!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,3,0,0,'bjarngrim EMOTE_BERSEKER_STANCE'),
+(-1602009,'Give me your worst!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14150,1,0,0,'bjarngrim SAY_DEFENSIVE_STANCE'),
+(-1602010,'%s switches to Defensive Stance!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,3,0,0,'bjarngrim EMOTE_DEFENSIVE_STANCE'),
+(-1602011,'You wish to confront the master? You must weather the storm!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14453,1,0,0,'ionar SAY_AGGRO'),
+(-1602012,'Shocking ... I know!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14456,1,0,0,'ionar SAY_SLAY_1'),
+(-1602013,'You atempt the unpossible.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14457,1,0,0,'ionar SAY_SLAY_2'),
+(-1602014,'Your spark of light is ... extinguish.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14458,1,0,0,'ionar SAY_SLAY_3'),
+(-1602015,'Master... you have guests.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14459,1,0,0,'ionar SAY_DEATH'),
+(-1602016,'The slightest spark shall be your undoing.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14454,1,0,0,'ionar SAY_SPLIT_1'),
+(-1602017,'No one is safe!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14455,1,0,0,'ionar SAY_SPLIT_2'),
+(-1602018,'What hope is there for you? None!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14162,1,0,0,'loken SAY_AGGRO0'),
+(-1602019,'I have witnessed the rise and fall of empires. The birth and extinction of entire species. Over countless millennia the foolishness of mortals has remained beyond a constant. Your presence here confirms this.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14160,1,0,0,'loken SAY_INTRO_1'),
+(-1602020,'My master has shown me the future, and you have no place in it. Azeroth will be reborn in darkness. Yogg-Saron shall be released! The Pantheon shall fall!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14162,1,0,0,'loken SAY_INTRO_2'),
+(-1602021,'Only mortal...', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14166,1,0,0,'loken SAY_SLAY_1'),
+(-1602022,'I... am... FOREVER!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14167,1,0,0,'loken SAY_SLAY_2'),
+(-1602023,'What little time you had, you wasted!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14168,1,0,0,'loken SAY_SLAY_3'),
+(-1602024,'My death... heralds the end of this world.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14172,1,0,0,'loken SAY_DEATH'),
+(-1602025,'You cannot hide from fate!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14163,1,0,0,'loken SAY_NOVA_1'),
+(-1602026,'Come closer. I will make it quick.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14164,1,0,0,'loken SAY_NOVA_2'),
+(-1602027,'Your flesh cannot hold out for long.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14165,1,0,0,'loken SAY_NOVA_3'),
+(-1602028,'You stare blindly into the abyss!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14169,1,0,0,'loken SAY_75HEALTH'),
+(-1602029,'Your ignorance is profound. Can you not see where this path leads?', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14170,1,0,0,'loken SAY_50HEALTH'),
+(-1602030,'You cross the precipice of oblivion!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14171,1,0,0,'loken SAY_25HEALTH'),
+(-1602031,'%s begins to cast Lightning Nova!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,3,0,0,'loken EMOTE_NOVA'),
+(-1602032,'It is you who have destroyed my children? You... shall... pay!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,13960,1,0,0,'volkhan SAY_AGGRO'),
+(-1602033,'The armies of iron will conquer all!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,13965, 1,0,0,'volkhan SAY_SLAY_1'),
+(-1602034,'Ha, pathetic!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,13966,1,0,0,'volkhan SAY_SLAY_2'),
+(-1602035,'You have cost me too much work!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,13967,1,0,0,'volkhan SAY_SLAY_3'),
+(-1602036,'The master was right... to be concerned.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,13968,1,0,0,'volkhan SAY_DEATH'),
+(-1602037,'I will crush you beneath my boots!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,13963,1,0,0,'volkhan SAY_STOMP_1'),
+(-1602038,'All my work... undone!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,13964,1,0,0,'volkhan SAY_STOMP_2'),
+(-1602039,'Life from the lifelessness... death for you.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,13961,1,0,0,'volkhan SAY_FORGE_1'),
+(-1602040,'Nothing is wasted in the process. You will see....', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,13962,1,0,0,'volkhan SAY_FORGE_2'),
+(-1602041,'runs to his anvil!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,3,0,0,'volkhan EMOTE_TO_ANVIL'),
+(-1602042,'prepares to shatter his Brittle Golems!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,3,0,0,'volkhan EMOTE_SHATTER');
+
 -- -1 615 000 OBSIDIAN SANCTUM
 INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, `sound`, `type`, `language`, `emote`, `comment`) VALUES
 (-1615000,'I fear nothing! Least of all you!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,14111,1,0,0,'shadron SAY_SHADRON_AGGRO'),
@@ -1824,12 +1890,6 @@ INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content
 (-1609014, 'Sate your hunger on cold steel\, $R', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 'unworthy_initiate SAY_EVENT_ATTACK_7'),
 (-1609015, 'It ends here!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 'unworthy_initiate SAY_EVENT_ATTACK_8'),
 (-1609016, 'Death is the only cure!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 'unworthy_initiate SAY_EVENT_ATTACK_9'),
-(-1609017,'No potions!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_A'),
-(-1609018,'Remember this day, $n, for it is the day that you will be thoroughly owned.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_B'),
-(-1609019,'I\'m going to tear your heart out, cupcake!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_C'),
-(-1609020,'Don\'t make me laugh.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_D'),
-(-1609021,'Here come the tears...', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_E'),
-(-1609022,'You have challenged death itself!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_F'),
 (-1609025,'Come to finish the job, have you?', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,0,0,1,'special_surprise SAY_EXEC_START_1'),
 (-1609026,'Come to finish the job, have ye?', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,0,0,1,'special_surprise SAY_EXEC_START_2'),
 (-1609027,'Come ta finish da job, mon?', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,0,0,1,'special_surprise SAY_EXEC_START_3'),
@@ -1883,7 +1943,26 @@ INSERT INTO `script_texts` (`entry`, `content_default`, `content_loc1`, `content
 (-1609075,'There... There\'s no more time for me. I\'m done for. Finish me off, $N. Do it or they\'ll kill us both. $N... Remember Mulgore. This world is worth saving.', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,0,0,18,'special_surprise SAY_EXEC_TIME_9'),
 (-1609076,'Der... Der\'s no more time for me. I be done for. Finish me off $N. Do it or they\'ll kill us both. $N... Remember Sen\'jin Village, mon! Dis world be worth saving!', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,0,0,18,'special_surprise SAY_EXEC_TIME_10'),
 (-1609077,'Do it, $N! Put me out of my misery!', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,0,0,1,'special_surprise SAY_EXEC_WAITING'),
-(-1609078,'dies from his wounds.', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,2,0,0,'special_surprise EMOTE_DIES');
+(-1609078,'dies from his wounds.', NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL,0,2,0,0,'special_surprise EMOTE_DIES'),
+(-1609080,'No potions!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_A'),
+(-1609081,'Remember this day, $n, for it is the day that you will be thoroughly owned.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_B'),
+(-1609082,'I\'m going to tear your heart out, cupcake!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_C'),
+(-1609083,'Don\'t make me laugh.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_D'),
+(-1609084,'Here come the tears...', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_E'),
+(-1609085,'You have challenged death itself!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_F'),
+(-1609086,'The Lich King will see his true champion on this day!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_G'),
+(-1609087,'You\'re going down!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_H'),
+(-1609088,'You don\'t stand a chance, $n', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'dk_initiate SAY_DUEL_I'),
+(-1609089, 'I\'ll need to get my runeblade and armor... Just need a little more time.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,399,'koltira SAY_BREAKOUT1'),
+(-1609090, 'I\'m still weak, but I think I can get an anti-magic barrier up. Stay inside it or you\'ll be destroyed by their spells.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'koltira SAY_BREAKOUT2'),
+(-1609091, 'Maintaining this barrier will require all of my concentration. Kill them all!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,16,'koltira SAY_BREAKOUT3'),
+(-1609092, 'There are more coming. Defend yourself! Don\'t fall out of the anti-magic field! They\'ll tear you apart without its protection!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'koltira SAY_BREAKOUT4'),
+(-1609093, 'I can\'t keep barrier up much longer... Where is that coward?', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'koltira SAY_BREAKOUT5'),
+(-1609094, 'The High Inquisitor comes! Be ready, death knight! Do not let him draw you out of the protective bounds of my anti-magic field! Kill him and take his head!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'koltira SAY_BREAKOUT6'),
+(-1609095, 'Stay in the anti-magic field! Make them come to you!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'koltira SAY_BREAKOUT7'),
+(-1609096, 'The death of the High Inquisitor of New Avalon will not go unnoticed. You need to get out of here at once! Go, before more of them show up. I\'ll be fine on my own.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'koltira SAY_BREAKOUT8'),
+(-1609097, 'I\'ll draw their fire, you make your escape behind me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,0,0,0,'koltira SAY_BREAKOUT9'),
+(-1609098, 'Your High Inquisitor is nothing more than a pile of meat, Crusaders! There are none beyond the grasp of the Scourge!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,0,1,0,0,'koltira SAY_BREAKOUT10');
 
 -- 
 -- Below just for beautiful view in table, run at own desire
@@ -1950,17 +2029,3 @@ REPLACE INTO `script_texts` (`entry`, `content_default`, `sound`, `type`, `langu
 (-1576043,'Dragonqueen... Life-Binder... preserve... me.',13454,1,0,0,'keristrasza SAY_DEATH'),
 (-1576044,'Stay. Enjoy your final moments.',13451,1,0,0,'keristrasza SAY_CRYSTAL_NOVA');
 
--- boss_bjarngrim
-DELETE FROM script_texts  where entry IN (-1602001,-1602000,-1602002,-1602003,-1602004,-1602005,-1602006,-1602007,-1602008,-1602009,-1602010);
-INSERT INTO script_texts (entry,content_default,sound,type,language,emote,comment) VALUES
-(-1602000,'I am the greatest of my father\'s sons! Your end has come!',14149,1,0,0,'bjarngrim SAY_AGGRO'),
-(-1602001,'So ends your curse!',14153,1,0,0,'bjarngrim SAY_SLAY_1'),
-(-1602002,'Flesh... is... weak!',14154,1,0,0,'bjarngrim SAY_SLAY_2'),
-(-1602003,'...',14155,1,0,0,'bjarngrim SAY_SLAY_3'),
-(-1602004,'How can it be...? Flesh is not... stronger!',14156,1,0,0,'bjarngrim SAY_DEATH'),
-(-1602005,'Defend yourself, for all the good it will do!',14151,1,0,0,'bjarngrim SAY_BATTLE_STANCE'),
-(-1602006,'%s switches to Battle Stance!',0,3,0,0,'bjarngrim EMOTE_BATTLE_STANCE'),
-(-1602007,'GRAAAAAH! Behold the fury of iron and steel!',14152,1,0,0,'bjarngrim SAY_BERSEKER_STANCE'),
-(-1602008,'%s switches to Berserker Stance!',0,3,0,0,'bjarngrim EMOTE_BERSEKER_STANCE'),
-(-1602009,'Give me your worst!',14150,1,0,0,'bjarngrim SAY_DEFENSIVE_STANCE'),
-(-1602010,'%s switches to Defensive Stance!',0,3,0,0,'bjarngrim EMOTE_DEFENSIVE_STANCE');

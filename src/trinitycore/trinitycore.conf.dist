@@ -1504,33 +1504,33 @@ Network.TcpNodelay = 1
 #
 #    Auction House Bot character data
 #        AuctionHouseBot.Account is the account number (in realmd->account table) of the player you want to run as the auction bot.
-#         AuctionHouseBot.GUID is the GUID (in characters->characters table) of the player you want to run as the auction bot.
+#        AuctionHouseBot.GUID is the GUID (in characters->characters table) of the player you want to run as the auction bot.
 #    Default: 0 (Auction House Bot disabled)
 #
 #    AuctionHouseBot.VendorItems
 #        Include items that can be bought from vendors.
-#    Default 0
+#    Default 0 (False)
 #
 #    AuctionHouseBot.LootItems
 #        Include items that can be looted or fished for.
-#    Default 1
+#    Default 1 (True)
 #
 #    AuctionHouseBot.OtherItems
 #        Include misc. items.
-#    Default 0
+#    Default 0 (False)
 #
 #    AuctionHouseBot.Bonding_types
 #        Indicates which bonding types to allow seller to put up for auction
 #            No_Bind
-#             Default 1
+#             Default 1 (True)
 #            Bind_When_Picked_Up
-#             Default 0
+#             Default 0 (False)
 #            Bind_When_Equipped
-#             Default 1
+#             Default 1 (True)
 #            Bind_When_Use
-#             Default 1
+#             Default 1 (True)
 #            Bind_Quest_Item
-#             Default 0
+#             Default 0 (False)
 #
 #    AuctionHouseBot.ItemsPerCycle
 #        Number of Items to Add/Remove from the AH during mass operations

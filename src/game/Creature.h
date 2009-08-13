@@ -500,7 +500,7 @@ class TRINITY_DLL_SPEC Creature : public Unit
 
         void Update( uint32 time );                         // overwrited Unit::Update
         void GetRespawnCoord(float &x, float &y, float &z, float* ori = NULL, float* dist =NULL) const;
-        uint32 GetEquipmentId() const { return m_equipmentId; }
+        uint32 GetEquipmentId() const { return GetCreatureInfo()->equipmentId; }
 
         uint32 HasSummonMask(uint32 mask) const { return mask & m_summonMask; }
         bool isSummon() const   { return m_summonMask & SUMMON_MASK_SUMMON; }
@@ -509,7 +509,6 @@ class TRINITY_DLL_SPEC Creature : public Unit
         bool isHunterPet() const{ return m_summonMask & SUMMON_MASK_HUNTER_PET; }
         bool isVehicle() const  { return m_summonMask & SUMMON_MASK_VEHICLE; }
         bool isTotem() const    { return m_summonMask & SUMMON_MASK_TOTEM; }
-        bool isWorldCreature() const { return m_summonMask & SUMMON_MASK_PET; }
 
         void SetCorpseDelay(uint32 delay) { m_corpseDelay = delay; }
         bool isRacialLeader() const { return GetCreatureInfo()->RacialLeader; }

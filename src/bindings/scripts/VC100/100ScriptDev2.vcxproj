@@ -97,6 +97,18 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|X64'">TrinityScript</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|X64'">.dll</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|X64'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|X64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|X64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|X64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|X64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|X64'" />
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -648,6 +660,7 @@
     <ClCompile Include="..\scripts\zone\violet_hold\boss_zuramat.cpp" />
     <ClCompile Include="..\scripts\zone\violet_hold\instance_violet_hold.cpp" />
     <ClCompile Include="..\scripts\zone\wailing_caverns\instance_wailing_caverns.cpp" />
+    <ClCompile Include="..\scripts\zone\wailing_caverns\wailing_caverns.cpp" />
     <ClCompile Include="..\scripts\zone\western_plaguelands\western_plaguelands.cpp" />
     <ClCompile Include="..\scripts\zone\westfall\westfall.cpp" />
     <ClCompile Include="..\scripts\zone\wintergrasp\wintergrasp.cpp" />
@@ -738,13 +751,9 @@
     <ClInclude Include="..\scripts\zone\utgarde_keep\utgarde_pinnacle\def_pinnacle.h" />
     <ClInclude Include="..\scripts\zone\vault_of_archavon\def_vault_of_archavon.h" />
     <ClInclude Include="..\scripts\zone\violet_hold\def_violet_hold.h" />
+    <ClInclude Include="..\scripts\zone\wailing_caverns\def_wailing_caverns.h" />
     <ClInclude Include="..\scripts\zone\zulaman\def_zulaman.h" />
     <ClInclude Include="..\scripts\zone\zulgurub\def_zulgurub.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\win\VC100\TrinityCore.vcxproj">
-      <Project>{a3a04e47-43a2-4c08-90b3-029cef558594}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

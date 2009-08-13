@@ -1,0 +1,250 @@
+diff --git a/src/game/Creature.h b/src/game/Creature.h
+index 94743f5..e5e39fc 100644
+--- a/src/game/Creature.h
++++ b/src/game/Creature.h
+@@ -601,6 +601,7 @@ class MANGOS_DLL_SPEC Creature : public Unit
+         virtual void DeleteFromDB();                        // overwrited in Pet
+ 
+         Loot loot;
++        uint64 taggedLooterGuid;
+         bool lootForPickPocketed;
+         bool lootForBody;
+         Player *GetLootRecipient() const;
+diff --git a/src/game/Group.cpp b/src/game/Group.cpp
+index 2513f0a..18cd063 100644
+--- a/src/game/Group.cpp
++++ b/src/game/Group.cpp
+@@ -91,6 +91,7 @@ bool Group::Create(const uint64 &guid, const char * name)
+     m_lootMethod = GROUP_LOOT;
+     m_lootThreshold = ITEM_QUALITY_UNCOMMON;
+     m_looterGuid = guid;
++    m_lastTaggedLooter = guid;
+ 
+     m_difficulty = DIFFICULTY_NORMAL;
+     if(!isBGGroup())
+@@ -152,6 +153,7 @@ bool Group::LoadGroupFromDB(const uint64 &leaderGuid, QueryResult *result, bool
+     m_mainAssistant = (*result)[1].GetUInt64();
+     m_lootMethod = (LootMethod)(*result)[2].GetUInt8();
+     m_looterGuid = MAKE_NEW_GUID((*result)[3].GetUInt32(), 0, HIGHGUID_PLAYER);
++    m_lastTaggedLooter = leaderGuid;
+     m_lootThreshold = (ItemQualities)(*result)[4].GetUInt16();
+ 
+     for(int i=0; i<TARGETICONCOUNT; ++i)
+@@ -536,6 +538,19 @@ void Group::SendLootAllPassed(uint32 NumberOfPlayers, const Roll &r)
+     }
+ }
+ 
++void Group::RoundRobin(const uint64& playerGUID, Loot *loot, Creature *creature)
++{
++    if (loot->alreadyViewedByTagged)
++        return;
++    std::vector<LootItem>::iterator i;
++    uint8 itemSlot = 0;
++    for (i=loot->items.begin(); i != loot->items.end(); ++i, ++itemSlot)
++    {
++        if (!i->freeforall)
++            loot->items[itemSlot].is_underthreshold = true;
++    }
++}
++
+ void Group::GroupLoot(const uint64& playerGUID, Loot *loot, Creature *creature)
+ {
+     std::vector<LootItem>::iterator i;
+@@ -953,7 +968,10 @@ void Group::SendUpdate()
+         if(GetMembersCount()-1)
+         {
+             data << (uint8)m_lootMethod;                    // loot method
+-            data << (uint64)m_looterGuid;                   // looter guid
++            if (GetLootMethod() == MASTER_LOOT)
++                data << (uint64)m_looterGuid;               // looter guid, only needed in Master Looter
++            else
++                data << (uint64)0;                          // other loot methods, send none
+             data << (uint8)m_lootThreshold;                 // loot threshold
+             data << (uint8)m_difficulty;                    // Heroic Mod Group
+         }
+@@ -1314,7 +1332,7 @@ void Group::ChangeMembersGroup(Player *player, const uint8 &group)
+     }
+ }
+ 
+-void Group::UpdateLooterGuid( Creature* creature, bool ifneed )
++void Group::SetTaggedLooter( Creature* creature, bool ifneed )
+ {
+     switch (GetLootMethod())
+     {
+@@ -1327,7 +1345,7 @@ void Group::UpdateLooterGuid( Creature* creature, bool ifneed )
+             break;
+     }
+ 
+-    member_citerator guid_itr = _getMemberCSlot(GetLooterGuid());
++    member_citerator guid_itr = _getMemberCSlot(m_lastTaggedLooter);
+     if(guid_itr != m_memberSlots.end())
+     {
+         if(ifneed)
+@@ -1353,7 +1371,9 @@ void Group::UpdateLooterGuid( Creature* creature, bool ifneed )
+ 
+                     //if(refresh)                             // update loot for new looter
+                     //    pl->GetSession()->DoLootRelease(pl->GetLootGUID());
+-                    SetLooterGuid(pl->GetGUID());
++                    m_lastTaggedLooter = pl->GetGUID();
++                    creature->taggedLooterGuid = pl->GetGUID();
++                    creature->SetUInt64Value(UNIT_FIELD_CREATEDBY,pl->GetGUID());
+                     SendUpdate();
+                     if(refresh)                             // update loot for new looter
+                         pl->SendLoot(creature->GetGUID(),LOOT_CORPSE);
+@@ -1374,7 +1394,9 @@ void Group::UpdateLooterGuid( Creature* creature, bool ifneed )
+ 
+                 //if(refresh)                               // update loot for new looter
+                 //    pl->GetSession()->DoLootRelease(pl->GetLootGUID());
+-                SetLooterGuid(pl->GetGUID());
++                m_lastTaggedLooter = pl->GetGUID();
++                creature->taggedLooterGuid = pl->GetGUID();
++                creature->SetUInt64Value(UNIT_FIELD_CREATEDBY,pl->GetGUID());
+                 SendUpdate();
+                 if(refresh)                                 // update loot for new looter
+                     pl->SendLoot(creature->GetGUID(),LOOT_CORPSE);
+diff --git a/src/game/Group.h b/src/game/Group.h
+index 478b7c5..c39bd5b 100644
+--- a/src/game/Group.h
++++ b/src/game/Group.h
+@@ -167,7 +167,7 @@ class MANGOS_DLL_SPEC Group
+         void   ChangeLeader(const uint64 &guid);
+         void   SetLootMethod(LootMethod method) { m_lootMethod = method; }
+         void   SetLooterGuid(const uint64 &guid) { m_looterGuid = guid; }
+-        void   UpdateLooterGuid( Creature* creature, bool ifneed = false );
++        void   SetTaggedLooter( Creature* creature, bool ifneed = false );
+         void   SetLootThreshold(ItemQualities threshold) { m_lootThreshold = threshold; }
+         void   Disband(bool hideDestroy=false);
+ 
+@@ -306,6 +306,7 @@ class MANGOS_DLL_SPEC Group
+         void GroupLoot(const uint64& playerGUID, Loot *loot, Creature *creature);
+         void NeedBeforeGreed(const uint64& playerGUID, Loot *loot, Creature *creature);
+         void MasterLoot(const uint64& playerGUID, Loot *loot, Creature *creature);
++        void RoundRobin(const uint64& playerGUID, Loot *loot, Creature *creature);
+         Rolls::iterator GetRoll(uint64 Guid)
+         {
+             Rolls::iterator iter;
+@@ -403,6 +404,7 @@ class MANGOS_DLL_SPEC Group
+         LootMethod          m_lootMethod;
+         ItemQualities       m_lootThreshold;
+         uint64              m_looterGuid;
++        uint64              m_lastTaggedLooter;
+         Rolls               RollId;
+         BoundInstancesMap   m_boundInstances[TOTAL_DIFFICULTIES];
+         uint8*              m_subGroupsCounts;
+diff --git a/src/game/LootHandler.cpp b/src/game/LootHandler.cpp
+index 06c84ae..3dfd47a 100644
+--- a/src/game/LootHandler.cpp
++++ b/src/game/LootHandler.cpp
+@@ -414,11 +414,9 @@ void WorldSession::DoLootRelease( uint64 lguid )
+ 
+         loot = &pCreature->loot;
+ 
+-        // update next looter
+-        if(Player *recipient = pCreature->GetLootRecipient())
+-            if(Group* group = recipient->GetGroup())
+-                if (group->GetLooterGuid() == player->GetGUID())
+-                    group->UpdateLooterGuid(pCreature);
++        //release tagged loot if player in group, and loot is tagged for him
++        if (player->GetGroup() && (pCreature->taggedLooterGuid == player->GetGUID()))
++            loot->alreadyViewedByTagged = true;
+ 
+         if (loot->isLooted())
+         {
+diff --git a/src/game/LootMgr.cpp b/src/game/LootMgr.cpp
+index 0f47984..e519833 100644
+--- a/src/game/LootMgr.cpp
++++ b/src/game/LootMgr.cpp
+@@ -705,14 +705,20 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
+         {
+             // You are not the items proprietary, so you can only see
+             // blocked rolled items and quest items, and !ffa items
++            uint8 slot_type;
+             for (uint8 i = 0; i < l.items.size(); ++i)
+             {
+                 if (!l.items[i].is_looted && !l.items[i].freeforall && !l.items[i].conditionId && l.items[i].AllowedForPlayer(lv.viewer))
+                 {
+-                    uint8 slot_type = (l.items[i].is_blocked || l.items[i].is_underthreshold) ? 0 : 1;
++                    if (l.items[i].is_blocked)
++                        slot_type = 1;
++                    else if (l.items[i].is_underthreshold && !lv.loot.alreadyViewedByTagged)
++                        slot_type = 3;
++                    else
++                        slot_type = 0;
+ 
+                     b << uint8(i) << l.items[i];            //send the index and the item if it's not looted, and blocked or under threshold, free for all items will be sent later, only one-player loots here
+-                    b << uint8(slot_type);                  // 0 - get 1 - look only
++                    b << uint8(slot_type);                  // 0 - get 1 - look only 3 - don't have permission (not tagged for player)
+                     ++itemsShown;
+                 }
+             }
+diff --git a/src/game/LootMgr.h b/src/game/LootMgr.h
+index b67ef9a..6fbfd23 100644
+--- a/src/game/LootMgr.h
++++ b/src/game/LootMgr.h
+@@ -240,8 +240,9 @@ struct Loot
+     uint32 gold;
+     uint8 unlootedCount;
+     LootType loot_type;                                     // required for achievement system
++    bool alreadyViewedByTagged;
+ 
+-    Loot(uint32 _gold = 0) : gold(_gold), unlootedCount(0), loot_type(LOOT_CORPSE) {}
++    Loot(uint32 _gold = 0) : gold(_gold), unlootedCount(0), loot_type(LOOT_CORPSE), alreadyViewedByTagged(false) {}
+     ~Loot() { clear(); }
+ 
+     // if loot becomes invalid this reference is used to inform the listener
+diff --git a/src/game/Player.cpp b/src/game/Player.cpp
+index 37931f6..606c927 100644
+--- a/src/game/Player.cpp
++++ b/src/game/Player.cpp
+@@ -7513,7 +7513,6 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
+ 
+                 if (Group* group = recipient->GetGroup())
+                 {
+-                    group->UpdateLooterGuid(creature,true);
+ 
+                     switch (group->GetLootMethod())
+                     {
+@@ -7527,6 +7526,9 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
+                         case MASTER_LOOT:
+                             group->MasterLoot(recipient->GetGUID(), loot, creature);
+                             break;
++                        case ROUND_ROBIN:
++                            group->RoundRobin(recipient->GetGUID(), loot, creature);
++                            break;
+                         default:
+                             break;
+                     }
+@@ -7548,13 +7550,10 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
+                     {
+                         if (group->GetLootMethod() == FREE_FOR_ALL)
+                             permission = ALL_PERMISSION;
+-                        else if (group->GetLooterGuid() == GetGUID())
+-                        {
+-                            if (group->GetLootMethod() == MASTER_LOOT)
+-                                permission = MASTER_PERMISSION;
+-                            else
+-                                permission = ALL_PERMISSION;
+-                        }
++                        else if (creature->taggedLooterGuid == GetGUID())
++                            permission = ALL_PERMISSION;
++                        else if ((group->GetLooterGuid() == GetGUID()) && (group->GetLootMethod() == MASTER_LOOT))
++                            permission = MASTER_PERMISSION;
+                         else
+                             permission = GROUP_PERMISSION;
+                     }
+diff --git a/src/game/Unit.cpp b/src/game/Unit.cpp
+index f5c300e..ae73323 100644
+--- a/src/game/Unit.cpp
++++ b/src/game/Unit.cpp
+@@ -649,7 +649,11 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
+                 cVictim->DeleteThreatList();
+                 // only lootable if it has loot or can drop gold
+                 if(cVictim->GetCreatureInfo()->lootid || cVictim->GetCreatureInfo()->maxgold > 0)
++                {
+                     cVictim->SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
++                    if (player->GetGroup())
++                        player->GetGroup()->SetTaggedLooter(cVictim);
++                }
+             }
+             // Call creature just died function
+             if (cVictim->AI())

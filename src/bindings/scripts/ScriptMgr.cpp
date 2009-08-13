@@ -87,7 +87,7 @@ extern void AddSC_npc_taxi();
 //------ ZONE --------
 
 //Alterac Mountains
-extern void AddSC_alterac_mountains();
+//extern void AddSC_alterac_mountains();
 
 //Arathi Highlands
 extern void AddSC_arathi_highlands();
@@ -602,6 +602,8 @@ extern void AddSC_instance_utgarde_keep();
 extern void AddSC_utgarde_keep();
 
 //Wailing caverns
+extern void AddSC_wailing_caverns();
+extern void AddSC_instance_wailing_caverns();
 
 //Western plaguelands
 extern void AddSC_western_plaguelands();
@@ -650,6 +652,7 @@ extern void AddSC_zuldrak();
 
 //Northrend
 //Dungeon
+
 //Vault of Archavon
 extern void AddSC_boss_archavon();
 extern void AddSC_boss_emalon();
@@ -658,6 +661,11 @@ extern void AddSC_instance_archavon();
 //Ulduar
 extern void AddSC_boss_flame_leviathan();
 extern void AddSC_boss_razorscale();
+
+//Halls of Lightning
+extern void AddSC_boss_bjarngrim();
+extern void AddSC_boss_loken();
+extern void AddSC_instance_halls_of_lightning();
 
 //Region
 extern void AddSC_wintergrasp();
@@ -1006,7 +1014,7 @@ void ScriptsInit(char const* cfg_file = "trinitycore.conf")
     //------ ZONE --------
 
     //Alterac Mountains
-    AddSC_alterac_mountains();
+    //AddSC_alterac_mountains();
 
     //Arathi Highlands
     AddSC_arathi_highlands();
@@ -1520,6 +1528,8 @@ void ScriptsInit(char const* cfg_file = "trinitycore.conf")
     AddSC_utgarde_keep();
 
     //Wailing caverns
+    AddSC_wailing_caverns();
+    AddSC_instance_wailing_caverns();
 
     //Western plaguelands
     AddSC_western_plaguelands();
@@ -1568,6 +1578,7 @@ void ScriptsInit(char const* cfg_file = "trinitycore.conf")
 
     //Northrend
     //Dungeon
+
     //Vault of Archavon
     AddSC_boss_archavon();
     AddSC_boss_emalon();
@@ -1576,6 +1587,11 @@ void ScriptsInit(char const* cfg_file = "trinitycore.conf")
     //Ulduar
     AddSC_boss_flame_leviathan();
     AddSC_boss_razorscale();
+
+    //Halls of Lightning
+    AddSC_boss_bjarngrim();
+    AddSC_boss_loken();
+    AddSC_instance_halls_of_lightning();
 
     //Region
     AddSC_wintergrasp();

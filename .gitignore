@@ -10,8 +10,22 @@
 # MaNGOS generated files at Windows build
 #
 bin/*
-dep/lib/Win32*/
-dep/lib/X64*/
+contrib/*/release/*.obj
+contrib/*/release/*.dep
+contrib/*/release/*.idb
+contrib/*/release/*.manifest
+contrib/*/release/*.htm*
+contrib/*/debug/*.manifest
+contrib/*/debug/*.htm*
+contrib/*/debug/*.obj
+contrib/*/debug/*.dep
+contrib/*/debug/*.idb
+contrib/*/*.ncb
+contrib/*/*.exe
+contrib/*/*.user
+contrib/*/*.suo
+dep/lib/win32*/ACE*
+dep/lib/x64*/ACE*
 win/*.opensdf
 win/*.sdf
 win/*.ncb

@@ -72,6 +72,15 @@ INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comm
 ( 20594, 65116, 0, 'Stoneform'),
 ( 49039, 50397, 2, 'Lichborne - shapeshift'),
 ( 64382, 64380, 0, 'Shattering Throw'),
+( 19574, 24395, 2, 'Bestial Wrath'),
+( 19574, 24396, 2, 'Bestial Wrath'),
+( 19574, 24397, 2, 'Bestial Wrath'),
+( 19574, 26592, 2, 'Bestial Wrath'),
+( 34471, 24395, 2, 'The Beast Within'),
+( 34471, 24396, 2, 'The Beast Within'),
+( 34471, 24397, 2, 'The Beast Within'),
+( 34471, 26592, 2, 'The Beast Within'),
+(-59907,     7, 0, 'Lightwell Charges - Suicide'),
 
 -- Creature
 ( 36574, 36650, 0, 'Apply Phase Slip Vulnerability'),
@@ -1611,6 +1620,7 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (1978, -1, -1, -1, 0.04, 'Hunter - Serpent Sting($RAP*0.2 / number of ticks)'),
 (56641, -1, -1, 0.1, -1, 'Hunter - Steady Shot'),
 (42243, -1, -1, 0.07, -1, 'Hunter - Volley'),
+(53352, -1, -1, 0.14, -1, 'Hunter - Explosive Shot (triggered)'),
 (55039, 0, 0, 0, 0, 'Item - Gnomish Lightning Generator'),
 (44425, 0.7143, -1, -1, -1, 'Mage - Arcane Barrage'),
 (30451, 0.7143, -1, -1, -1, 'Mage - Arcane Blast'),
@@ -1680,6 +1690,12 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (14914, 0.5711, 0.024, -1, -1, 'Priest - Holy Fire'),
 (15237, 0.1606, -1, -1, -1, 'Priest - Holy Nova Damage'),
 (23455, 0.3035, -1, -1, -1, 'Priest - Holy Nova Heal Rank 1'),
+(7001, -1, 0.3333, -1, -1, 'Priest - Lightwell Renew Rank 1'),
+(27873, -1, 0.3333, -1, -1, 'Priest - Lightwell Renew Rank 2'),
+(27874, -1, 0.3333, -1, -1, 'Priest - Lightwell Renew Rank 3'),
+(28276, -1, 0.3333, -1, -1, 'Priest - Lightwell Renew Rank 4'),
+(48084, -1, 0.3333, -1, -1, 'Priest - Lightwell Renew Rank 5'),
+(48085, -1, 0.3333, -1, -1, 'Priest - Lightwell Renew Rank 6'),
 (8129, 0, 0, 0, 0, 'Priest - Mana Burn'),
 (8092, 0.428, -1, -1, -1, 'Priest - Mind Blast'),
 (15407, 0.257, -1, -1, -1, 'Priest - Mind Flay'),
@@ -2064,3 +2080,13 @@ INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`) VALUES
 DELETE FROM `spell_linked_spell` WHERE `spell_trigger` IN (54643);
 INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES
 ( 54643,-54643, 2, 'Wintergrasp Defender Teleport');
+
+
+-- lightwell
+REPLACE INTO `npc_spellclick_spells` (npc_entry, spell_id, quest_start, quest_start_active, quest_end, cast_flags, quest_status) VALUES
+(31883, 60123, 0, 0, 0, 2, 0),
+(31893, 60123, 0, 0, 0, 2, 0),
+(31894, 60123, 0, 0, 0, 2, 0),
+(31895, 60123, 0, 0, 0, 2, 0),
+(31896, 60123, 0, 0, 0, 2, 0),
+(31897, 60123, 0, 0, 0, 2, 0);

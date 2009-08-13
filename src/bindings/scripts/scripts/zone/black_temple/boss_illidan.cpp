@@ -1734,7 +1734,7 @@ struct TRINITY_DLL_DECL mob_parasitic_shadowfiendAI : public ScriptedAI
                 && !m_creature->getVictim()->HasAura(SPELL_PARASITIC_SHADOWFIEND2))
             {
                 if(Creature* illidan = Unit::GetCreature((*m_creature),IllidanGUID))//summon only in 1. phase
-                    if(((boss_illidan_stormrageAI*)illidan->AI())->Phase == PHASE_NORMAL)
+                    if(CAST_AI(boss_illidan_stormrageAI, illidan->AI())->Phase == PHASE_NORMAL)
                         m_creature->CastSpell(m_creature->getVictim(), SPELL_PARASITIC_SHADOWFIEND2, true, 0, 0, IllidanGUID); //do not stack
             }
             m_creature->AttackerStateUpdate(m_creature->getVictim());
@@ -1930,8 +1930,8 @@ void boss_illidan_stormrageAI::HandleTalkSequence()
                 x += 10; y += 10;
                 Akama->GetMotionMaster()->Clear(false);
                 //Akama->GetMotionMaster()->MoveIdle();
-                Akama->Relocate(x, y, z);
-                Akama->SendMonsterMove(x, y, z, 0);//Illidan must not die until Akama arrives.
+                Akama->GetMap()->CreatureRelocation(m_creature, x, y, z, 0.0f);
+                Akama->SendMonsterMove(x, y, z, 0, MOVEMENTFLAG_NONE, 0);//Illidan must not die until Akama arrives.
                 Akama->GetMotionMaster()->MoveChase(m_creature);
             }
         }

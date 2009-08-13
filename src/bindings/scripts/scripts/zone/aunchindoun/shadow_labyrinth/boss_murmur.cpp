@@ -22,6 +22,7 @@ SDCategory: Auchindoun, Shadow Labyrinth
 EndScriptData */
 
 #include "precompiled.h"
+#include "def_shadow_labyrinth.h"
 
 #define EMOTE_SONIC_BOOM            -1555036
 
@@ -33,10 +34,11 @@ EndScriptData */
 #define SPELL_SONIC_SHOCK           38797
 #define SPELL_THUNDERING_STORM      39365
 
-struct TRINITY_DLL_DECL boss_murmurAI : public Scripted_NoMovementAI
+struct TRINITY_DLL_DECL boss_murmurAI : public ScriptedAI
 {
-    boss_murmurAI(Creature *c) : Scripted_NoMovementAI(c)
+    boss_murmurAI(Creature *c) : ScriptedAI(c)
     {
+        SetCombatMovement(false);
         HeroicMode = m_creature->GetMap()->IsHeroic();
     }
 
