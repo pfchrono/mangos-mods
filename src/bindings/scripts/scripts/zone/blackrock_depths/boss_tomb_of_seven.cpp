@@ -60,16 +60,16 @@ struct TRINITY_DLL_DECL boss_angerrelAI : public ScriptedAI
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
         m_creature->LoadCreaturesAddon();
-        if(m_creature->isAlive())
+        if (m_creature->isAlive())
             m_creature->GetMotionMaster()->MoveTargetedHome();
         m_creature->SetLootRecipient(NULL);
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData64(DATA_EVENSTARTER, 0);
     }
 
     void JustDied(Unit *who)
     {
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData(DATA_GHOSTKILL, 1);
     }
 
@@ -103,9 +103,9 @@ struct TRINITY_DLL_DECL boss_angerrelAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_angerrel(Creature *_Creature)
+CreatureAI* GetAI_boss_angerrel(Creature* pCreature)
 {
-    return new boss_angerrelAI (_Creature);
+    return new boss_angerrelAI (pCreature);
 }
 
 enum
@@ -144,16 +144,16 @@ struct TRINITY_DLL_DECL boss_doperelAI : public ScriptedAI
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
         m_creature->LoadCreaturesAddon();
-        if(m_creature->isAlive())
+        if (m_creature->isAlive())
             m_creature->GetMotionMaster()->MoveTargetedHome();
         m_creature->SetLootRecipient(NULL);
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData64(DATA_EVENSTARTER, 0);
     }
 
     void JustDied(Unit *who)
     {
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData(DATA_GHOSTKILL, 1);
     }
 
@@ -187,9 +187,9 @@ struct TRINITY_DLL_DECL boss_doperelAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_doperel(Creature *_Creature)
+CreatureAI* GetAI_boss_doperel(Creature* pCreature)
 {
-    return new boss_doperelAI (_Creature);
+    return new boss_doperelAI (pCreature);
 }
 
 enum
@@ -230,16 +230,16 @@ struct TRINITY_DLL_DECL boss_haterelAI : public ScriptedAI
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
         m_creature->LoadCreaturesAddon();
-        if(m_creature->isAlive())
+        if (m_creature->isAlive())
             m_creature->GetMotionMaster()->MoveTargetedHome();
         m_creature->SetLootRecipient(NULL);
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData64(DATA_EVENSTARTER, 0);
     }
 
     void JustDied(Unit *who)
     {
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData(DATA_GHOSTKILL, 1);
     }
 
@@ -283,9 +283,9 @@ struct TRINITY_DLL_DECL boss_haterelAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_haterel(Creature *_Creature)
+CreatureAI* GetAI_boss_haterel(Creature* pCreature)
 {
-    return new boss_haterelAI (_Creature);
+    return new boss_haterelAI (pCreature);
 }
 
 enum
@@ -327,16 +327,16 @@ struct TRINITY_DLL_DECL boss_vilerelAI : public ScriptedAI
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
         m_creature->LoadCreaturesAddon();
-        if(m_creature->isAlive())
+        if (m_creature->isAlive())
             m_creature->GetMotionMaster()->MoveTargetedHome();
         m_creature->SetLootRecipient(NULL);
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData64(DATA_EVENSTARTER, 0);
     }
 
     void JustDied(Unit *who)
     {
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData(DATA_GHOSTKILL, 1);
     }
 
@@ -377,9 +377,9 @@ struct TRINITY_DLL_DECL boss_vilerelAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_vilerel(Creature *_Creature)
+CreatureAI* GetAI_boss_vilerel(Creature* pCreature)
 {
-    return new boss_vilerelAI (_Creature);
+    return new boss_vilerelAI (pCreature);
 }
 
 enum
@@ -426,16 +426,16 @@ struct TRINITY_DLL_DECL boss_seethrelAI : public ScriptedAI
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
         m_creature->LoadCreaturesAddon();
-        if(m_creature->isAlive())
+        if (m_creature->isAlive())
             m_creature->GetMotionMaster()->MoveTargetedHome();
         m_creature->SetLootRecipient(NULL);
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData64(DATA_EVENSTARTER, 0);
     }
 
     void JustDied(Unit *who)
     {
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData(DATA_GHOSTKILL, 1);
     }
 
@@ -485,9 +485,9 @@ struct TRINITY_DLL_DECL boss_seethrelAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_seethrel(Creature *_Creature)
+CreatureAI* GetAI_boss_seethrel(Creature* pCreature)
 {
-    return new boss_seethrelAI (_Creature);
+    return new boss_seethrelAI (pCreature);
 }
 
 enum
@@ -528,22 +528,22 @@ struct TRINITY_DLL_DECL boss_gloomrelAI : public ScriptedAI
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
         m_creature->LoadCreaturesAddon();
-        if(m_creature->isAlive())
+        if (m_creature->isAlive())
             m_creature->GetMotionMaster()->MoveTargetedHome();
         m_creature->SetLootRecipient(NULL);
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData64(DATA_EVENSTARTER, 0);
     }
 
     void JustDied(Unit *who)
     {
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData(DATA_GHOSTKILL, 1);
     }
 
     void UpdateAI(const uint32 diff)
     {
-        if (!UpdateVictim() )
+        if (!UpdateVictim())
             return;
 
         //Hamstring_Timer
@@ -571,46 +571,46 @@ struct TRINITY_DLL_DECL boss_gloomrelAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_gloomrel(Creature *_Creature)
+CreatureAI* GetAI_boss_gloomrel(Creature* pCreature)
 {
-    return new boss_gloomrelAI (_Creature);
+    return new boss_gloomrelAI (pCreature);
 }
 
 #define GOSSIP_ITEM_TEACH_1 "Teach me the art of smelting dark iron"
 #define GOSSIP_ITEM_TEACH_2 "Continue..."
 #define GOSSIP_ITEM_TRIBUTE "I want to pay tribute"
 
-bool GossipHello_boss_gloomrel(Player *player, Creature *_Creature)
+bool GossipHello_boss_gloomrel(Player* pPlayer, Creature* pCreature)
 {
-    if (player->GetQuestRewardStatus(4083) == 1 && player->GetSkillValue(SKILL_MINING) >= 230 && !player->HasSpell(14891) )
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_TEACH_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if (pPlayer->GetQuestRewardStatus(4083) == 1 && pPlayer->GetSkillValue(SKILL_MINING) >= 230 && !pPlayer->HasSpell(14891))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_TEACH_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
-    if (player->GetQuestRewardStatus(4083) == 0 && player->GetSkillValue(SKILL_MINING) >= 230)
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_TRIBUTE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    if (pPlayer->GetQuestRewardStatus(4083) == 0 && pPlayer->GetSkillValue(SKILL_MINING) >= 230)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_TRIBUTE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
-    player->SEND_GOSSIP_MENU(_Creature->GetNpcTextId(), _Creature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(pCreature->GetNpcTextId(), pCreature->GetGUID());
     return true;
 }
 
-bool GossipSelect_boss_gloomrel(Player *player, Creature *_Creature, uint32 sender, uint32 action )
+bool GossipSelect_boss_gloomrel(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
 {
     switch (action)
     {
         case GOSSIP_ACTION_INFO_DEF+1:
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_TEACH_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            player->SEND_GOSSIP_MENU(2606, _Creature->GetGUID());
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_TEACH_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->SEND_GOSSIP_MENU(2606, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+11:
-            player->CLOSE_GOSSIP_MENU();
-            _Creature->CastSpell(player, 14894, false);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            pCreature->CastSpell(pPlayer, 14894, false);
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Continue...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 22);
-            player->SEND_GOSSIP_MENU(2604, _Creature->GetGUID());
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Continue...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 22);
+            pPlayer->SEND_GOSSIP_MENU(2604, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+22:
-            player->CLOSE_GOSSIP_MENU();
-            if (ScriptedInstance* pInstance = _Creature->GetInstanceData())
+            pPlayer->CLOSE_GOSSIP_MENU();
+            if (ScriptedInstance* pInstance = pCreature->GetInstanceData())
             {
                 //are 5 minutes expected? go template may have data to despawn when used at quest
                 pInstance->DoRespawnGameObject(pInstance->GetData64(DATA_GO_CHALICE),MINUTE*5);
@@ -660,8 +660,8 @@ struct TRINITY_DLL_DECL boss_doomrelAI : public ScriptedAI
         // was set before event start, so set again
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_2);
 
-        if(pInstance)
-            if(pInstance->GetData(DATA_GHOSTKILL) >= 7)
+        if (pInstance)
+            if (pInstance->GetData(DATA_GHOSTKILL) >= 7)
                 m_creature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
             else
                 m_creature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -677,22 +677,22 @@ struct TRINITY_DLL_DECL boss_doomrelAI : public ScriptedAI
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
         m_creature->LoadCreaturesAddon();
-        if(m_creature->isAlive())
+        if (m_creature->isAlive())
             m_creature->GetMotionMaster()->MoveTargetedHome();
         m_creature->SetLootRecipient(NULL);
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData64(DATA_EVENSTARTER, 0);
     }
 
     void JustDied(Unit *who)
     {
-        if(pInstance)
+        if (pInstance)
             pInstance->SetData(DATA_GHOSTKILL, 1);
     }
 
     void UpdateAI(const uint32 diff)
     {
-        if (!UpdateVictim() )
+        if (!UpdateVictim())
             return;
 
         //ShadowVolley_Timer
@@ -726,7 +726,7 @@ struct TRINITY_DLL_DECL boss_doomrelAI : public ScriptedAI
         }else DemonArmor_Timer -= diff;
 
         //Summon Voidwalkers
-        if (!Voidwalkers && m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 51 )
+        if (!Voidwalkers && m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 51)
         {
             m_creature->CastSpell(m_creature->getVictim(), SPELL_SUMMON_VOIDWALKERS, true);
             Voidwalkers = true;
@@ -736,38 +736,38 @@ struct TRINITY_DLL_DECL boss_doomrelAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_doomrel(Creature *_Creature)
+CreatureAI* GetAI_boss_doomrel(Creature* pCreature)
 {
-    return new boss_doomrelAI (_Creature);
+    return new boss_doomrelAI (pCreature);
 }
 
 #define GOSSIP_ITEM_CHALLENGE   "Your bondage is at an end, Doom'rel. I challenge you!"
 
-bool GossipHello_boss_doomrel(Player *player, Creature *_Creature)
+bool GossipHello_boss_doomrel(Player* pPlayer, Creature* pCreature)
 {
-    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_CHALLENGE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    player->SEND_GOSSIP_MENU(2601, _Creature->GetGUID());
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_CHALLENGE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->SEND_GOSSIP_MENU(2601, pCreature->GetGUID());
 
     return true;
 }
 
-bool GossipSelect_boss_doomrel(Player *player, Creature *_Creature, uint32 sender, uint32 action )
+bool GossipSelect_boss_doomrel(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
 {
     switch (action)
     {
         case GOSSIP_ACTION_INFO_DEF+1:
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Continue...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            player->SEND_GOSSIP_MENU(2605, _Creature->GetGUID());
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Continue...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->SEND_GOSSIP_MENU(2605, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
-            player->CLOSE_GOSSIP_MENU();
+            pPlayer->CLOSE_GOSSIP_MENU();
             //start event here
-            _Creature->setFaction(FACTION_HOSTILE);
-            _Creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_2);
-            _Creature->AI()->AttackStart(player);
-            ScriptedInstance* pInstance = _Creature->GetInstanceData();
-            if(pInstance)
-                pInstance->SetData64(DATA_EVENSTARTER,player->GetGUID());
+            pCreature->setFaction(FACTION_HOSTILE);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_2);
+            pCreature->AI()->AttackStart(pPlayer);
+            ScriptedInstance* pInstance = pCreature->GetInstanceData();
+            if (pInstance)
+                pInstance->SetData64(DATA_EVENSTARTER,pPlayer->GetGUID());
             break;
     }
     return true;

@@ -2178,7 +2178,7 @@ void Spell::EffectTriggerSpell(uint32 i)
         && m_spellInfo->Category == spellInfo->Category)
         ((Player*)m_caster)->RemoveSpellCooldown(spellInfo->Id);
 
-    unitTarget->CastSpell(unitTarget,spellInfo,true,NULL,NULL,m_originalCasterGUID);
+    m_caster->CastSpell(unitTarget,spellInfo,true,NULL,NULL,m_originalCasterGUID);
 }
 
 void Spell::EffectTriggerMissileSpell(uint32 effect_idx)
@@ -2915,6 +2915,7 @@ void Spell::EffectEnergize(uint32 i)
         case 31930:                                         // Judgements of the Wise
         case 63375:                                         // Improved Stormstrike
             damage = damage * unitTarget->GetCreateMana() / 100;
+            break;
         case 48542:                                         // Revitalize
             damage = damage * unitTarget->GetMaxPower(power) / 100;
             break;

@@ -29,7 +29,7 @@ EndScriptData */
 ## go_barrel_old_hillsbrad
 ######*/
 
-bool GOHello_go_barrel_old_hillsbrad(Player *player, GameObject* _GO)
+bool GOHello_go_barrel_old_hillsbrad(Player* pPlayer, GameObject* _GO)
 {
     ScriptedInstance* pInstance = _GO->GetInstanceData();
 
@@ -174,9 +174,9 @@ struct TRINITY_DLL_DECL boss_lieutenant_drakeAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_lieutenant_drake(Creature *_Creature)
+CreatureAI* GetAI_boss_lieutenant_drake(Creature* pCreature)
 {
-    return new boss_lieutenant_drakeAI (_Creature);
+    return new boss_lieutenant_drakeAI (pCreature);
 }
 
 void AddSC_boss_lieutenant_drake()

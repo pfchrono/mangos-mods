@@ -135,10 +135,10 @@ struct TRINITY_DLL_DECL boss_skeramAI : public ScriptedAI
         }else ArcaneExplosion_Timer -= diff;
 
         //If we are within range melee the target
-        if( m_creature->IsWithinMeleeRange(m_creature->getVictim()))
+        if (m_creature->IsWithinMeleeRange(m_creature->getVictim()))
         {
             //Make sure our attack is ready and we arn't currently casting
-            if( m_creature->isAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
+            if (m_creature->isAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
             {
                 m_creature->AttackerStateUpdate(m_creature->getVictim());
                 m_creature->resetAttackTimer();
@@ -160,15 +160,15 @@ struct TRINITY_DLL_DECL boss_skeramAI : public ScriptedAI
             switch(rand()%3)
             {
                 case 0:
-                    m_creature->Relocate(-8340.782227,2083.814453,125.648788,0);
+                    m_creature->GetMap()->CreatureRelocation(m_creature, -8340.782227,2083.814453,125.648788,0.0f);
                     DoResetThreat();
                     break;
                 case 1:
-                    m_creature->Relocate(-8341.546875,2118.504639,133.058151,0);
+                    m_creature->GetMap()->CreatureRelocation(m_creature, -8341.546875,2118.504639,133.058151,0.0f);
                     DoResetThreat();
                     break;
                 case 2:
-                    m_creature->Relocate(-8318.822266,2058.231201,133.058151,0);
+                    m_creature->GetMap()->CreatureRelocation(m_creature, -8318.822266,2058.231201,133.058151,0.0f);
                     DoResetThreat();
                     break;
             }
@@ -180,16 +180,16 @@ struct TRINITY_DLL_DECL boss_skeramAI : public ScriptedAI
         int procent = (int) (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() +0.5);
 
         //Summoning 2 Images and teleporting to a random position on 75% health
-        if ( (!Images75 && !IsImage) && (procent <= 75 && procent > 70) )
+        if ((!Images75 && !IsImage) && (procent <= 75 && procent > 70))
             DoSplit(75);
 
         //Summoning 2 Images and teleporting to a random position on 50% health
-        if ( (!Images50 && !IsImage) &&
-            (procent <= 50 && procent > 45) )
+        if ((!Images50 && !IsImage) &&
+            (procent <= 50 && procent > 45))
             DoSplit(50);
 
         //Summoning 2 Images and teleporting to a random position on 25% health
-        if ( (!Images25 && !IsImage) && (procent <= 25 && procent > 20) )
+        if ((!Images25 && !IsImage) && (procent <= 25 && procent > 20))
             DoSplit(25);
 
         //Invisible_Timer
@@ -259,7 +259,7 @@ struct TRINITY_DLL_DECL boss_skeramAI : public ScriptedAI
         m_creature->RemoveAllAuras();
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         m_creature->SetVisibility(VISIBILITY_OFF);
-        m_creature->Relocate(bossc->x, bossc->y, bossc->z, bossc->r);
+        m_creature->GetMap()->CreatureRelocation(m_creature, bossc->x, bossc->y, bossc->z, bossc->r);
         Invisible = true;
         delete place1;
         delete place2;
@@ -300,9 +300,9 @@ struct TRINITY_DLL_DECL boss_skeramAI : public ScriptedAI
 
 };
 
-CreatureAI* GetAI_boss_skeram(Creature *_Creature)
+CreatureAI* GetAI_boss_skeram(Creature* pCreature)
 {
-    return new boss_skeramAI (_Creature);
+    return new boss_skeramAI (pCreature);
 }
 
 void AddSC_boss_skeram()

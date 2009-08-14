@@ -86,14 +86,14 @@ struct TRINITY_DLL_DECL boss_kruulAI : public ScriptedAI
         }
         Rand = 0;
         Summoned = DoSpawnCreature(19207, RandX, RandY, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
-        if(Summoned)
+        if (Summoned)
             (Summoned->AI())->AttackStart(victim);
     }
 
     void UpdateAI(const uint32 diff)
     {
         //Return since we have no target
-        if (!UpdateVictim() )
+        if (!UpdateVictim())
             return;
 
         //ShadowVolley_Timer
@@ -167,9 +167,9 @@ struct TRINITY_DLL_DECL boss_kruulAI : public ScriptedAI
         DoMeleeAttackIfReady();
     }
 };
-CreatureAI* GetAI_boss_kruul(Creature *_Creature)
+CreatureAI* GetAI_boss_kruul(Creature* pCreature)
 {
-    return new boss_kruulAI (_Creature);
+    return new boss_kruulAI (pCreature);
 }
 
 void AddSC_boss_kruul()

@@ -30,7 +30,7 @@ EndScriptData */
 
 struct TRINITY_DLL_DECL instance_blood_furnace : public ScriptedInstance
 {
-    instance_blood_furnace(Map *map) : ScriptedInstance(map) {Initialize();};
+    instance_blood_furnace(Map* pMap) : ScriptedInstance(pMap) {Initialize();};
 
     uint64 The_MakerGUID;
     uint64 BroggokGUID;
@@ -77,14 +77,14 @@ struct TRINITY_DLL_DECL instance_blood_furnace : public ScriptedInstance
         PrisonCell7GUID = 0;
         PrisonCell8GUID = 0;
         
-        for(uint8 i = 0; i < ENCOUNTERS; i++)
+        for(uint8 i = 0; i < ENCOUNTERS; ++i)
             Encounter[i] = NOT_STARTED;
     }
 
 
     void OnCreatureCreate(Creature *creature, bool add)
     {
-        if(!add)
+        if (!add)
             return;
 
         switch(creature->GetEntry())
@@ -97,7 +97,7 @@ struct TRINITY_DLL_DECL instance_blood_furnace : public ScriptedInstance
 
     void OnGameObjectCreate(GameObject *go, bool add)
     {
-        if(!add)
+        if (!add)
             return;
 
      if (go->GetEntry() == 181766)                //Final exit door
@@ -219,9 +219,9 @@ struct TRINITY_DLL_DECL instance_blood_furnace : public ScriptedInstance
 };
 
 
-InstanceData* GetInstanceData_instance_blood_furnace(Map* map)
+InstanceData* GetInstanceData_instance_blood_furnace(Map* pMap)
 {
-    return new instance_blood_furnace(map);
+    return new instance_blood_furnace(pMap);
 }
 
 void AddSC_instance_blood_furnace()

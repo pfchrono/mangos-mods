@@ -35,7 +35,7 @@ EndContentData */
 ## go_gauntlet_gate (this is the _first_ of the gauntlet gates, two exist)
 ######*/
 
-bool GOHello_go_gauntlet_gate(Player *player, GameObject* _GO)
+bool GOHello_go_gauntlet_gate(Player* pPlayer, GameObject* _GO)
 {
     ScriptedInstance* pInstance = _GO->GetInstanceData();
 
@@ -45,7 +45,7 @@ bool GOHello_go_gauntlet_gate(Player *player, GameObject* _GO)
     if (pInstance->GetData(TYPE_BARON_RUN) != NOT_STARTED)
         return false;
 
-    if (Group *pGroup = player->GetGroup())
+    if (Group *pGroup = pPlayer->GetGroup())
     {
         for(GroupReference *itr = pGroup->GetFirstMember(); itr != NULL; itr = itr->next())
         {
@@ -58,10 +58,10 @@ bool GOHello_go_gauntlet_gate(Player *player, GameObject* _GO)
                 pGroupie->GetMap() == _GO->GetMap())
                 pGroupie->CastSpell(pGroupie,SPELL_BARON_ULTIMATUM,true);
         }
-    } else if (player->GetQuestStatus(QUEST_DEAD_MAN_PLEA) == QUEST_STATUS_INCOMPLETE &&
-                !player->HasAura(SPELL_BARON_ULTIMATUM) &&
-                player->GetMap() == _GO->GetMap())
-                player->CastSpell(player,SPELL_BARON_ULTIMATUM,true);
+    } else if (pPlayer->GetQuestStatus(QUEST_DEAD_MAN_PLEA) == QUEST_STATUS_INCOMPLETE &&
+                !pPlayer->HasAura(SPELL_BARON_ULTIMATUM) &&
+                pPlayer->GetMap() == _GO->GetMap())
+                pPlayer->CastSpell(pPlayer,SPELL_BARON_ULTIMATUM,true);
 
     pInstance->SetData(TYPE_BARON_RUN,IN_PROGRESS);
     return false;
@@ -95,9 +95,9 @@ struct TRINITY_DLL_DECL mob_freed_soulAI : public ScriptedAI
     void EnterCombat(Unit* who) { }
 };
 
-CreatureAI* GetAI_mob_freed_soul(Creature *_Creature)
+CreatureAI* GetAI_mob_freed_soul(Creature* pCreature)
 {
-    return new mob_freed_soulAI (_Creature);
+    return new mob_freed_soulAI (pCreature);
 }
 
 /*######
@@ -163,9 +163,9 @@ struct TRINITY_DLL_DECL mob_restless_soulAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_mob_restless_soul(Creature *_Creature)
+CreatureAI* GetAI_mob_restless_soul(Creature* pCreature)
 {
-    return new mob_restless_soulAI (_Creature);
+    return new mob_restless_soulAI (pCreature);
 }
 
 /*######
@@ -203,7 +203,7 @@ struct TRINITY_DLL_DECL mobs_spectral_ghostly_citizenAI : public ScriptedAI
     {
         if (Tagged)
         {
-            for(uint32 i = 1; i <= 4; i++)
+            for(uint32 i = 1; i <= 4; ++i)
             {
                 float x,y,z;
                  m_creature->GetRandomPoint(m_creature->GetPositionX(),m_creature->GetPositionY(),m_creature->GetPositionZ(),20.0f,x,y,z);
@@ -258,9 +258,9 @@ struct TRINITY_DLL_DECL mobs_spectral_ghostly_citizenAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_mobs_spectral_ghostly_citizen(Creature *_Creature)
+CreatureAI* GetAI_mobs_spectral_ghostly_citizen(Creature* pCreature)
 {
-    return new mobs_spectral_ghostly_citizenAI (_Creature);
+    return new mobs_spectral_ghostly_citizenAI (pCreature);
 }
 
 void AddSC_stratholme()

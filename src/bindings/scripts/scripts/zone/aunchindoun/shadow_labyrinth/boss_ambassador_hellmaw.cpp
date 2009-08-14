@@ -149,7 +149,7 @@ struct TRINITY_DLL_DECL boss_ambassador_hellmawAI : public ScriptedAI
         {
             if (EventCheck_Timer < diff)
             {
-                if(pInstance)
+                if (pInstance)
                 {
                     if (pInstance->GetData(TYPE_OVERSEER) == DONE)
                         DoIntro();
@@ -164,10 +164,10 @@ struct TRINITY_DLL_DECL boss_ambassador_hellmawAI : public ScriptedAI
             //DoWhine("I haz no mount!", LANG_UNIVERSAL, NULL);
         }
 
-        if (!UpdateVictim() )
+        if (!UpdateVictim())
             return;
 
-        if(m_creature->HasAura(SPELL_BANISH, 0))
+        if (m_creature->HasAura(SPELL_BANISH, 0))
         {
             EnterEvadeMode();
             return;
@@ -197,9 +197,9 @@ struct TRINITY_DLL_DECL boss_ambassador_hellmawAI : public ScriptedAI
         DoMeleeAttackIfReady();
     }
 };
-CreatureAI* GetAI_boss_ambassador_hellmaw(Creature *_Creature)
+CreatureAI* GetAI_boss_ambassador_hellmaw(Creature* pCreature)
 {
-    return new boss_ambassador_hellmawAI (_Creature);
+    return new boss_ambassador_hellmawAI (pCreature);
 }
 
 void AddSC_boss_ambassador_hellmaw()

@@ -1622,6 +1622,7 @@ INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`
 (42243, -1, -1, 0.07, -1, 'Hunter - Volley'),
 (53352, -1, -1, 0.14, -1, 'Hunter - Explosive Shot (triggered)'),
 (55039, 0, 0, 0, 0, 'Item - Gnomish Lightning Generator'),
+(40293, 0, 0, 0, 0, 'Item - Siphon Essence'),
 (44425, 0.7143, -1, -1, -1, 'Mage - Arcane Barrage'),
 (30451, 0.7143, -1, -1, -1, 'Mage - Arcane Blast'),
 (1449, 0.2128, -1, -1, -1, 'Mage - Arcane Explosion'),
@@ -1993,7 +1994,8 @@ INSERT INTO `spell_target_position` (`id`, `target_map`, `target_position_x`, `t
 -- death charger
 DELETE FROM spell_area WHERE spell = 52693;
 INSERT INTO spell_area (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES
-(52693, 4298, 12687, 1, 12687, 0, 0, 0, 1);
+(52693, 4298, 12687, 1, 12687, 0, 0, 2, 1);
+update spell_area set gender=2 where spell in (33836,50426,46023,52693);
 
 DELETE FROM `npc_spellclick_spells` WHERE `spell_id` IN (
 54568, 54575, 52263, 52280, 52447);
@@ -2051,6 +2053,39 @@ INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`) VALUES
 (27929, 1, 16060), # To Anchor 2 - Gothik
 (27935, 1, 16060), # To Anchor 1 - Gothik
 (27936, 1, 16060); # To Anchor 2 - Gothik
+
+-- --------
+-- ULDUAR
+-- --------
+INSERT INTO creature_template (entry, vehicleid) VALUES
+(33113, 340), # Flame Leviathan
+(33114, 341) # Flame Leviathan Seat
+ON DUPLICATE KEY UPDATE
+vehicleid = VALUES(vehicleid);
+
+UPDATE creature_template SET flags_extra = 128 WHERE entry IN (33114);
+
+INSERT INTO creature_template (entry, spell1, spell2, spell3, spell4, spell5, spell6, vehicleid) VALUES
+(33062, 62974, 62286, 62299, 64660, 0, 0, 335), # Salvaged Chopper
+(33109, 62306, 62490, 62308, 62324, 0, 0, 338), # Salvaged Demolisher
+(33167, 62634, 64979, 62479, 62471, 0, 62428, 345), # Salvaged Demolisher Mechanic Seat
+(33060, 62345, 62522, 62346, 0, 0, 0, 336), # Salvaged Siege Engine
+(33067, 62358, 62359, 64677, 0, 0, 0, 337) # Salvaged Siege Turret
+ON DUPLICATE KEY UPDATE
+spell1 = VALUES(spell1),
+spell2 = VALUES(spell2),
+spell3 = VALUES(spell3),
+spell4 = VALUES(spell4),
+spell5 = VALUES(spell5),
+spell6 = VALUES(spell6),
+vehicleid = VALUES(vehicleid);
+
+DELETE FROM `spell_script_target` WHERE `entry` IN (62374,62399);
+INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`) VALUES
+(62374, 1, 33060), # Pursued
+(62374, 1, 33109),
+(62399, 1, 33139); # Overload Circuit
+
 
 -- --------
 -- WINTERGRASP

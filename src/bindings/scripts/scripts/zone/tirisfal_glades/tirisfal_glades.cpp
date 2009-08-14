@@ -127,14 +127,14 @@ struct TRINITY_DLL_DECL npc_calvin_montagueAI : public ScriptedAI
         DoMeleeAttackIfReady();
     }
 };
-CreatureAI* GetAI_npc_calvin_montague(Creature *_Creature)
+CreatureAI* GetAI_npc_calvin_montague(Creature* pCreature)
 {
-    return new npc_calvin_montagueAI (_Creature);
+    return new npc_calvin_montagueAI (pCreature);
 }
 
 bool QuestAccept_npc_calvin_montague(Player* pPlayer, Creature* pCreature, Quest const* quest)
 {
-    if( quest->GetQuestId() == QUEST_590 )
+    if (quest->GetQuestId() == QUEST_590)
     {
         pCreature->setFaction(FACTION_HOSTILE);
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_2);
