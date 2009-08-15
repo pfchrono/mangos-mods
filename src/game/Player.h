@@ -1472,18 +1472,18 @@ class MANGOS_DLL_SPEC Player : public Unit
         void LearnTalent(uint32 talentId, uint32 talentRank);
         void LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank);
 
-        bool AddTalent(uint32 spell, uint8 spec, bool learning);
-        bool HasTalent(uint32 spell_id, uint8 spec) const;
+        bool AddTalent(uint32 spell, uint32 spec, bool learning);
+        bool HasTalent(uint32 spell_id, uint32 spec) const;
 
         uint32 CalculateTalentsPoints() const;
 
         // Dual Spec
-        void UpdateSpecCount(uint8 count);
+        void UpdateSpecCount(uint32 count);
         uint32 GetActiveSpec() { return m_activeSpec; }
         void SetActiveSpec(uint8 spec) { m_activeSpec = spec; }
         uint8 GetSpecsCount() { return m_specsCount; }
         void SetSpecsCount(uint8 count) { m_specsCount = count; }
-        void ActivateSpec(uint8 spec);
+        void ActivateSpec(uint32 spec);
 
         void InitGlyphsForLevel();
         void SetGlyphSlot(uint8 slot, uint32 slottype) { SetUInt32Value(PLAYER_FIELD_GLYPH_SLOTS_1 + slot, slottype); }

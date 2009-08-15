@@ -426,7 +426,7 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
     m_activeSpec = 0;
     m_specsCount = 0;
 
-    for (uint8 i = 0; i < MAX_TALENT_SPECS; ++i)
+    for (int i = 0; i < MAX_TALENT_SPECS; ++i)
     {
         for (int g = 0; g < MAX_GLYPH_SLOT_INDEX; ++g)
             m_Glyphs[i][g] = 0;
@@ -500,7 +500,7 @@ Player::~Player ()
     for (PlayerSpellMap::const_iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
         delete itr->second;
 
-    for (uint8 i = 0; i < MAX_TALENT_SPECS; ++i)
+    for (int i = 0; i < MAX_TALENT_SPECS; ++i)
     {
         for (PlayerTalentMap::const_iterator itr = m_talents[i]->begin(); itr != m_talents[i]->end(); ++itr)
             delete itr->second;
@@ -714,6 +714,7 @@ bool Player::Create( uint32 guidlow, const std::string& name, uint8 race, uint8 
     for (PlayerCreateInfoActions::const_iterator action_itr = info->action.begin(); action_itr != info->action.end(); ++action_itr)
         addActionButton(action_itr->button,action_itr->action,action_itr->type);
 
+    _SaveActions();
     // original items
     CharStartOutfitEntry const* oEntry = NULL;
     for (uint32 i = 1; i < sCharStartOutfitStore.GetNumRows(); ++i)
@@ -2556,6 +2557,9 @@ void Player::InitTalentForLevel()
 
         uint32 talentPointsForLevel = CalculateTalentsPoints();
 
+        if(m_usedTalentCount + talentPointsForLevel == 0) // Sanity Check for 0 used and 0 for level
+            resetTalents(true);
+
         // if used more that have then reset
         if(m_usedTalentCount > talentPointsForLevel)
         {
@@ -2566,7 +2570,7 @@ void Player::InitTalentForLevel()
         }
         // else update amount of free points
         else
-            SetFreeTalentPoints(talentPointsForLevel-m_usedTalentCount);
+            SetFreeTalentPoints(talentPointsForLevel - m_usedTalentCount);
     }
 
     if(!GetSession()->PlayerLoading())
@@ -2869,7 +2873,7 @@ void Player::AddNewMailDeliverTime(time_t deliver_time)
     }
 }
 
-bool Player::AddTalent(uint32 spell_id, uint8 spec, bool learning)
+bool Player::AddTalent(uint32 spell_id, uint32 spec, bool learning)
 {
     SpellEntry const *spellInfo = sSpellStore.LookupEntry(spell_id);
     if (!spellInfo)
@@ -4010,7 +4014,7 @@ bool Player::HasSpell(uint32 spell) const
         !itr->second->disabled);
 }
 
-bool Player::HasTalent(uint32 spell, uint8 spec) const
+bool Player::HasTalent(uint32 spell, uint32 spec) const
 {
     PlayerTalentMap::const_iterator itr = m_talents[spec]->find(spell);
     return (itr != m_talents[spec]->end() && itr->second->state != PLAYERSPELL_REMOVED);
@@ -21645,7 +21649,7 @@ void Player::_LoadTalents(QueryResult *result)
 
 void Player::_SaveTalents()
 {
-    for (uint8 i = 0; i < MAX_TALENT_SPECS; ++i)
+    for (int i = 0; i < MAX_TALENT_SPECS; ++i)
     {
         for (PlayerTalentMap::iterator itr = m_talents[i]->begin(), next = m_talents[i]->begin(); itr != m_talents[i]->end();)
         {
@@ -21669,7 +21673,7 @@ void Player::_SaveTalents()
     }
 }
 
-void Player::UpdateSpecCount(uint8 count)
+void Player::UpdateSpecCount(uint32 count)
 {
     if(GetSpecsCount() == count)
         return;
@@ -21700,7 +21704,7 @@ void Player::UpdateSpecCount(uint8 count)
     SendTalentsInfoData(false);
 }
 
-void Player::ActivateSpec(uint8 spec)
+void Player::ActivateSpec(uint32 spec)
 {
     if(GetActiveSpec() == spec)
         return;
@@ -21710,7 +21714,7 @@ void Player::ActivateSpec(uint8 spec)
 
     uint32 const* talentTabIds = GetTalentTabPages(getClass());
     
-    for(uint8 i = 0; i < 3; ++i)
+    for(uint32 i = 0; i < 3; ++i)
     {
         uint32 talentTabId = talentTabIds[i];
 
@@ -21737,7 +21741,7 @@ void Player::ActivateSpec(uint8 spec)
     }
 
     // set glyphs
-    for (uint8 slot = 0; slot < MAX_GLYPH_SLOT_INDEX; ++slot)
+    for (int slot = 0; slot < MAX_GLYPH_SLOT_INDEX; ++slot) 
     {
         // remove secondary glyph
         if(uint32 oldglyph = m_Glyphs[m_activeSpec][slot])
@@ -21751,7 +21755,7 @@ void Player::ActivateSpec(uint8 spec)
 
     SetActiveSpec(spec);
 
-    for(uint8 i = 0; i < 3; ++i)
+    for(uint32 i = 0; i < 3; ++i)
     {
         uint32 talentTabId = talentTabIds[i];
 
@@ -21778,7 +21782,7 @@ void Player::ActivateSpec(uint8 spec)
     }
 
     // set glyphs
-    for (uint8 slot = 0; slot < MAX_GLYPH_SLOT_INDEX; ++slot) 
+    for (int slot = 0; slot < MAX_GLYPH_SLOT_INDEX; ++slot) 
     {
         uint32 glyph = m_Glyphs[m_activeSpec][slot];
         // apply primary glyph
@@ -21792,7 +21796,7 @@ void Player::ActivateSpec(uint8 spec)
         SetGlyph(slot, glyph);
     }
 
-    m_usedTalentCount = (uint32)(sizeof(m_talents[spec]) / sizeof(m_talents[spec][0])); // This is not right, not factoring in talent ranks :(
+    //m_usedTalentCount = (uint32)(sizeof(m_talents[spec]) / sizeof(m_talents[spec][0])); // This is not right, not factoring in talent ranks :(
     InitTalentForLevel();
 
     QueryResult *result = CharacterDatabase.PQuery("SELECT button,action,type FROM character_action WHERE guid = '%u' AND spec = '%u' ORDER BY button", GetGUIDLow(), m_activeSpec);
@@ -21800,8 +21804,9 @@ void Player::ActivateSpec(uint8 spec)
     {
         _LoadActions(result);
     }
-    delete result; // -- Lets delete our result and free memory
+
     UnsummonPetTemporaryIfAny();
     SendActionButtons();
     SetPower(getPowerType(), 0);
+    this->SaveToDB();
 }
