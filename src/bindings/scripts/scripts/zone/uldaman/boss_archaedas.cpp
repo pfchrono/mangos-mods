@@ -103,7 +103,7 @@ struct TRINITY_DLL_DECL boss_archaedasAI : public ScriptedAI
     {
         // Being woken up from the altar, start the awaken sequence
         if (spell == GetSpellStore()->LookupEntry(SPELL_ARCHAEDAS_AWAKEN)) {
-            DoYell(SAY_AGGRO,LANG_UNIVERSAL,NULL);
+            m_creature->MonsterYell(SAY_AGGRO,LANG_UNIVERSAL,NULL);
             DoPlaySoundToSet(m_creature,SOUND_AGGRO);
             Awaken_Timer = 4000;
             wakingUp = true;
@@ -112,7 +112,7 @@ struct TRINITY_DLL_DECL boss_archaedasAI : public ScriptedAI
 
     void KilledUnit(Unit *victim)
     {
-        DoYell(SAY_KILL,LANG_UNIVERSAL, NULL);
+        m_creature->MonsterYell(SAY_KILL,LANG_UNIVERSAL, NULL);
         DoPlaySoundToSet(m_creature, SOUND_KILL);
     }
 
@@ -150,7 +150,7 @@ struct TRINITY_DLL_DECL boss_archaedasAI : public ScriptedAI
             ActivateMinion(pInstance->GetData64(8),true);   // EarthenGuardian4
             ActivateMinion(pInstance->GetData64(9),true);   // EarthenGuardian5
             ActivateMinion(pInstance->GetData64(10),false); // EarthenGuardian6
-            DoYell(SAY_SUMMON,LANG_UNIVERSAL, NULL);
+            m_creature->MonsterYell(SAY_SUMMON,LANG_UNIVERSAL, NULL);
             DoPlaySoundToSet(m_creature, SOUND_SUMMON);
             guardiansAwake = true;
         }
@@ -161,7 +161,7 @@ struct TRINITY_DLL_DECL boss_archaedasAI : public ScriptedAI
             ActivateMinion(pInstance->GetData64(2),true);    // VaultWalker2
             ActivateMinion(pInstance->GetData64(3),true);    // VaultWalker3
             ActivateMinion(pInstance->GetData64(4),false);    // VaultWalker4
-            DoYell(SAY_SUMMON2, LANG_UNIVERSAL, NULL);
+            m_creature->MonsterYell(SAY_SUMMON2, LANG_UNIVERSAL, NULL);
             DoPlaySoundToSet(m_creature, SOUND_SUMMON2);
             vaultWalkersAwake = true;
         }
@@ -300,10 +300,10 @@ uint64 altarOfArchaedasCount[5];
 int32 altarOfArchaedasCounter=0;
 
 
-bool GOHello_go_altar_of_archaedas(Player* pPlayer, GameObject* go)
+bool GOHello_go_altar_of_archaedas(Player* pPlayer, GameObject* pGo)
 {
     bool alreadyUsed;
-    go->AddUse ();
+    pGo->AddUse ();
 
     alreadyUsed = false;
     for (uint32 loop=0; loop<5; loop++) {
@@ -414,14 +414,14 @@ EndScriptData */
 static uint64 altarOfTheKeeperCount[5];
 static uint32 altarOfTheKeeperCounter=0;
 
-bool GOHello_go_altar_of_the_keepers(Player* pPlayer, GameObject* go)
+bool GOHello_go_altar_of_the_keepers(Player* pPlayer, GameObject* pGo)
 {
     ScriptedInstance* pInstance = (pPlayer->GetInstanceData());
     if (!pInstance) return true;
 
     bool alreadyUsed;
 
-    go->AddUse ();
+    pGo->AddUse ();
 
     alreadyUsed = false;
     for (uint32 loop=0; loop<5; ++loop)

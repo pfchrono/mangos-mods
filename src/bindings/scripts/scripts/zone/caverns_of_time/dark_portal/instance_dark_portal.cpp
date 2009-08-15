@@ -24,7 +24,7 @@ EndScriptData */
 #include "precompiled.h"
 #include "def_dark_portal.h"
 
-#define ENCOUNTERS              2
+#define MAX_ENCOUNTER              2
 
 #define C_MEDIVH                15608
 #define C_TIME_RIFT             17838
@@ -63,7 +63,7 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
 {
     instance_dark_portal(Map* pMap) : ScriptedInstance(pMap) {Initialize();};
 
-    uint32 Encounter[ENCOUNTERS];
+    uint32 m_auiEncounter[MAX_ENCOUNTER];
 
     uint32 mRiftPortalCount;
     uint32 mShieldPercent;
@@ -83,8 +83,7 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
 
     void Clear()
     {
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
-            Encounter[i] = NOT_STARTED;
+        memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
 
         mRiftPortalCount    = 0;
         mShieldPercent      = 100;
@@ -96,25 +95,11 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
         NextPortal_Timer    = 0;
     }
 
-    void UpdateBMWorldState(uint32 id, uint32 state)
-    {
-        Map::PlayerList const& players = instance->GetPlayers();
-
-        if (!players.isEmpty())
-        {
-            for(Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-            {
-                if (Player* pPlayer = itr->getSource())
-                    pPlayer->SendUpdateWorldState(id,state);
-            }
-        }else debug_log("TSCR: Instance Black Portal: UpdateBMWorldState, but PlayerList is empty!");
-    }
-
     void InitWorldState(bool Enable = true)
     {
-        UpdateBMWorldState(WORLD_STATE_BM,Enable ? 1 : 0);
-        UpdateBMWorldState(WORLD_STATE_BM_SHIELD,100);
-        UpdateBMWorldState(WORLD_STATE_BM_RIFT,0);
+        DoUpdateWorldState(WORLD_STATE_BM,Enable ? 1 : 0);
+        DoUpdateWorldState(WORLD_STATE_BM_SHIELD, 100);
+        DoUpdateWorldState(WORLD_STATE_BM_RIFT, 0);
     }
 
     bool IsEncounterInProgress()
@@ -133,10 +118,10 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
         pPlayer->SendUpdateWorldState(WORLD_STATE_BM,0);
     }
 
-    void OnCreatureCreate(Creature *creature, bool add)
+    void OnCreatureCreate(Creature* pCreature, bool add)
     {
-        if (creature->GetEntry() == C_MEDIVH)
-            MedivhGUID = creature->GetGUID();
+        if (pCreature->GetEntry() == C_MEDIVH)
+            MedivhGUID = pCreature->GetGUID();
     }
 
     //what other conditions to check?
@@ -170,10 +155,11 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
         switch(type)
         {
         case TYPE_MEDIVH:
-            if (data == SPECIAL && Encounter[0] == IN_PROGRESS)
+            if (data == SPECIAL && m_auiEncounter[0] == IN_PROGRESS)
             {
                 --mShieldPercent;
-                UpdateBMWorldState(WORLD_STATE_BM_SHIELD,mShieldPercent);
+
+                DoUpdateWorldState(WORLD_STATE_BM_SHIELD, mShieldPercent);
 
                 if (!mShieldPercent)
                 {
@@ -182,8 +168,8 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
                         if (pMedivh->isAlive())
                         {
                             pMedivh->DealDamage(pMedivh, pMedivh->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
-                            Encounter[0] = FAIL;
-                            Encounter[1] = NOT_STARTED;
+                            m_auiEncounter[0] = FAIL;
+                            m_auiEncounter[1] = NOT_STARTED;
                         }
                     }
                 }
@@ -194,7 +180,7 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
                 {
                     debug_log("TSCR: Instance Dark Portal: Starting event.");
                     InitWorldState();
-                    Encounter[1] = IN_PROGRESS;
+                    m_auiEncounter[1] = IN_PROGRESS;
                     NextPortal_Timer = 15000;
                 }
 
@@ -220,7 +206,7 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
                     }
                 }
 
-                Encounter[0] = data;
+                m_auiEncounter[0] = data;
             }
             break;
         case TYPE_RIFT:
@@ -230,7 +216,7 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
                     NextPortal_Timer = 5000;
             }
             else
-                Encounter[1] = data;
+                m_auiEncounter[1] = data;
             break;
         }
     }
@@ -240,9 +226,9 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
         switch(type)
         {
         case TYPE_MEDIVH:
-            return Encounter[0];
+            return m_auiEncounter[0];
         case TYPE_RIFT:
-            return Encounter[1];
+            return m_auiEncounter[1];
         case DATA_PORTAL_COUNT:
             return mRiftPortalCount;
         case DATA_SHIELD:
@@ -323,7 +309,7 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
 
     void Update(uint32 diff)
     {
-        if (Encounter[1] != IN_PROGRESS)
+        if (m_auiEncounter[1] != IN_PROGRESS)
             return;
 
         //add delay timer?
@@ -338,7 +324,8 @@ struct TRINITY_DLL_DECL instance_dark_portal : public ScriptedInstance
             if (NextPortal_Timer <= diff)
             {
                 ++mRiftPortalCount;
-                UpdateBMWorldState(WORLD_STATE_BM_RIFT,mRiftPortalCount);
+
+                DoUpdateWorldState(WORLD_STATE_BM_RIFT, mRiftPortalCount);
 
                 DoSpawnPortal();
                 NextPortal_Timer = RiftWaves[GetRiftWaveId()].NextPortalTime;

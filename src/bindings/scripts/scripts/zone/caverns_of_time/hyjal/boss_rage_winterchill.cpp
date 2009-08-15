@@ -35,7 +35,7 @@ struct TRINITY_DLL_DECL boss_rage_winterchillAI : public hyjal_trashAI
     boss_rage_winterchillAI(Creature *c) : hyjal_trashAI(c)
     {
         pInstance = c->GetInstanceData();
-        go = false;
+        pGo = false;
         pos = 0;
     }
 
@@ -43,7 +43,7 @@ struct TRINITY_DLL_DECL boss_rage_winterchillAI : public hyjal_trashAI
     uint32 DecayTimer;
     uint32 NovaTimer;
     uint32 IceboltTimer;
-    bool go;
+    bool pGo;
     uint32 pos;
 
     void Reset()
@@ -63,7 +63,7 @@ struct TRINITY_DLL_DECL boss_rage_winterchillAI : public hyjal_trashAI
         if (pInstance && IsEvent)
             pInstance->SetData(DATA_RAGEWINTERCHILLEVENT, IN_PROGRESS);
         DoPlaySoundToSet(m_creature, SOUND_ONAGGRO);
-        DoYell(SAY_ONAGGRO, LANG_UNIVERSAL, NULL);
+        m_creature->MonsterYell(SAY_ONAGGRO, LANG_UNIVERSAL, 0);
     }
 
     void KilledUnit(Unit *victim)
@@ -72,11 +72,11 @@ struct TRINITY_DLL_DECL boss_rage_winterchillAI : public hyjal_trashAI
         {
             case 0:
                 DoPlaySoundToSet(m_creature, SOUND_ONSLAY1);
-                DoYell(SAY_ONSLAY1, LANG_UNIVERSAL, NULL);
+                m_creature->MonsterYell(SAY_ONSLAY1, LANG_UNIVERSAL, NULL);
                 break;
             case 1:
                 DoPlaySoundToSet(m_creature, SOUND_ONSLAY2);
-                DoYell(SAY_ONSLAY2, LANG_UNIVERSAL, NULL);
+                m_creature->MonsterYell(SAY_ONSLAY2, LANG_UNIVERSAL, NULL);
                 break;
         }
     }
@@ -98,7 +98,7 @@ struct TRINITY_DLL_DECL boss_rage_winterchillAI : public hyjal_trashAI
         if (pInstance && IsEvent)
             pInstance->SetData(DATA_RAGEWINTERCHILLEVENT, DONE);
         DoPlaySoundToSet(m_creature, SOUND_ONDEATH);
-        DoYell(SAY_ONDEATH, LANG_UNIVERSAL, NULL);
+        m_creature->MonsterYell(SAY_ONDEATH, LANG_UNIVERSAL, NULL);
     }
 
     void UpdateAI(const uint32 diff)
@@ -107,9 +107,9 @@ struct TRINITY_DLL_DECL boss_rage_winterchillAI : public hyjal_trashAI
         {
             //Must update npc_escortAI
             npc_escortAI::UpdateAI(diff);
-            if (!go)
+            if (!pGo)
             {
-                go = true;
+                pGo = true;
                 if (pInstance)
                 {
                     AddWaypoint(0, 4896.08,    -1576.35,    1333.65);
@@ -143,11 +143,11 @@ struct TRINITY_DLL_DECL boss_rage_winterchillAI : public hyjal_trashAI
             {
                 case 0:
                     DoPlaySoundToSet(m_creature, SOUND_DECAY1);
-                    DoYell(SAY_DECAY1, LANG_UNIVERSAL, NULL);
+                    m_creature->MonsterYell(SAY_DECAY1, LANG_UNIVERSAL, NULL);
                     break;
                 case 1:
                     DoPlaySoundToSet(m_creature, SOUND_DECAY2);
-                    DoYell(SAY_DECAY2, LANG_UNIVERSAL, NULL);
+                    m_creature->MonsterYell(SAY_DECAY2, LANG_UNIVERSAL, NULL);
                     break;
             }
         }else DecayTimer -= diff;
@@ -159,11 +159,11 @@ struct TRINITY_DLL_DECL boss_rage_winterchillAI : public hyjal_trashAI
             {
                 case 0:
                     DoPlaySoundToSet(m_creature, SOUND_NOVA1);
-                    DoYell(SAY_NOVA1, LANG_UNIVERSAL, NULL);
+                    m_creature->MonsterYell(SAY_NOVA1, LANG_UNIVERSAL, NULL);
                     break;
                 case 1:
                     DoPlaySoundToSet(m_creature, SOUND_NOVA2);
-                    DoYell(SAY_NOVA2, LANG_UNIVERSAL, NULL);
+                    m_creature->MonsterYell(SAY_NOVA2, LANG_UNIVERSAL, NULL);
                     break;
             }
         }else NovaTimer -= diff;

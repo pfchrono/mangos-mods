@@ -32,7 +32,7 @@ struct TRINITY_DLL_DECL boss_azgalorAI : public hyjal_trashAI
     boss_azgalorAI(Creature *c) : hyjal_trashAI(c)
     {
         pInstance = c->GetInstanceData();
-        go = false;
+        pGo = false;
         pos = 0;
         SpellEntry *TempSpell = GET_SPELL(SPELL_HOWL_OF_AZGALOR);
         if (TempSpell)
@@ -46,7 +46,7 @@ struct TRINITY_DLL_DECL boss_azgalorAI : public hyjal_trashAI
     uint32 EnrageTimer;
     bool enraged;
 
-    bool go;
+    bool pGo;
     uint32 pos;
 
     void Reset()
@@ -68,7 +68,7 @@ struct TRINITY_DLL_DECL boss_azgalorAI : public hyjal_trashAI
         if (pInstance && IsEvent)
             pInstance->SetData(DATA_AZGALOREVENT, IN_PROGRESS);
         DoPlaySoundToSet(m_creature, SOUND_ONAGGRO);
-        DoYell(SAY_ONAGGRO, LANG_UNIVERSAL, NULL);
+        m_creature->MonsterYell(SAY_ONAGGRO, LANG_UNIVERSAL, NULL);
     }
 
     void KilledUnit(Unit *victim)
@@ -77,15 +77,15 @@ struct TRINITY_DLL_DECL boss_azgalorAI : public hyjal_trashAI
         {
             case 0:
                 DoPlaySoundToSet(m_creature, SOUND_ONSLAY1);
-                DoYell(SAY_ONSLAY1, LANG_UNIVERSAL, NULL);
+                m_creature->MonsterYell(SAY_ONSLAY1, LANG_UNIVERSAL, NULL);
                 break;
             case 1:
                 DoPlaySoundToSet(m_creature, SOUND_ONSLAY2);
-                DoYell(SAY_ONSLAY2, LANG_UNIVERSAL, NULL);
+                m_creature->MonsterYell(SAY_ONSLAY2, LANG_UNIVERSAL, NULL);
                 break;
             case 2:
                 DoPlaySoundToSet(m_creature, SOUND_ONSLAY3);
-                DoYell(SAY_ONSLAY3, LANG_UNIVERSAL, NULL);
+                m_creature->MonsterYell(SAY_ONSLAY3, LANG_UNIVERSAL, NULL);
                 break;
         }
     }
@@ -115,9 +115,9 @@ struct TRINITY_DLL_DECL boss_azgalorAI : public hyjal_trashAI
         {
             //Must update npc_escortAI
             npc_escortAI::UpdateAI(diff);
-            if (!go)
+            if (!pGo)
             {
-                go = true;
+                pGo = true;
                 if (pInstance)
                 {
                     AddWaypoint(0, 5492.91,    -2404.61,    1462.63);

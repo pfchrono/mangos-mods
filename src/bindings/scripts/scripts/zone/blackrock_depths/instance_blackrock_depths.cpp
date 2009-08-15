@@ -36,7 +36,7 @@ update `instance_template` set `script`='instance_blackrock_depths' where `map`=
 
 enum
 {
-    ENCOUNTERS              = 6,
+    MAX_ENCOUNTER           = 6,
 
     NPC_EMPEROR             = 9019,
     NPC_PHALANX             = 9502,
@@ -74,7 +74,7 @@ struct TRINITY_DLL_DECL instance_blackrock_depths : public ScriptedInstance
 {
     instance_blackrock_depths(Map* pMap) : ScriptedInstance(pMap) {Initialize();};
 
-    uint32 Encounter[ENCOUNTERS];
+    uint32 m_auiEncounter[MAX_ENCOUNTER];
     std::string str_data;
 
     uint64 EmperorGUID;
@@ -108,6 +108,8 @@ struct TRINITY_DLL_DECL instance_blackrock_depths : public ScriptedInstance
 
     void Initialize()
     {
+        memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+
         EmperorGUID = 0;
         PhalanxGUID = 0;
 
@@ -136,56 +138,54 @@ struct TRINITY_DLL_DECL instance_blackrock_depths : public ScriptedInstance
         TombTimer = TIMER_TOMBOFTHESEVEN;
         TombEventCounter = 0;
 
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
-            Encounter[i] = NOT_STARTED;
         for(uint8 i = 0; i < 7; ++i)
             TombBossGUIDs[i] = 0;
     }
 
-    void OnCreatureCreate(Creature *creature, bool add)
+    void OnCreatureCreate(Creature* pCreature, bool add)
     {
-        switch(creature->GetEntry())
+        switch(pCreature->GetEntry())
         {
-        case NPC_EMPEROR: EmperorGUID = creature->GetGUID(); break;
-        case NPC_PHALANX: PhalanxGUID = creature->GetGUID(); break;
-        case NPC_DOOMREL: TombBossGUIDs[0] = creature->GetGUID(); break;
-        case NPC_DOPEREL: TombBossGUIDs[1] = creature->GetGUID(); break;
-        case NPC_HATEREL: TombBossGUIDs[2] = creature->GetGUID(); break;
-        case NPC_VILEREL: TombBossGUIDs[3] = creature->GetGUID(); break;
-        case NPC_SEETHREL: TombBossGUIDs[4] = creature->GetGUID(); break;
-        case NPC_GLOOMREL: TombBossGUIDs[5] = creature->GetGUID(); break;
-        case NPC_ANGERREL: TombBossGUIDs[6] = creature->GetGUID(); break;
+        case NPC_EMPEROR: EmperorGUID = pCreature->GetGUID(); break;
+        case NPC_PHALANX: PhalanxGUID = pCreature->GetGUID(); break;
+        case NPC_DOOMREL: TombBossGUIDs[0] = pCreature->GetGUID(); break;
+        case NPC_DOPEREL: TombBossGUIDs[1] = pCreature->GetGUID(); break;
+        case NPC_HATEREL: TombBossGUIDs[2] = pCreature->GetGUID(); break;
+        case NPC_VILEREL: TombBossGUIDs[3] = pCreature->GetGUID(); break;
+        case NPC_SEETHREL: TombBossGUIDs[4] = pCreature->GetGUID(); break;
+        case NPC_GLOOMREL: TombBossGUIDs[5] = pCreature->GetGUID(); break;
+        case NPC_ANGERREL: TombBossGUIDs[6] = pCreature->GetGUID(); break;
         }
     }
 
-    void OnGameObjectCreate(GameObject *go, bool add)
+    void OnGameObjectCreate(GameObject* pGo, bool add)
     {
-        switch(go->GetEntry())
+        switch(pGo->GetEntry())
         {
-        case GO_ARENA1: GoArena1GUID = go->GetGUID(); break;
-        case GO_ARENA2: GoArena2GUID = go->GetGUID(); break;
-        case GO_ARENA3: GoArena3GUID = go->GetGUID(); break;
-        case GO_ARENA4: GoArena4GUID = go->GetGUID(); break;
-        case GO_SHADOW_LOCK: GoShadowLockGUID = go->GetGUID(); break;
-        case GO_SHADOW_MECHANISM: GoShadowMechGUID = go->GetGUID(); break;
-        case GO_SHADOW_GIANT_DOOR: GoShadowGiantGUID = go->GetGUID(); break;
-        case GO_SHADOW_DUMMY: GoShadowDummyGUID = go->GetGUID(); break;
-        case GO_BAR_KEG_SHOT: GoBarKegGUID = go->GetGUID(); break;
-        case GO_BAR_KEG_TRAP: GoBarKegTrapGUID = go->GetGUID(); break;
-        case GO_BAR_DOOR: GoBarDoorGUID = go->GetGUID(); break;
-        case GO_TOMB_ENTER: GoTombEnterGUID = go->GetGUID(); break;
+        case GO_ARENA1: GoArena1GUID = pGo->GetGUID(); break;
+        case GO_ARENA2: GoArena2GUID = pGo->GetGUID(); break;
+        case GO_ARENA3: GoArena3GUID = pGo->GetGUID(); break;
+        case GO_ARENA4: GoArena4GUID = pGo->GetGUID(); break;
+        case GO_SHADOW_LOCK: GoShadowLockGUID = pGo->GetGUID(); break;
+        case GO_SHADOW_MECHANISM: GoShadowMechGUID = pGo->GetGUID(); break;
+        case GO_SHADOW_GIANT_DOOR: GoShadowGiantGUID = pGo->GetGUID(); break;
+        case GO_SHADOW_DUMMY: GoShadowDummyGUID = pGo->GetGUID(); break;
+        case GO_BAR_KEG_SHOT: GoBarKegGUID = pGo->GetGUID(); break;
+        case GO_BAR_KEG_TRAP: GoBarKegTrapGUID = pGo->GetGUID(); break;
+        case GO_BAR_DOOR: GoBarDoorGUID = pGo->GetGUID(); break;
+        case GO_TOMB_ENTER: GoTombEnterGUID = pGo->GetGUID(); break;
         case GO_TOMB_EXIT: 
-            GoTombExitGUID = go->GetGUID();
+            GoTombExitGUID = pGo->GetGUID();
             if (GhostKillCount >= 7)
-                HandleGameObject(0, true, go);
+                HandleGameObject(0, true, pGo);
             else
-                HandleGameObject(0, false, go);
+                HandleGameObject(0, false, pGo);
             break;
-        case GO_LYCEUM: GoLyceumGUID = go->GetGUID(); break;
-        case GO_GOLEM_ROOM_N: GoGolemNGUID = go->GetGUID(); break;
-        case GO_GOLEM_ROOM_S: GoGolemSGUID = go->GetGUID(); break;
-        case GO_THONE_ROOM: GoThoneGUID = go->GetGUID(); break;
-        case GO_CHEST_SEVEN: GoChestGUID = go->GetGUID(); break;
+        case GO_LYCEUM: GoLyceumGUID = pGo->GetGUID(); break;
+        case GO_GOLEM_ROOM_N: GoGolemNGUID = pGo->GetGUID(); break;
+        case GO_GOLEM_ROOM_S: GoGolemSGUID = pGo->GetGUID(); break;
+        case GO_THONE_ROOM: GoThoneGUID = pGo->GetGUID(); break;
+        case GO_CHEST_SEVEN: GoChestGUID = pGo->GetGUID(); break;
         }
     }
 
@@ -212,25 +212,25 @@ struct TRINITY_DLL_DECL instance_blackrock_depths : public ScriptedInstance
         switch(type)
         {
         case TYPE_RING_OF_LAW:
-            Encounter[0] = data;
+            m_auiEncounter[0] = data;
             break;
         case TYPE_VAULT:
-            Encounter[1] = data;
+            m_auiEncounter[1] = data;
             break;
         case TYPE_BAR:
             if (data == SPECIAL)
                 ++BarAleCount;
             else
-                Encounter[2] = data;
+                m_auiEncounter[2] = data;
             break;
         case TYPE_TOMB_OF_SEVEN:
-            Encounter[3] = data;
+            m_auiEncounter[3] = data;
             break;
         case TYPE_LYCEUM:
-            Encounter[4] = data;
+            m_auiEncounter[4] = data;
             break;
         case TYPE_IRON_HALL:
-            Encounter[5] = data;
+            m_auiEncounter[5] = data;
             break;
         case DATA_GHOSTKILL:
             GhostKillCount += data;
@@ -242,8 +242,8 @@ struct TRINITY_DLL_DECL instance_blackrock_depths : public ScriptedInstance
             OUT_SAVE_INST_DATA;
 
             std::ostringstream saveStream;
-            saveStream << Encounter[0] << " " << Encounter[1] << " " << Encounter[2] << " "
-                << Encounter[3] << " " << Encounter[4] << " " << Encounter[5] << " " << GhostKillCount;
+            saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2] << " "
+                << m_auiEncounter[3] << " " << m_auiEncounter[4] << " " << m_auiEncounter[5] << " " << GhostKillCount;
 
             str_data = saveStream.str();
 
@@ -257,20 +257,20 @@ struct TRINITY_DLL_DECL instance_blackrock_depths : public ScriptedInstance
         switch(type)
         {
         case TYPE_RING_OF_LAW:
-            return Encounter[0];
+            return m_auiEncounter[0];
         case TYPE_VAULT:
-            return Encounter[1];
+            return m_auiEncounter[1];
         case TYPE_BAR:
-            if (Encounter[2] == IN_PROGRESS && BarAleCount == 3)
+            if (m_auiEncounter[2] == IN_PROGRESS && BarAleCount == 3)
                 return SPECIAL;
             else
-                return Encounter[2];
+                return m_auiEncounter[2];
         case TYPE_TOMB_OF_SEVEN:
-            return Encounter[3];
+            return m_auiEncounter[3];
         case TYPE_LYCEUM:
-            return Encounter[4];
+            return m_auiEncounter[4];
         case TYPE_IRON_HALL:
-            return Encounter[5];
+            return m_auiEncounter[5];
         case DATA_GHOSTKILL:
             return GhostKillCount;
         }
@@ -321,12 +321,12 @@ struct TRINITY_DLL_DECL instance_blackrock_depths : public ScriptedInstance
         OUT_LOAD_INST_DATA(in);
 
         std::istringstream loadStream(in);
-        loadStream >> Encounter[0] >> Encounter[1] >> Encounter[2] >> Encounter[3]
-        >> Encounter[4] >> Encounter[5] >> GhostKillCount;
+        loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> m_auiEncounter[3]
+        >> m_auiEncounter[4] >> m_auiEncounter[5] >> GhostKillCount;
 
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
-            if (Encounter[i] == IN_PROGRESS)
-                Encounter[i] = NOT_STARTED;
+        for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
+            if (m_auiEncounter[i] == IN_PROGRESS)
+                m_auiEncounter[i] = NOT_STARTED;
         if (GhostKillCount > 0 && GhostKillCount < 7)
             GhostKillCount = 0;//reset tomb of seven event
         if (GhostKillCount > 7)

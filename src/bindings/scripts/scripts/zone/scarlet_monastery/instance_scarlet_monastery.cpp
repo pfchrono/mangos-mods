@@ -30,7 +30,7 @@ EndScriptData */
 #define ENTRY_HEAD              23775
 #define ENTRY_PUMPKIN           23694
 
-#define ENCOUNTERS 1
+#define MAX_ENCOUNTER 1
 
 struct TRINITY_DLL_DECL instance_scarlet_monastery : public ScriptedInstance
 {
@@ -46,10 +46,12 @@ struct TRINITY_DLL_DECL instance_scarlet_monastery : public ScriptedInstance
     uint64 VorrelGUID;
     uint64 DoorHighInquisitorGUID;
 
-    uint32 Encounter[ENCOUNTERS];
+    uint32 m_auiEncounter[MAX_ENCOUNTER];
 
     void Initialize()
     {
+        memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+
         PumpkinShrineGUID  = 0;
         HorsemanGUID = 0;
         HeadGUID = 0;
@@ -59,30 +61,27 @@ struct TRINITY_DLL_DECL instance_scarlet_monastery : public ScriptedInstance
         WhitemaneGUID = 0;
         VorrelGUID = 0;
         DoorHighInquisitorGUID = 0;
-
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
-            Encounter[i] = NOT_STARTED;
     }
 
-    void OnGameObjectCreate(GameObject *go, bool add)
+    void OnGameObjectCreate(GameObject* pGo, bool add)
     {
-        switch(go->GetEntry())
+        switch(pGo->GetEntry())
         {
-        case ENTRY_PUMPKIN_SHRINE: PumpkinShrineGUID = go->GetGUID();break;
-        case 104600: DoorHighInquisitorGUID = go->GetGUID(); break;
+        case ENTRY_PUMPKIN_SHRINE: PumpkinShrineGUID = pGo->GetGUID();break;
+        case 104600: DoorHighInquisitorGUID = pGo->GetGUID(); break;
         }
     }
 
-    void OnCreatureCreate(Creature *creature, bool add)
+    void OnCreatureCreate(Creature* pCreature, bool add)
     {
-        switch(creature->GetEntry())
+        switch(pCreature->GetEntry())
         {
-            case ENTRY_HORSEMAN:    HorsemanGUID = creature->GetGUID(); break;
-            case ENTRY_HEAD:        HeadGUID = creature->GetGUID(); break;
-            case ENTRY_PUMPKIN:     HorsemanAdds.insert(creature->GetGUID());break;
-            case 3976: MograineGUID = creature->GetGUID(); break;
-            case 3977: WhitemaneGUID = creature->GetGUID(); break;
-            case 3981: VorrelGUID = creature->GetGUID(); break;
+            case ENTRY_HORSEMAN:    HorsemanGUID = pCreature->GetGUID(); break;
+            case ENTRY_HEAD:        HeadGUID = pCreature->GetGUID(); break;
+            case ENTRY_PUMPKIN:     HorsemanAdds.insert(pCreature->GetGUID());break;
+            case 3976: MograineGUID = pCreature->GetGUID(); break;
+            case 3977: WhitemaneGUID = pCreature->GetGUID(); break;
+            case 3981: VorrelGUID = pCreature->GetGUID(); break;
         }
     }
 
@@ -96,7 +95,7 @@ struct TRINITY_DLL_DECL instance_scarlet_monastery : public ScriptedInstance
             if (data == FAIL)
                 DoUseDoorOrButton(DoorHighInquisitorGUID);
 
-            Encounter[0] = data;
+            m_auiEncounter[0] = data;
             break;
         case GAMEOBJECT_PUMPKIN_SHRINE:
             HandleGameObject(PumpkinShrineGUID, false);
@@ -135,7 +134,7 @@ struct TRINITY_DLL_DECL instance_scarlet_monastery : public ScriptedInstance
     uint32 GetData(uint32 type)
     {
         if (type == TYPE_MOGRAINE_AND_WHITE_EVENT)
-            return Encounter[0];
+            return m_auiEncounter[0];
 
         return 0;
     }

@@ -24,7 +24,7 @@ EndScriptData */
 #include "precompiled.h"
 #include "def_karazhan.h"
 
-#define ENCOUNTERS      12
+#define MAX_ENCOUNTER      12
 
 /*
 0  - Attumen + Midnight (optional)
@@ -45,7 +45,7 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
 {
     instance_karazhan(Map* pMap) : ScriptedInstance(pMap) {Initialize();}
 
-    uint32 m_auiEncounter[ENCOUNTERS];
+    uint32 m_auiEncounter[MAX_ENCOUNTER];
     std::string strSaveData;
 
     uint32 m_uiOperaEvent;
@@ -69,8 +69,7 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
 
     void Initialize()
     {
-        for (uint8 i = 0; i < ENCOUNTERS; ++i)
-            m_auiEncounter[i] = NOT_STARTED;
+        memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
 
         // 1 - OZ, 2 - HOOD, 3 - RAJ, this never gets altered.
         m_uiOperaEvent      = urand(1,3);
@@ -98,20 +97,20 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
 
     bool IsEncounterInProgress() const
     {
-        for (uint8 i = 0; i < ENCOUNTERS; ++i)
+        for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
             if (m_auiEncounter[i] == IN_PROGRESS)
                 return true;
 
         return false;
     }
 
-    void OnCreatureCreate(Creature *creature, bool add)
+    void OnCreatureCreate(Creature* pCreature, bool add)
     {
-        switch (creature->GetEntry())
+        switch (pCreature->GetEntry())
         {
-            case 17229:   m_uiKilrekGUID = creature->GetGUID();      break;
-            case 15688:   m_uiTerestianGUID = creature->GetGUID();   break;
-            case 15687:   m_uiMoroesGUID = creature->GetGUID();      break;
+            case 17229:   m_uiKilrekGUID = pCreature->GetGUID();      break;
+            case 15688:   m_uiTerestianGUID = pCreature->GetGUID();   break;
+            case 15687:   m_uiMoroesGUID = pCreature->GetGUID();      break;
         }
     }
 
@@ -175,36 +174,36 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
          }
      }
 
-    void OnGameObjectCreate(GameObject *go, bool add)
+    void OnGameObjectCreate(GameObject* pGo, bool add)
     {
-        switch(go->GetEntry())
+        switch(pGo->GetEntry())
         {
-            case 183932:   m_uiCurtainGUID          = go->GetGUID();         break;
+            case 183932:   m_uiCurtainGUID          = pGo->GetGUID();         break;
             case 184278:
-                m_uiStageDoorLeftGUID = go->GetGUID();
+                m_uiStageDoorLeftGUID = pGo->GetGUID();
                 if (m_auiEncounter[4] == DONE)
-                    go->SetGoState(GO_STATE_ACTIVE);
+                    pGo->SetGoState(GO_STATE_ACTIVE);
                 break;
             case 184279:
-                m_uiStageDoorRightGUID = go->GetGUID();
+                m_uiStageDoorRightGUID = pGo->GetGUID();
                 if (m_auiEncounter[4] == DONE)
-                    go->SetGoState(GO_STATE_ACTIVE);
+                    pGo->SetGoState(GO_STATE_ACTIVE);
                 break;
-            case 184517:   m_uiLibraryDoor          = go->GetGUID();         break;
-            case 185521:   m_uiMassiveDoor          = go->GetGUID();         break;
-            case 184276:   m_uiGamesmansDoor        = go->GetGUID();         break;
-            case 184277:   m_uiGamesmansExitDoor    = go->GetGUID();         break;
-            case 185134:   m_uiNetherspaceDoor      = go->GetGUID();         break;
-            case 184274:    MastersTerraceDoor[0] = go->GetGUID();  break;
-            case 184280:    MastersTerraceDoor[1] = go->GetGUID();  break;
+            case 184517:   m_uiLibraryDoor          = pGo->GetGUID();         break;
+            case 185521:   m_uiMassiveDoor          = pGo->GetGUID();         break;
+            case 184276:   m_uiGamesmansDoor        = pGo->GetGUID();         break;
+            case 184277:   m_uiGamesmansExitDoor    = pGo->GetGUID();         break;
+            case 185134:   m_uiNetherspaceDoor      = pGo->GetGUID();         break;
+            case 184274:    MastersTerraceDoor[0] = pGo->GetGUID();  break;
+            case 184280:    MastersTerraceDoor[1] = pGo->GetGUID();  break;
             case 184275:
-                m_uiSideEntranceDoor = go->GetGUID();
+                m_uiSideEntranceDoor = pGo->GetGUID();
                 if (m_auiEncounter[4] == DONE)
-                    go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED);
+                    pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED);
                 else
-                    go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED);
+                    pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED);
                 break;
-            case 185119: DustCoveredChest = go->GetGUID(); break;
+            case 185119: DustCoveredChest = pGo->GetGUID(); break;
         }
 
         switch(m_uiOperaEvent)
@@ -287,7 +286,7 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
         loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> m_auiEncounter[3]
             >> m_auiEncounter[4] >> m_auiEncounter[5] >> m_auiEncounter[6] >> m_auiEncounter[7]
             >> m_auiEncounter[8] >> m_auiEncounter[9] >> m_auiEncounter[10] >> m_auiEncounter[11];
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
+        for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
             if (m_auiEncounter[i] == IN_PROGRESS)                // Do not load an encounter as "In Progress" - reset it instead.
                 m_auiEncounter[i] = NOT_STARTED;
         OUT_LOAD_INST_DATA_COMPLETE;

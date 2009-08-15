@@ -225,8 +225,8 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectMilling,                                  //158 SPELL_EFFECT_MILLING                  milling
     &Spell::EffectRenamePet,                                //159 SPELL_EFFECT_ALLOW_RENAME_PET         allow rename pet once again
     &Spell::EffectNULL,                                     //160 SPELL_EFFECT_160                      unused
-    &Spell::EffectNULL,                                     //161 SPELL_EFFECT_TALENT_SPEC_COUNT        second talent spec (learn/revert)
-    &Spell::EffectNULL,                                     //162 SPELL_EFFECT_TALENT_SPEC_SELECT       activate primary/secondary spec
+    &Spell::EffectSpecCount,                                //161 SPELL_EFFECT_TALENT_SPEC_COUNT        second talent spec (learn/revert)
+    &Spell::EffectActivateSpec,                             //162 SPELL_EFFECT_TALENT_SPEC_SELECT       activate primary/secondary spec
 };
 
 void Spell::EffectNULL(uint32 /*i*/)
@@ -1909,18 +1909,10 @@ void Spell::EffectDummy(uint32 i)
             {
                 // No power, dismiss Gargoyle
                 if (m_caster->GetPower(POWER_RUNIC_POWER)<30)
-                    m_caster->CastSpell((Unit*)NULL,50515,true);
+                    m_caster->RemoveAurasDueToSpell(50514, m_caster->GetGUID());
                 else
                     m_caster->ModifyPower(POWER_RUNIC_POWER,-30);
 
-                return;
-            }
-            // Dismiss Gargoyle
-            else if (m_spellInfo->Id == 50515)
-            {
-                // FIXME: gargoyle should fly away
-                unitTarget->setDeathState(JUST_DIED);
-                m_caster->RemoveAurasDueToSpell(50514);
                 return;
             }
             break;
@@ -3432,9 +3424,11 @@ void Spell::EffectSummonType(uint32 i)
                         TempSummon * summon = m_originalCaster->SummonCreature(entry,px,py,pz,m_caster->GetOrientation(),summonType,duration);
                         if (!summon)
                             continue;
-                        summon->SetUInt64Value(UNIT_FIELD_SUMMONEDBY, m_originalCaster->GetGUID());
                         if (properties->Category == SUMMON_CATEGORY_ALLY)
+                        {
+                            summon->SetUInt64Value(UNIT_FIELD_SUMMONEDBY, m_originalCaster->GetGUID());
                             summon->setFaction(m_originalCaster->getFaction());
+                        }
                     }
                     break;
                 }
@@ -6941,5 +6935,21 @@ void Spell::EffectPlayMusic(uint32 i)
     WorldPacket data(SMSG_PLAY_MUSIC, 4);
     data << uint32(soundid);
     ((Player*)unitTarget)->GetSession()->SendPacket(&data);
+}
+
+void Spell::EffectSpecCount(uint32 /*eff_idx*/)
+{
+    if(!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+        return;
+
+    ((Player*)unitTarget)->UpdateSpecCount(damage);
+}
+
+void Spell::EffectActivateSpec(uint32 /*eff_idx*/)
+{
+    if(!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+        return;
+
+    ((Player*)unitTarget)->ActivateSpec(damage-1);  // damage is 1 or 2, spec is 0 or 1
 }
 

@@ -24,7 +24,7 @@ EndScriptData */
 #include "precompiled.h"
 #include "def_shattered_halls.h"
 
-#define ENCOUNTERS  2
+#define MAX_ENCOUNTER  2
 
 #define DOOR_NETHEKURSE     1
 
@@ -32,32 +32,31 @@ struct TRINITY_DLL_DECL instance_shattered_halls : public ScriptedInstance
 {
     instance_shattered_halls(Map* pMap) : ScriptedInstance(pMap) {Initialize();};
 
-    uint32 Encounter[ENCOUNTERS];
+    uint32 m_auiEncounter[MAX_ENCOUNTER];
     uint64 nethekurseGUID;
     uint64 nethekurseDoorGUID;
 
     void Initialize()
     {
+        memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+
         nethekurseGUID = 0;
         nethekurseDoorGUID = 0;
-
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
-            Encounter[i] = NOT_STARTED;
     }
 
-    void OnGameObjectCreate(GameObject *go, bool add)
+    void OnGameObjectCreate(GameObject* pGo, bool add)
     {
-        switch(go->GetEntry())
+        switch(pGo->GetEntry())
         {
-            case DOOR_NETHEKURSE: nethekurseDoorGUID = go->GetGUID(); break;
+            case DOOR_NETHEKURSE: nethekurseDoorGUID = pGo->GetGUID(); break;
         }
     }
 
-    void OnCreatureCreate(Creature *creature, bool add)
+    void OnCreatureCreate(Creature* pCreature, bool add)
     {
-        switch(creature->GetEntry())
+        switch(pCreature->GetEntry())
         {
-            case 16807: nethekurseGUID = creature->GetGUID(); break;
+            case 16807: nethekurseGUID = pCreature->GetGUID(); break;
         }
     }
 
@@ -66,10 +65,10 @@ struct TRINITY_DLL_DECL instance_shattered_halls : public ScriptedInstance
         switch(type)
         {
             case TYPE_NETHEKURSE:
-                Encounter[0] = data;
+                m_auiEncounter[0] = data;
                 break;
             case TYPE_OMROGG:
-                Encounter[1] = data;
+                m_auiEncounter[1] = data;
                 break;
         }
     }
@@ -79,9 +78,9 @@ struct TRINITY_DLL_DECL instance_shattered_halls : public ScriptedInstance
         switch(type)
         {
             case TYPE_NETHEKURSE:
-                return Encounter[0];
+                return m_auiEncounter[0];
             case TYPE_OMROGG:
-                return Encounter[1];
+                return m_auiEncounter[1];
         }
         return 0;
     }

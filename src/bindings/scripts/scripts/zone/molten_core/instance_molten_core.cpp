@@ -24,7 +24,7 @@ EndScriptData */
 #include "precompiled.h"
 #include "def_molten_core.h"
 
-#define ENCOUNTERS      9
+#define MAX_ENCOUNTER      9
 
 #define ID_LUCIFRON     12118
 #define ID_MAGMADAR     11982
@@ -48,10 +48,12 @@ struct TRINITY_DLL_DECL instance_molten_core : public ScriptedInstance
     //If all Bosses are dead.
     bool IsBossDied[9];
 
-    uint32 Encounter[ENCOUNTERS];
+    uint32 m_auiEncounter[MAX_ENCOUNTER];
 
     void Initialize()
     {
+        memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+
         Lucifron = 0;
         Magmadar = 0;
         Gehennas = 0;
@@ -84,9 +86,6 @@ struct TRINITY_DLL_DECL instance_molten_core : public ScriptedInstance
 
         IsBossDied[7] = false;
         IsBossDied[8] = false;
-
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
-            Encounter[i] = NOT_STARTED;
     }
 
     bool IsEncounterInProgress() const
@@ -95,84 +94,84 @@ struct TRINITY_DLL_DECL instance_molten_core : public ScriptedInstance
     };
 
 
-    void OnGameObjectCreate(GameObject *go, bool add)
+    void OnGameObjectCreate(GameObject* pGo, bool add)
     {
-        switch(go->GetEntry())
+        switch(pGo->GetEntry())
         {
         case 176951:                                    //Sulfuron
-            RuneKoro = go->GetGUID();
+            RuneKoro = pGo->GetGUID();
             break;
         case 176952:                                    //Geddon
-            RuneZeth = go->GetGUID();
+            RuneZeth = pGo->GetGUID();
             break;
         case 176953:                                    //Shazzrah
-            RuneMazj = go->GetGUID();
+            RuneMazj = pGo->GetGUID();
             break;
         case 176954:                                    //Golemagg
-            RuneTheri = go->GetGUID();
+            RuneTheri = pGo->GetGUID();
             break;
         case 176955:                                    //Garr
-            RuneBlaz = go->GetGUID();
+            RuneBlaz = pGo->GetGUID();
             break;
         case 176956:                                    //Magmadar
-            RuneKress = go->GetGUID();
+            RuneKress = pGo->GetGUID();
             break;
         case 176957:                                    //Gehennas
-            RuneMohn = go->GetGUID();
+            RuneMohn = pGo->GetGUID();
             break;
         case 179703:
-            m_uiFirelordCacheGUID = go->GetGUID();      //when majordomo event == DONE DoRespawnGameObject(m_uiFirelordCacheGUID,);
+            m_uiFirelordCacheGUID = pGo->GetGUID();      //when majordomo event == DONE DoRespawnGameObject(m_uiFirelordCacheGUID,);
             break;
         }
     }
 
 
-    void OnCreatureCreate(Creature *creature, bool add)
+    void OnCreatureCreate(Creature* pCreature, bool add)
     {
-        switch (creature->GetEntry())
+        switch (pCreature->GetEntry())
         {
             case ID_LUCIFRON:
-                Lucifron = creature->GetGUID();
+                Lucifron = pCreature->GetGUID();
                 break;
 
             case ID_MAGMADAR:
-                Magmadar = creature->GetGUID();
+                Magmadar = pCreature->GetGUID();
                 break;
 
             case ID_GEHENNAS:
-                Gehennas = creature->GetGUID();
+                Gehennas = pCreature->GetGUID();
                 break;
 
             case ID_GARR:
-                Garr = creature->GetGUID();
+                Garr = pCreature->GetGUID();
                 break;
 
             case ID_GEDDON:
-                Geddon = creature->GetGUID();
+                Geddon = pCreature->GetGUID();
                 break;
 
             case ID_SHAZZRAH:
-                Shazzrah = creature->GetGUID();
+                Shazzrah = pCreature->GetGUID();
                 break;
 
             case ID_SULFURON:
-                Sulfuron = creature->GetGUID();
+                Sulfuron = pCreature->GetGUID();
                 break;
 
             case ID_GOLEMAGG:
-                Golemagg = creature->GetGUID();
+                Golemagg = pCreature->GetGUID();
                 break;
 
             case ID_DOMO:
-                Domo = creature->GetGUID();
+                Domo = pCreature->GetGUID();
                 break;
 
             case ID_RAGNAROS:
-                Ragnaros = creature->GetGUID();
+                Ragnaros = pCreature->GetGUID();
                 break;
 
             case ID_FLAMEWAKERPRIEST:
-                FlamewakerPriest = creature->GetGUID();
+                FlamewakerPriest = pCreature->GetGUID();
                 break;
         }
     }

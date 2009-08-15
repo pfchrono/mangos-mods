@@ -96,9 +96,9 @@ bool GossipHello_guard_azuremyst(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_azuremyst(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_azuremyst(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bank
             pPlayer->SEND_POI(-3918.95, -11544.7, 7, 6, 0, "Bank");
@@ -139,19 +139,20 @@ void SendDefaultMenu_guard_azuremyst(Player* pPlayer, Creature* pCreature, uint3
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_JEWELCRAFTING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION         , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_JEWELCRAFTING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 14);
             pPlayer->SEND_GOSSIP_MENU(10087, pCreature->GetGUID());
             break;
     }
 }
 
-void SendClassTrainerMenu_guard_azuremyst(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_azuremyst(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Druid
             pPlayer->SEND_POI(-4274.81, -11495.3, 7, 6, 0, "Shalannius");
@@ -184,9 +185,9 @@ void SendClassTrainerMenu_guard_azuremyst(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendProfTrainerMenu_guard_azuremyst(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_azuremyst(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(-4191.15, -12470, 7, 6, 0, "Daedal");
@@ -219,36 +220,40 @@ void SendProfTrainerMenu_guard_azuremyst(Player* pPlayer, Creature* pCreature, u
         case GOSSIP_ACTION_INFO_DEF + 8:                    //Herbalism
             pPlayer->SEND_GOSSIP_MENU(10095, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Jewelcrafting
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Inscription
+             pPlayer->SEND_POI(-3881.63, -11488.59, 7, 6, 0, "Thoth");
+             pPlayer->SEND_GOSSIP_MENU(30000, pCreature->GetGUID());
+             break;
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Jewelcrafting
             pPlayer->SEND_POI(-3781.55, -11541.8, 7, 6, 0, "Farii");
             pPlayer->SEND_GOSSIP_MENU(10096, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Leatherworking
             pPlayer->SEND_POI(-3442.68, -12322.2, 7, 6, 0, "Moordo");
             pPlayer->SEND_GOSSIP_MENU(10098, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Mining
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Mining
             pPlayer->SEND_POI(-4179.89, -12493.1, 7, 6, 0, "Dulvi");
             pPlayer->SEND_GOSSIP_MENU(10097, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 12:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 13:                   //Skinning
             pPlayer->SEND_POI(-3431.17, -12316.5, 7, 6, 0, "Gurf");
             pPlayer->SEND_GOSSIP_MENU(10098, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 13:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 14:                   //Tailoring
             pPlayer->SEND_POI(-4711.54, -12386.7, 7, 6, 0, "Erin Kelly");
             pPlayer->SEND_GOSSIP_MENU(10099, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_azuremyst(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_azuremyst(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_azuremyst(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_azuremyst(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_azuremyst(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_azuremyst(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_azuremyst(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_azuremyst(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -283,9 +288,9 @@ bool GossipHello_guard_bluffwatcher(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bank
             pPlayer->SEND_POI(-1257.8, 24.14, 7, 6, 0, "Thunder Bluff Bank");
@@ -342,18 +347,19 @@ void SendDefaultMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, ui
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 5);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION         , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
             pPlayer->SEND_GOSSIP_MENU(3541, pCreature->GetGUID());
             break;
     }
 }
 
-void SendBattleMasterMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendBattleMasterMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //AV
             pPlayer->SEND_POI(-1387.82, -97.55, 7, 6, 0, "Taim Ragetotem");
@@ -370,9 +376,9 @@ void SendBattleMasterMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreatur
     }
 }
 
-void SendClassTrainerMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Druid
             pPlayer->SEND_POI(-1054.47, -285, 7, 6, 0, "Hall of Elders");
@@ -401,9 +407,9 @@ void SendClassTrainerMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreatur
     }
 }
 
-void SendProfTrainerMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(-1085.56, 27.29, 7, 6, 0, "Bena's Alchemy");
@@ -433,33 +439,37 @@ void SendProfTrainerMenu_guard_bluffwatcher(Player* pPlayer, Creature* pCreature
             pPlayer->SEND_POI(-1137.7, -1.51, 7, 6, 0, "Holistic Herbalism");
             pPlayer->SEND_GOSSIP_MENU(1338, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 8:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 8:                    //Inscription
+            pPlayer->SEND_POI(-1000.26, 209.52, 7, 6, 0, "Poshken Hardbinder");
+            pPlayer->SEND_GOSSIP_MENU(30000, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Leatherworking
             pPlayer->SEND_POI(-1156.22, 66.86, 7, 6, 0, "Thunder Bluff Armorers");
             pPlayer->SEND_GOSSIP_MENU(1339, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Mining
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Mining
             pPlayer->SEND_POI(-1249.17, 155, 7, 6, 0, "Stonehoof Geology");
             pPlayer->SEND_GOSSIP_MENU(1340, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Skinning
             pPlayer->SEND_POI(-1148.56, 51.18, 7, 6, 0, "Mooranta");
             pPlayer->SEND_GOSSIP_MENU(1343, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Tailoring
             pPlayer->SEND_POI(-1156.22, 66.86, 7, 6, 0, "Thunder Bluff Armorers");
             pPlayer->SEND_GOSSIP_MENU(1341, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_bluffwatcher(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_bluffwatcher(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_bluffwatcher(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_bluffwatcher(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_bluffwatcher(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_bluffwatcher(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_bluffwatcher(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_bluffwatcher(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_bluffwatcher(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -506,9 +516,9 @@ bool GossipHello_guard_darnassus(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Auction house
             pPlayer->SEND_POI(9861.23, 2334.55, 7, 6, 0, "Darnassus Auction House");
@@ -563,17 +573,18 @@ void SendDefaultMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, uint3
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 4);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING         , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 5);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING  , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION     , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING  , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
             pPlayer->SEND_GOSSIP_MENU(4273, pCreature->GetGUID());
             break;
     }
 }
 
-void SendBattleMasterMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendBattleMasterMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //AV
             pPlayer->SEND_POI(9923.61, 2327.43, 7, 6, 0, "Brogun Stoneshield");
@@ -590,9 +601,9 @@ void SendBattleMasterMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendClassTrainerMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Druid
             pPlayer->SEND_POI(10186, 2570.46, 7, 6, 0, "Darnassus Druid Trainer");
@@ -617,9 +628,9 @@ void SendClassTrainerMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendProfTrainerMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(10075.90, 2356.76, 7, 6, 0, "Darnassus Alchemy Trainer");
@@ -645,29 +656,33 @@ void SendProfTrainerMenu_guard_darnassus(Player* pPlayer, Creature* pCreature, u
             pPlayer->SEND_POI(9757.17, 2430.16, 7, 6, 0, "Darnassus Herbalism Trainer");
             pPlayer->SEND_GOSSIP_MENU(3039, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 7:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 7:                    //Inscription
+            pPlayer->SEND_POI(10139.00, 2343.31, 7, 6, 0, "Feyden Darkin");
+            pPlayer->SEND_GOSSIP_MENU(30000, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 8:                    //Leatherworking
             pPlayer->SEND_POI(10086.59, 2255.77, 7, 6, 0, "Darnassus Leatherworking Trainer");
             pPlayer->SEND_GOSSIP_MENU(3040, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 8:                    //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Skinning
             pPlayer->SEND_POI(10081.40, 2257.18, 7, 6, 0, "Darnassus Skinning Trainer");
             pPlayer->SEND_GOSSIP_MENU(3042, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Tailoring
             pPlayer->SEND_POI(10079.70, 2268.19, 7, 6, 0, "Darnassus Tailor");
             pPlayer->SEND_GOSSIP_MENU(3044, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_darnassus(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_darnassus(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_darnassus(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_darnassus(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_darnassus(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_darnassus(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_darnassus(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_darnassus(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_darnassus(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_darnassus(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -699,9 +714,9 @@ bool GossipHello_guard_dunmorogh(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_dunmorogh(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_dunmorogh(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bank
             pPlayer->SEND_GOSSIP_MENU(4288, pCreature->GetGUID());
@@ -739,18 +754,19 @@ void SendDefaultMenu_guard_dunmorogh(Player* pPlayer, Creature* pCreature, uint3
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING               , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION          , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING               , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
             pPlayer->SEND_GOSSIP_MENU(4300, pCreature->GetGUID());
             break;
     }
 }
 
-void SendClassTrainerMenu_guard_dunmorogh(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_dunmorogh(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Hunter
             pPlayer->SEND_POI(-5618.29, -454.25, 7, 6, 0, "Grif Wildheart");
@@ -783,9 +799,9 @@ void SendClassTrainerMenu_guard_dunmorogh(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendProfTrainerMenu_guard_dunmorogh(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_dunmorogh(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_GOSSIP_MENU(4301, pCreature->GetGUID());
@@ -816,29 +832,32 @@ void SendProfTrainerMenu_guard_dunmorogh(Player* pPlayer, Creature* pCreature, u
         case GOSSIP_ACTION_INFO_DEF + 8:                    //Herbalism
             pPlayer->SEND_GOSSIP_MENU(4308, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Inscription
+            pPlayer->SEND_GOSSIP_MENU(30001, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Leatherworking
             pPlayer->SEND_GOSSIP_MENU(4310, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Mining
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Mining
             pPlayer->SEND_POI(-5531, -666.53, 7, 6, 0, "Yarr Hamerstone");
             pPlayer->SEND_GOSSIP_MENU(4311, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Skinning
             pPlayer->SEND_GOSSIP_MENU(4312, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 12:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 13:                   //Tailoring
             pPlayer->SEND_GOSSIP_MENU(4313, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_dunmorogh(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_dunmorogh(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_dunmorogh(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_dunmorogh(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_dunmorogh(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_dunmorogh(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_dunmorogh(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_dunmorogh(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -868,9 +887,9 @@ bool GossipHello_guard_durotar(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_durotar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_durotar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bank
             pPlayer->SEND_GOSSIP_MENU(4032, pCreature->GetGUID());
@@ -905,18 +924,19 @@ void SendDefaultMenu_guard_durotar(Player* pPlayer, Creature* pCreature, uint32 
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION         , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
             pPlayer->SEND_GOSSIP_MENU(4036, pCreature->GetGUID());
             break;
     }
 }
 
-void SendClassTrainerMenu_guard_durotar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_durotar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Hunter
             pPlayer->SEND_POI(276, -4706.72, 7, 6, 0, "Thotar");
@@ -949,9 +969,9 @@ void SendClassTrainerMenu_guard_durotar(Player* pPlayer, Creature* pCreature, ui
     }
 }
 
-void SendProfTrainerMenu_guard_durotar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_durotar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(-800.25, -4894.33, 7, 6, 0, "Miao'zan");
@@ -999,13 +1019,13 @@ void SendProfTrainerMenu_guard_durotar(Player* pPlayer, Creature* pCreature, uin
     }
 }
 
-bool GossipSelect_guard_durotar(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_durotar(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_durotar(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_durotar(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_durotar(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_durotar(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_durotar(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_durotar(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -1036,9 +1056,9 @@ bool GossipHello_guard_elwynnforest(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_elwynnforest(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_elwynnforest(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bank
             pPlayer->SEND_GOSSIP_MENU(4260, pCreature->GetGUID());
@@ -1086,9 +1106,9 @@ void SendDefaultMenu_guard_elwynnforest(Player* pPlayer, Creature* pCreature, ui
     }
 }
 
-void SendClassTrainerMenu_guard_elwynnforest(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_elwynnforest(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Druid
             pPlayer->SEND_GOSSIP_MENU(4265, pCreature->GetGUID());
@@ -1123,9 +1143,9 @@ void SendClassTrainerMenu_guard_elwynnforest(Player* pPlayer, Creature* pCreatur
     }
 }
 
-void SendProfTrainerMenu_guard_elwynnforest(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_elwynnforest(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(-9057.04, 153.63, 7, 6, 0, "Alchemist Mallory");
@@ -1157,31 +1177,35 @@ void SendProfTrainerMenu_guard_elwynnforest(Player* pPlayer, Creature* pCreature
             pPlayer->SEND_POI(-9060.70, 149.23, 7, 6, 0, "Herbalist Pomeroy");
             pPlayer->SEND_GOSSIP_MENU(4281, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Inscription
+            pPlayer->SEND_POI(-8862.50, 875.19, 7, 6, 0, "Catarina Stanford");
+            pPlayer->SEND_GOSSIP_MENU(30000, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Leatherworking
             pPlayer->SEND_POI(-9376.12, -75.23, 7, 6, 0, "Adele Fielder");
             pPlayer->SEND_GOSSIP_MENU(4282, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Mining
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Mining
             pPlayer->SEND_GOSSIP_MENU(4283, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Skinning
             pPlayer->SEND_POI(-9536.91, -1212.76, 7, 6, 0, "Helene Peltskinner");
             pPlayer->SEND_GOSSIP_MENU(4284, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 12:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 13:                   //Tailoring
             pPlayer->SEND_POI(-9376.12, -75.23, 7, 6, 0, "Eldrin");
             pPlayer->SEND_GOSSIP_MENU(4285, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_elwynnforest(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_elwynnforest(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_elwynnforest(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_elwynnforest(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_elwynnforest(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_elwynnforest(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_elwynnforest(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_elwynnforest(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -1211,9 +1235,9 @@ bool GossipHello_guard_eversong(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_eversong(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_eversong(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bat Handler
             pPlayer->SEND_POI(9371.93, -7164.80, 7, 6, 0, "Skymistress Gloaming");
@@ -1248,19 +1272,20 @@ void SendDefaultMenu_guard_eversong(Player* pPlayer, Creature* pCreature, uint32
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 5);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_JEWELCRAFTING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION         , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_JEWELCRAFTING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
             pPlayer->SEND_GOSSIP_MENU(10180, pCreature->GetGUID());
             break;
     }
 }
 
-void SendClassTrainerMenu_guard_eversong(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_eversong(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Druid
             pPlayer->SEND_GOSSIP_MENU(10185, pCreature->GetGUID());
@@ -1292,9 +1317,9 @@ void SendClassTrainerMenu_guard_eversong(Player* pPlayer, Creature* pCreature, u
     }
 }
 
-void SendProfTrainerMenu_guard_eversong(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_eversong(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(8659.90, -6368.12, 7, 6, 0, "Arcanist Sheynathren");
@@ -1322,35 +1347,39 @@ void SendProfTrainerMenu_guard_eversong(Player* pPlayer, Creature* pCreature, ui
             pPlayer->SEND_POI(8678.92, -6329.09, 7, 6, 0, "Botanist Tyniarrel");
             pPlayer->SEND_GOSSIP_MENU(10200, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 8:                    //Jewelcrafting
+        case GOSSIP_ACTION_INFO_DEF + 8:                    //Inscription
+            pPlayer->SEND_POI(9959.29, -7248.38, 7, 6, 0, "Zantasia");
+            pPlayer->SEND_GOSSIP_MENU(30000, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Jewelcrafting
             pPlayer->SEND_POI(9484.32, -6874.98, 7, 6, 0, "Aleinia");
             pPlayer->SEND_GOSSIP_MENU(10203, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Leatherworking
             pPlayer->SEND_POI(9362.04, -7130.33, 7, 6, 0, "Sathein");
             pPlayer->SEND_GOSSIP_MENU(10204, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Mining
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Mining
             pPlayer->SEND_GOSSIP_MENU(10205, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Skinning
             pPlayer->SEND_POI(9362.04, -7130.33, 7, 6, 0, "Mathreyn");
             pPlayer->SEND_GOSSIP_MENU(10206, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 12:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 13:                   //Tailoring
             pPlayer->SEND_POI(8680.36, -6327.51, 7, 6, 0, "Sempstress Ambershine");
             pPlayer->SEND_GOSSIP_MENU(10207, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_eversong(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_eversong(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_eversong(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_eversong(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_eversong(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_eversong(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_eversong(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_eversong(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -1385,9 +1414,9 @@ bool GossipHello_guard_exodar(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Auction house
             pPlayer->SEND_POI(-4023.6, -11739.3, 7, 6, 0, "Exodar Auction House");
@@ -1447,20 +1476,21 @@ void SendDefaultMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 a
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_ENGINEERING         , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 5);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_JEWELCRAFTING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION         , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_JEWELCRAFTING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 14);
             pPlayer->SEND_GOSSIP_MENU(9555, pCreature->GetGUID());
             break;
     }
 }
 
-void SendBattleMasterMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendBattleMasterMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //AV
             pPlayer->SEND_POI(-3978.1, -11357, 7, 6, 0, "Alterac Valley Battlemaster");
@@ -1485,9 +1515,9 @@ void SendBattleMasterMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uin
     }
 }
 
-void SendClassTrainerMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Druid
             pPlayer->SEND_POI(-4276.0, -11495, 7, 6, 0, "Exodar Druid Trainer");
@@ -1520,9 +1550,9 @@ void SendClassTrainerMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uin
     }
 }
 
-void SendProfTrainerMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(-4040.6, -11364.5, 7, 6, 0, "Exodar Alchemy Trainer");
@@ -1552,41 +1582,45 @@ void SendProfTrainerMenu_guard_exodar(Player* pPlayer, Creature* pCreature, uint
             pPlayer->SEND_POI(-3725.5, -11385.2, 7, 6, 0, "Exodar Fishing Trainer");
             pPlayer->SEND_GOSSIP_MENU(9538, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 8:                    //Jewelcrafting
-            pPlayer->SEND_POI(-3783, -11546, 7, 6, 0, "Exodar Jewelcrafting Trainer");
-            pPlayer->SEND_GOSSIP_MENU(9547, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Herbalism
+        case GOSSIP_ACTION_INFO_DEF + 8:                    //Herbalism
             pPlayer->SEND_POI(-4040.6, -11364.5, 7, 6, 0, "Exodar Herbalist Trainer");
             pPlayer->SEND_GOSSIP_MENU(9543, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 9:                   //Inscription
+             pPlayer->SEND_POI(-3881.63, -11488.59, 7, 6, 0, "Thoth");
+             pPlayer->SEND_GOSSIP_MENU(30000, pCreature->GetGUID());
+             break;
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Jewelcrafting
+            pPlayer->SEND_POI(-3783, -11546, 7, 6, 0, "Exodar Jewelcrafting Trainer");
+            pPlayer->SEND_GOSSIP_MENU(9547, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Leatherworking
             pPlayer->SEND_POI(-4140.6, -11776.7, 7, 6, 0, "Exodar Leatherworking Trainer");
             pPlayer->SEND_GOSSIP_MENU(9549, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Mining
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Mining
             pPlayer->SEND_POI(-4228, -11697, 7, 6, 0, "Exodar Mining Trainer");
             pPlayer->SEND_GOSSIP_MENU(9552, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 12:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 13:                   //Skinning
             pPlayer->SEND_POI(-4134.97, -11760.5, 7, 6, 0, "Exodar Skinning Trainer");
             pPlayer->SEND_GOSSIP_MENU(9557, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 13:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 14:                   //Tailoring
             pPlayer->SEND_POI(-4092.5, -11744.5, 7, 6, 0, "Exodar Tailor Trainer");
             pPlayer->SEND_GOSSIP_MENU(9559, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_exodar(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_exodar(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_exodar(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_exodar(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_exodar(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_exodar(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_exodar(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_exodar(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_exodar(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -1622,9 +1656,9 @@ bool GossipHello_guard_ironforge(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Auction House
             pPlayer->SEND_POI(-4957.39, -911.6, 7, 6, 0, "Ironforge Auction House");
@@ -1688,18 +1722,19 @@ void SendDefaultMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, uint3
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING         , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING  , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING          , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION     , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING  , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING          , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
             pPlayer->SEND_GOSSIP_MENU(2793, pCreature->GetGUID());
             break;
     }
 }
 
-void SendBattleMasterMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendBattleMasterMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //AV
             pPlayer->SEND_POI(-5047.87, -1263.77, 7, 6, 0, "Glordrum Steelbeard");
@@ -1716,9 +1751,9 @@ void SendBattleMasterMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendClassTrainerMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Hunter
             pPlayer->SEND_POI(-5023, -1253.68, 7, 6, 0, "Hall of Arms");
@@ -1756,9 +1791,9 @@ void SendClassTrainerMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendProfTrainerMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(-4858.5, -1241.83, 7, 6, 0, "Berryfizz's Potions and Mixed Drinks");
@@ -1792,33 +1827,37 @@ void SendProfTrainerMenu_guard_ironforge(Player* pPlayer, Creature* pCreature, u
             pPlayer->SEND_POI(-4876.9, -1151.92, 7, 6, 0, "Ironforge Physician");
             pPlayer->SEND_GOSSIP_MENU(2801, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Inscription
+            pPlayer->SEND_POI(-4807.02, -1194.43, 7, 6, 0, "Elise Brightletter");
+            pPlayer->SEND_GOSSIP_MENU(30000, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Leatherworking
             pPlayer->SEND_POI(-4745, -1027.57, 7, 6, 0, "Finespindle's Leather Goods");
             pPlayer->SEND_GOSSIP_MENU(2802, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Minning
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Minning
             pPlayer->SEND_POI(-4705.06, -1116.43, 7, 6, 0, "Deepmountain Mining Guild");
             pPlayer->SEND_GOSSIP_MENU(2804, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Skinning
             pPlayer->SEND_POI(-4745, -1027.57, 7, 6, 0, "Finespindle's Leather Goods");
             pPlayer->SEND_GOSSIP_MENU(2805, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 12:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 13:                   //Tailoring
             pPlayer->SEND_POI(-4719.60, -1056.96, 7, 6, 0, "Stonebrow's Clothier");
             pPlayer->SEND_GOSSIP_MENU(2807, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_ironforge(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_ironforge(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_ironforge(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_ironforge(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_ironforge(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_ironforge(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_ironforge(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_ironforge(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_ironforge(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_ironforge(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -1848,9 +1887,9 @@ bool GossipHello_guard_mulgore(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_mulgore(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_mulgore(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bank
             pPlayer->SEND_GOSSIP_MENU(4051, pCreature->GetGUID());
@@ -1881,18 +1920,19 @@ void SendDefaultMenu_guard_mulgore(Player* pPlayer, Creature* pCreature, uint32 
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 5);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING         , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING  , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING          , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION     , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING  , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING          , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
             pPlayer->SEND_GOSSIP_MENU(4070, pCreature->GetGUID());
             break;
     }
 }
 
-void SendClassTrainerMenu_guard_mulgore(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_mulgore(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Druid
             pPlayer->SEND_POI(-2312.15, -443.69, 7, 6, 0, "Gennia Runetotem");
@@ -1913,9 +1953,9 @@ void SendClassTrainerMenu_guard_mulgore(Player* pPlayer, Creature* pCreature, ui
     }
 }
 
-void SendProfTrainerMenu_guard_mulgore(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_mulgore(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_GOSSIP_MENU(4058, pCreature->GetGUID());
@@ -1941,30 +1981,33 @@ void SendProfTrainerMenu_guard_mulgore(Player* pPlayer, Creature* pCreature, uin
         case GOSSIP_ACTION_INFO_DEF + 7:                    //Herbalism
             pPlayer->SEND_GOSSIP_MENU(4064, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 8:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 8:                    //Inscription
+            pPlayer->SEND_GOSSIP_MENU(30001, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Leatherworking
             pPlayer->SEND_POI(-2257.12, -288.63, 7, 6, 0, "Chaw Stronghide");
             pPlayer->SEND_GOSSIP_MENU(4065, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Mining
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Mining
             pPlayer->SEND_GOSSIP_MENU(4066, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Skinning
             pPlayer->SEND_POI(-2252.94, -291.32, 7, 6, 0, "Yonn Deepcut");
             pPlayer->SEND_GOSSIP_MENU(4067, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Tailoring
             pPlayer->SEND_GOSSIP_MENU(4068, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_mulgore(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_mulgore(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_mulgore(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_mulgore(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_mulgore(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_mulgore(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_mulgore(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_mulgore(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -2002,9 +2045,9 @@ bool GossipHello_guard_orgrimmar(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bank
             pPlayer->SEND_POI(1631.51, -4375.33, 7, 6, 0, "Bank of Orgrimmar");
@@ -2072,18 +2115,19 @@ void SendDefaultMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint3
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION         , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING      , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING           , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
             pPlayer->SEND_GOSSIP_MENU(2594, pCreature->GetGUID());
             break;
     }
 }
 
-void SendBattleMasterMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendBattleMasterMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //AV
             pPlayer->SEND_POI(1983.92, -4794.2, 7, 6, 0, "Hall of the Brave");
@@ -2100,9 +2144,9 @@ void SendBattleMasterMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendClassTrainerMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Hunter
             pPlayer->SEND_POI(2114.84, -4625.31, 7, 6, 0, "Orgrimmar Hunter's Hall");
@@ -2139,9 +2183,9 @@ void SendClassTrainerMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendProfTrainerMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(1955.17, -4475.79, 7, 6, 0, "Yelmak's Alchemy and Potions");
@@ -2175,33 +2219,37 @@ void SendProfTrainerMenu_guard_orgrimmar(Player* pPlayer, Creature* pCreature, u
             pPlayer->SEND_POI(1898.61, -4454.93, 7, 6, 0, "Jandi's Arboretum");
             pPlayer->SEND_GOSSIP_MENU(2504, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Inscription
+            pPlayer->SEND_POI(1839.02, -4465.97, 7, 6, 0, "Jo'mah");
+            pPlayer->SEND_GOSSIP_MENU(30000, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Leatherworking
             pPlayer->SEND_POI(1852.82, -4562.31, 7, 6, 0, "Kodohide Leatherworkers");
             pPlayer->SEND_GOSSIP_MENU(2513, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Mining
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Mining
             pPlayer->SEND_POI(2029.79, -4704, 7, 6, 0, "Red Canyon Mining");
             pPlayer->SEND_GOSSIP_MENU(2515, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Skinning
             pPlayer->SEND_POI(1852.82, -4562.31, 7, 6, 0, "Kodohide Leatherworkers");
             pPlayer->SEND_GOSSIP_MENU(2516, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 12:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 13:                   //Tailoring
             pPlayer->SEND_POI(1802.66, -4560.66, 7, 6, 0, "Magar's Cloth Goods");
             pPlayer->SEND_GOSSIP_MENU(2518, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_orgrimmar(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_orgrimmar(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_orgrimmar(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_orgrimmar(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_orgrimmar(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_orgrimmar(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_orgrimmar(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_orgrimmar(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_orgrimmar(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -2237,9 +2285,9 @@ bool GossipHello_guard_shattrath(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Tavern
             pPlayer->SEND_POI(-1759.5, 5165, 7, 6, 0, "Worlds End Tavern");
@@ -2304,37 +2352,37 @@ void SendDefaultMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint3
     }
 }
 
-void SendBankMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendBankMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->SEND_POI(-1730.5, 5496, 7, 6, 0, "Aldor Bank");
         pPlayer->SEND_GOSSIP_MENU(10380,  pCreature->GetGUID());
     }
-    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pPlayer->SEND_POI(-1997.7, 5363, 7, 6, 0, "Scyers Bank");
         pPlayer->SEND_GOSSIP_MENU(10381, pCreature->GetGUID());
     }
 }
 
-void SendInnMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendInnMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->SEND_POI(-1895, 5767, 7, 6, 0, "Aldor Inn");
         pPlayer->SEND_GOSSIP_MENU(10383,  pCreature->GetGUID());
     }
-    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pPlayer->SEND_POI(-2178, 5405, 7, 6, 0, "Scyers Inn");
         pPlayer->SEND_GOSSIP_MENU(10384, pCreature->GetGUID());
     }
 }
 
-void SendMailboxMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendMailboxMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:
             pPlayer->SEND_POI(-1730.5, 5496, 7, 6, 0, "Aldor Bank");
@@ -2355,23 +2403,23 @@ void SendMailboxMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint3
     }
 }
 
-void SendStableMasterMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendStableMasterMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->SEND_POI(-1888.5, 5761, 7, 6, 0, "Aldor Stable");
         pPlayer->SEND_GOSSIP_MENU(10321,  pCreature->GetGUID());
     }
-    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pPlayer->SEND_POI(-2170, 5404, 7, 6, 0, "Scyers Stable");
         pPlayer->SEND_GOSSIP_MENU(10321, pCreature->GetGUID());
     }
 }
 
-void SendBattleMasterMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendBattleMasterMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:
             pPlayer->SEND_POI(-1774, 5251, 7, 6, 0, "Alliance Battlemasters");
@@ -2388,9 +2436,9 @@ void SendBattleMasterMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendProfTrainerMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(-1648.5, 5534, 7, 6, 0, "Lorokeem");
@@ -2427,32 +2475,32 @@ void SendProfTrainerMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, u
     }
 }
 
-void SendGemMerchantMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendGemMerchantMenu_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->SEND_POI(-1645, 5669.5, 7, 6, 0, "Aldor Gem Merchant");
         pPlayer->SEND_GOSSIP_MENU(10698,  pCreature->GetGUID());
     }
-    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pPlayer->SEND_POI(-2193, 5424.5, 7, 6, 0, "Scyers Gem Merchant");
         pPlayer->SEND_GOSSIP_MENU(10699, pCreature->GetGUID());
     }
 }
 
-bool GossipSelect_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_shattrath(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:              SendDefaultMenu_guard_shattrath(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BANK:          SendBankMenu_guard_shattrath(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_INN:           SendInnMenu_guard_shattrath(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_STABLEMASTER:  SendStableMasterMenu_guard_shattrath(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_GEMMERCHANT:   SendGemMerchantMenu_guard_shattrath(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_MAILBOX:       SendMailboxMenu_guard_shattrath(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:     SendProfTrainerMenu_guard_shattrath(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:    SendBattleMasterMenu_guard_shattrath(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:              SendDefaultMenu_guard_shattrath(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BANK:          SendBankMenu_guard_shattrath(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_INN:           SendInnMenu_guard_shattrath(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_STABLEMASTER:  SendStableMasterMenu_guard_shattrath(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_GEMMERCHANT:   SendGemMerchantMenu_guard_shattrath(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_MAILBOX:       SendMailboxMenu_guard_shattrath(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:     SendProfTrainerMenu_guard_shattrath(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:    SendBattleMasterMenu_guard_shattrath(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -2547,9 +2595,9 @@ bool GossipHello_guard_shattrath_aldor(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_shattrath_aldor(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_shattrath_aldor(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Tavern
             pPlayer->SEND_POI(-1759.5, 5165, 7, 6, 0, "Worlds End Tavern");
@@ -2608,9 +2656,9 @@ void SendDefaultMenu_guard_shattrath_aldor(Player* pPlayer, Creature* pCreature,
     }
 }
 
-void SendProfTrainerMenu_guard_shattrath_aldor(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_shattrath_aldor(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(-1648.5, 5534, 7, 6, 0, "Lorokeem");
@@ -2647,13 +2695,13 @@ void SendProfTrainerMenu_guard_shattrath_aldor(Player* pPlayer, Creature* pCreat
     }
 }
 
-bool GossipSelect_guard_shattrath_aldor(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_shattrath_aldor(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_shattrath_aldor(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_shattrath_aldor(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_shattrath(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_shattrath_aldor(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_shattrath_aldor(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_shattrath(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -2743,9 +2791,9 @@ bool GossipHello_guard_shattrath_scryer(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_shattrath_scryer(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_shattrath_scryer(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Tavern
             pPlayer->SEND_POI(-1759.5, 5165, 7, 6, 0, "Worlds End Tavern");
@@ -2803,9 +2851,9 @@ void SendDefaultMenu_guard_shattrath_scryer(Player* pPlayer, Creature* pCreature
     }
 }
 
-void SendProfTrainerMenu_guard_shattrath_scryer(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_shattrath_scryer(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(-1648.5, 5534, 7, 6, 0, "Lorokeem");
@@ -2842,13 +2890,13 @@ void SendProfTrainerMenu_guard_shattrath_scryer(Player* pPlayer, Creature* pCrea
     }
 }
 
-bool GossipSelect_guard_shattrath_scryer(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_shattrath_scryer(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_shattrath_scryer(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_shattrath_scryer(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_shattrath(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_shattrath_scryer(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_shattrath_scryer(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_shattrath(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -2883,9 +2931,9 @@ bool GossipHello_guard_silvermoon(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Auction house
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_AH_SILVERMOON_1 , GOSSIP_SENDER_SEC_AUCTIONHOUSE, GOSSIP_ACTION_INFO_DEF + 1);
@@ -2947,48 +2995,49 @@ void SendDefaultMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_ENGINEERING          , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 5);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_JEWELCRAFTING        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING               , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION          , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_JEWELCRAFTING        , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING               , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 14);
             pPlayer->SEND_GOSSIP_MENU(9338, pCreature->GetGUID());
             break;
     }
 }
 
-void SendAuctionhouseMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendAuctionhouseMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->SEND_POI(9644.47, -7140.22, 7, 6, 0, "Western Auction House");
         pPlayer->SEND_GOSSIP_MENU(9318, pCreature->GetGUID());
     }
-    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pPlayer->SEND_POI(9683.27, -7521.22, 7, 6, 0, "Royal Exchange Auction House");
         pPlayer->SEND_GOSSIP_MENU(9319, pCreature->GetGUID());
     }
 }
 
-void SendInnMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendInnMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->SEND_POI(9677.7, -7368, 7, 6, 0, "Silvermoon City Inn");
         pPlayer->SEND_GOSSIP_MENU(9325, pCreature->GetGUID());
     }
-    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pPlayer->SEND_POI(9561.1, -7517.5, 7, 6, 0, "Wayfarer's Rest tavern");
         pPlayer->SEND_GOSSIP_MENU(9603, pCreature->GetGUID());
     }
 }
 
-void SendBattleMasterMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendBattleMasterMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //AV
             pPlayer->SEND_POI(9850.49, -7572.26, 7, 6, 0, "Gurak");
@@ -3013,9 +3062,9 @@ void SendBattleMasterMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature,
     }
 }
 
-void SendClassTrainerMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Druid
             pPlayer->SEND_POI(9700.55, -7262.57, 7, 6, 0, "Harene Plainwalker");
@@ -3048,9 +3097,9 @@ void SendClassTrainerMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature,
     }
 }
 
-void SendProfTrainerMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(9998.09, -7214.36, 7, 6, 0, "Silvermoon Alchemy Trainer");
@@ -3080,43 +3129,47 @@ void SendProfTrainerMenu_guard_silvermoon(Player* pPlayer, Creature* pCreature, 
             pPlayer->SEND_POI(9602.73, -7328.3, 7, 6, 0, "Silvermoon Fishing Trainer");
             pPlayer->SEND_GOSSIP_MENU(9316, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 8:                    //Jewelcrafting
-            pPlayer->SEND_POI(9553.54, -7506.43, 7, 6, 0, "Silvermoon Jewelcrafting Trainer");
-            pPlayer->SEND_GOSSIP_MENU(9346, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Herbalism
+        case GOSSIP_ACTION_INFO_DEF + 8:                    //Herbalism
             pPlayer->SEND_POI(10004.4, -7216.86, 7, 6, 0, "Silvermoon Herbalism Trainer");
             pPlayer->SEND_GOSSIP_MENU(9316, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Inscription
+            pPlayer->SEND_POI(9959.29, -7248.38, 7, 6, 0, "Zantasia");
+            pPlayer->SEND_GOSSIP_MENU(30000, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 10:                    //Jewelcrafting
+            pPlayer->SEND_POI(9553.54, -7506.43, 7, 6, 0, "Silvermoon Jewelcrafting Trainer");
+            pPlayer->SEND_GOSSIP_MENU(9346, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Leatherworking
             pPlayer->SEND_POI(9503.72, -7430.16, 7, 6, 0, "Silvermoon Leatherworking Trainer");
             pPlayer->SEND_GOSSIP_MENU(9347, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Mining
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Mining
             pPlayer->SEND_POI(9805.1, -7355.56, 7, 6, 0, "Silvermoon Mining Trainer");
             pPlayer->SEND_GOSSIP_MENU(9348, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 12:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 13:                   //Skinning
             pPlayer->SEND_POI(9513.37, -7429.4, 7, 6, 0, "Silvermoon Skinning Trainer");
             pPlayer->SEND_GOSSIP_MENU(9316, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 13:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 14:                   //Tailoring
             pPlayer->SEND_POI(9750.55, -7095.28, 7, 6, 0, "Silvermoon Tailor");
             pPlayer->SEND_GOSSIP_MENU(9350, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_silvermoon(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:                SendDefaultMenu_guard_silvermoon(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_AUCTIONHOUSE:    SendAuctionhouseMenu_guard_silvermoon(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_INN:             SendInnMenu_guard_silvermoon(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:      SendClassTrainerMenu_guard_silvermoon(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:       SendProfTrainerMenu_guard_silvermoon(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:      SendBattleMasterMenu_guard_silvermoon(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:                SendDefaultMenu_guard_silvermoon(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_AUCTIONHOUSE:    SendAuctionhouseMenu_guard_silvermoon(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_INN:             SendInnMenu_guard_silvermoon(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:      SendClassTrainerMenu_guard_silvermoon(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:       SendProfTrainerMenu_guard_silvermoon(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:      SendBattleMasterMenu_guard_silvermoon(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -3153,9 +3206,9 @@ bool GossipHello_guard_stormwind(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Auction House
             pPlayer->SEND_POI(-8811.46, 667.46, 7, 6, 0, "Stormwind Auction House");
@@ -3224,18 +3277,19 @@ void SendDefaultMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, uint3
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING               , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION          , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING               , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
             pPlayer->SEND_GOSSIP_MENU(918, pCreature->GetGUID());
             break;
     }
 }
 
-void SendBattleMasterMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendBattleMasterMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //AV
             pPlayer->SEND_POI(-8443.88, 335.99, 7, 6, 0, "Thelman Slatefist");
@@ -3252,9 +3306,9 @@ void SendBattleMasterMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendClassTrainerMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Mage
             pPlayer->SEND_POI(-9012.0, 867.6, 7, 6, 0, "Wizard`s Sanctum");
@@ -3296,9 +3350,9 @@ void SendClassTrainerMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendProfTrainerMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(-8988.0, 759.60, 7, 6, 0, "Alchemy Needs");
@@ -3332,33 +3386,37 @@ void SendProfTrainerMenu_guard_stormwind(Player* pPlayer, Creature* pCreature, u
             pPlayer->SEND_POI(-8967.0, 779.5, 7, 6, 0, "Alchemy Needs");
             pPlayer->SEND_GOSSIP_MENU(924, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Inscription
+            pPlayer->SEND_POI(-8862.50, 875.19, 7, 6, 0, "Catarina Stanford");
+            pPlayer->SEND_GOSSIP_MENU(30000, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Leatherworking
             pPlayer->SEND_POI(-8726.0, 477.4, 7, 6, 0, "The Protective Hide");
             pPlayer->SEND_GOSSIP_MENU(925, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Mining
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Mining
             pPlayer->SEND_POI(-8434.0, 692.8, 7, 6, 0, "Gelman Stonehand");
             pPlayer->SEND_GOSSIP_MENU(927, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Skinning
             pPlayer->SEND_POI(-8716.0, 469.4, 7, 6, 0, "The Protective Hide");
             pPlayer->SEND_GOSSIP_MENU(928, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 12:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 13:                   //Tailoring
             pPlayer->SEND_POI(-8938.0, 800.7, 7, 6, 0, "Duncan`s Textiles");
             pPlayer->SEND_GOSSIP_MENU(929, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_stormwind(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_stormwind(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_stormwind(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_stormwind(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_stormwind(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_stormwind(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_stormwind(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_stormwind(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_stormwind(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_stormwind(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -3389,9 +3447,9 @@ bool GossipHello_guard_teldrassil(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_teldrassil(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_teldrassil(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bank
             pPlayer->SEND_GOSSIP_MENU(4317, pCreature->GetGUID());
@@ -3425,17 +3483,18 @@ void SendDefaultMenu_guard_teldrassil(Player* pPlayer, Creature* pCreature, uint
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 4);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 5);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION          , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
             pPlayer->SEND_GOSSIP_MENU(4273, pCreature->GetGUID());
             break;
     }
 }
 
-void SendClassTrainerMenu_guard_teldrassil(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_teldrassil(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Druid
             pPlayer->SEND_POI(9741.58, 963.7, 7, 6, 0, "Kal");
@@ -3460,9 +3519,9 @@ void SendClassTrainerMenu_guard_teldrassil(Player* pPlayer, Creature* pCreature,
     }
 }
 
-void SendProfTrainerMenu_guard_teldrassil(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_teldrassil(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(9767.59, 878.81, 7, 6, 0, "Cyndra Kindwhisper");
@@ -3487,27 +3546,30 @@ void SendProfTrainerMenu_guard_teldrassil(Player* pPlayer, Creature* pCreature, 
             pPlayer->SEND_POI(9773.78, 875.88, 7, 6, 0, "Malorne Bladeleaf");
             pPlayer->SEND_GOSSIP_MENU(4334, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 7:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 7:                    //Inscription
+            pPlayer->SEND_GOSSIP_MENU(30001, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 8:                    //Leatherworking
             pPlayer->SEND_POI(10152.59, 1681.46, 7, 6, 0, "Nadyia Maneweaver");
             pPlayer->SEND_GOSSIP_MENU(4335, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 8:                    //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Skinning
             pPlayer->SEND_POI(10135.59, 1673.18, 7, 6, 0, "Radnaal Maneweaver");
             pPlayer->SEND_GOSSIP_MENU(4336, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Tailoring
             pPlayer->SEND_GOSSIP_MENU(4337, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_teldrassil(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_teldrassil(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_teldrassil(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_teldrassil(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_teldrassil(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_teldrassil(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_teldrassil(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_teldrassil(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -3537,9 +3599,9 @@ bool GossipHello_guard_tirisfal(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_tirisfal(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_tirisfal(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bank
             pPlayer->SEND_GOSSIP_MENU(4074, pCreature->GetGUID());
@@ -3572,18 +3634,19 @@ void SendDefaultMenu_guard_tirisfal(Player* pPlayer, Creature* pCreature, uint32
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FIRSTAID             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FISHING              , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 7);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_HERBALISM            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING               , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_INSCRIPTION          , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 9);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_LEATHERWORKING       , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 10);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_MINING               , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_SKINNING             , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_TAILORING            , GOSSIP_SENDER_SEC_PROFTRAIN, GOSSIP_ACTION_INFO_DEF + 13);
             pPlayer->SEND_GOSSIP_MENU(4096, pCreature->GetGUID());
             break;
     }
 }
 
-void SendClassTrainerMenu_guard_tirisfal(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_tirisfal(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Mage
             pPlayer->SEND_POI(2259.18, 240.93, 7, 6, 0, "Cain Firesong");
@@ -3608,9 +3671,9 @@ void SendClassTrainerMenu_guard_tirisfal(Player* pPlayer, Creature* pCreature, u
     }
 }
 
-void SendProfTrainerMenu_guard_tirisfal(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_tirisfal(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(2263.25, 344.23, 7, 6, 0, "Carolai Anise");
@@ -3641,31 +3704,34 @@ void SendProfTrainerMenu_guard_tirisfal(Player* pPlayer, Creature* pCreature, ui
             pPlayer->SEND_POI(2268.21, 331.69, 7, 6, 0, "Faruza");
             pPlayer->SEND_GOSSIP_MENU(4089, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 9:                    //Leatherworking
+        case GOSSIP_ACTION_INFO_DEF + 9:                    //Inscription
+            pPlayer->SEND_GOSSIP_MENU(30001, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 10:                   //Leatherworking
             pPlayer->SEND_POI(2027, 78.72, 7, 6, 0, "Shelene Rhobart");
             pPlayer->SEND_GOSSIP_MENU(4090, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 10:                   //Mining
+        case GOSSIP_ACTION_INFO_DEF + 11:                   //Mining
             pPlayer->SEND_GOSSIP_MENU(4091, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 11:                   //Skinning
+        case GOSSIP_ACTION_INFO_DEF + 12:                   //Skinning
             pPlayer->SEND_POI(2027, 78.72, 7, 6, 0, "Rand Rhobart");
             pPlayer->SEND_GOSSIP_MENU(4092, pCreature->GetGUID());
             break;
-        case GOSSIP_ACTION_INFO_DEF + 12:                   //Tailoring
+        case GOSSIP_ACTION_INFO_DEF + 13:                   //Tailoring
             pPlayer->SEND_POI(2160.45, 659.93, 7, 6, 0, "Bowen Brisboise");
             pPlayer->SEND_GOSSIP_MENU(4093, pCreature->GetGUID());
             break;
     }
 }
 
-bool GossipSelect_guard_tirisfal(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_tirisfal(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_tirisfal(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_tirisfal(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_tirisfal(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_tirisfal(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_tirisfal(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_tirisfal(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }
@@ -3701,9 +3767,9 @@ bool GossipHello_guard_undercity(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void SendDefaultMenu_guard_undercity(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendDefaultMenu_guard_undercity(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Bank
             pPlayer->SEND_POI(1595.64, 232.45, 7, 6, 0, "Undercity Bank");
@@ -3773,9 +3839,9 @@ void SendDefaultMenu_guard_undercity(Player* pPlayer, Creature* pCreature, uint3
     }
 }
 
-void SendBattleMasterMenu_guard_undercity(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendBattleMasterMenu_guard_undercity(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //AV
             pPlayer->SEND_POI(1329, 333.92, 7, 6, 0, "Grizzle Halfmane");
@@ -3792,9 +3858,9 @@ void SendBattleMasterMenu_guard_undercity(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendClassTrainerMenu_guard_undercity(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendClassTrainerMenu_guard_undercity(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Mage
             pPlayer->SEND_POI(1781, 53, 7, 6, 0, "Undercity Mage Trainers");
@@ -3819,9 +3885,9 @@ void SendClassTrainerMenu_guard_undercity(Player* pPlayer, Creature* pCreature, 
     }
 }
 
-void SendProfTrainerMenu_guard_undercity(Player* pPlayer, Creature* pCreature, uint32 action)
+void SendProfTrainerMenu_guard_undercity(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
-    switch (action)
+    switch (uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:                    //Alchemy
             pPlayer->SEND_POI(1419.82, 417.19, 7, 6, 0, "The Apothecarium");
@@ -3874,14 +3940,14 @@ void SendProfTrainerMenu_guard_undercity(Player* pPlayer, Creature* pCreature, u
     }
 }
 
-bool GossipSelect_guard_undercity(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+bool GossipSelect_guard_undercity(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    switch (sender)
+    switch (uiSender)
     {
-        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_undercity(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_undercity(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_undercity(pPlayer, pCreature, action); break;
-        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_undercity(pPlayer, pCreature, action); break;
+        case GOSSIP_SENDER_MAIN:            SendDefaultMenu_guard_undercity(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_CLASSTRAIN:  SendClassTrainerMenu_guard_undercity(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_PROFTRAIN:   SendProfTrainerMenu_guard_undercity(pPlayer, pCreature, uiAction); break;
+        case GOSSIP_SENDER_SEC_BATTLEINFO:  SendBattleMasterMenu_guard_undercity(pPlayer, pCreature, uiAction); break;
     }
     return true;
 }

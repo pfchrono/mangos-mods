@@ -12,7 +12,7 @@ EndScriptData */
 #include "precompiled.h"
 #include "def_sunwell_plateau.h"
 
-#define ENCOUNTERS 6
+#define MAX_ENCOUNTER 6
 
 /* Sunwell Plateau:
 0 - Kalecgos and Sathrovarr
@@ -27,7 +27,7 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
 {
     instance_sunwell_plateau(Map* pMap) : ScriptedInstance(pMap) {Initialize();};
 
-    uint32 Encounters[ENCOUNTERS];
+    uint32 m_auiEncounter[MAX_ENCOUNTER];
 
     /** Creatures **/
     uint64 Kalecgos_Dragon;
@@ -55,6 +55,8 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
 
     void Initialize()
     {
+        memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+
         /*** Creatures ***/
         Kalecgos_Dragon         = 0;
         Kalecgos_Human          = 0;
@@ -76,18 +78,14 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
         MurusGate[0] = 0;
         MurusGate[1] = 0;
 
-        /*** Encounters ***/
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
-            Encounters[i] = NOT_STARTED;
-
         /*** Misc ***/
         SpectralRealmTimer = 5000;
     }
 
     bool IsEncounterInProgress() const
     {
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
-            if (Encounters[i] == IN_PROGRESS)
+        for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
+            if (m_auiEncounter[i] == IN_PROGRESS)
                 return true;
 
         return false;
@@ -111,41 +109,41 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
         return NULL;
     }
 
-    void OnCreatureCreate(Creature *creature, bool add)
+    void OnCreatureCreate(Creature* pCreature, bool add)
     {
-        switch(creature->GetEntry())
+        switch(pCreature->GetEntry())
         {
-            case 24850: Kalecgos_Dragon     = creature->GetGUID(); break;
-            case 24891: Kalecgos_Human      = creature->GetGUID(); break;
-            case 24892: Sathrovarr          = creature->GetGUID(); break;
-            case 24882: Brutallus           = creature->GetGUID(); break;
-            case 24895: Madrigosa           = creature->GetGUID(); break;
-            case 25038: Felmyst             = creature->GetGUID(); break;
-            case 25166: Alythess            = creature->GetGUID(); break;
-            case 25165: Sacrolash           = creature->GetGUID(); break;
-            case 25741: Muru                = creature->GetGUID(); break;
-            case 25315: KilJaeden           = creature->GetGUID(); break;
-            case 25608: KilJaedenController = creature->GetGUID(); break;
-            case 26046: Anveena             = creature->GetGUID(); break;
-            case 25319: KalecgosKJ          = creature->GetGUID(); break;
+            case 24850: Kalecgos_Dragon     = pCreature->GetGUID(); break;
+            case 24891: Kalecgos_Human      = pCreature->GetGUID(); break;
+            case 24892: Sathrovarr          = pCreature->GetGUID(); break;
+            case 24882: Brutallus           = pCreature->GetGUID(); break;
+            case 24895: Madrigosa           = pCreature->GetGUID(); break;
+            case 25038: Felmyst             = pCreature->GetGUID(); break;
+            case 25166: Alythess            = pCreature->GetGUID(); break;
+            case 25165: Sacrolash           = pCreature->GetGUID(); break;
+            case 25741: Muru                = pCreature->GetGUID(); break;
+            case 25315: KilJaeden           = pCreature->GetGUID(); break;
+            case 25608: KilJaedenController = pCreature->GetGUID(); break;
+            case 26046: Anveena             = pCreature->GetGUID(); break;
+            case 25319: KalecgosKJ          = pCreature->GetGUID(); break;
         }
     }
 
-    void OnGameObjectCreate(GameObject *go, bool add)
+    void OnGameObjectCreate(GameObject* pGo, bool add)
     {
-        switch(go->GetEntry())
+        switch(pGo->GetEntry())
         {
-            case 188421: ForceField     = go->GetGUID(); break;
+            case 188421: ForceField     = pGo->GetGUID(); break;
             case 188075:
-                if (Encounters[2] == DONE)
-                    HandleGameObject(NULL, true, go);
-                FireBarrier = go->GetGUID();
+                if (m_auiEncounter[2] == DONE)
+                    HandleGameObject(NULL, true, pGo);
+                FireBarrier = pGo->GetGUID();
                 break;
-            case 187990: MurusGate[0]   = go->GetGUID(); break;
+            case 187990: MurusGate[0]   = pGo->GetGUID(); break;
             case 188118:
-                if (Encounters[4] == DONE)
-                    HandleGameObject(NULL, true, go);
-                MurusGate[1]= go->GetGUID();
+                if (m_auiEncounter[4] == DONE)
+                    HandleGameObject(NULL, true, pGo);
+                MurusGate[1]= pGo->GetGUID();
                 break;
         }
     }
@@ -154,12 +152,12 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
     {
         switch(id)
         {
-            case DATA_KALECGOS_EVENT:     return Encounters[0];
-            case DATA_BRUTALLUS_EVENT:    return Encounters[1];
-            case DATA_FELMYST_EVENT:      return Encounters[2];
-            case DATA_EREDAR_TWINS_EVENT: return Encounters[3];
-            case DATA_MURU_EVENT:         return Encounters[4];
-            case DATA_KILJAEDEN_EVENT:    return Encounters[5];
+            case DATA_KALECGOS_EVENT:     return m_auiEncounter[0];
+            case DATA_BRUTALLUS_EVENT:    return m_auiEncounter[1];
+            case DATA_FELMYST_EVENT:      return m_auiEncounter[2];
+            case DATA_EREDAR_TWINS_EVENT: return m_auiEncounter[3];
+            case DATA_MURU_EVENT:         return m_auiEncounter[4];
+            case DATA_KILJAEDEN_EVENT:    return m_auiEncounter[5];
         }
         return 0;
     }
@@ -193,13 +191,13 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
     {
         switch(id)
         {
-            case DATA_KALECGOS_EVENT:      Encounters[0] = data; break;
-            case DATA_BRUTALLUS_EVENT:     Encounters[1] = data; break;
+            case DATA_KALECGOS_EVENT:      m_auiEncounter[0] = data; break;
+            case DATA_BRUTALLUS_EVENT:     m_auiEncounter[1] = data; break;
             case DATA_FELMYST_EVENT:
                 if (data == DONE)
                     HandleGameObject(FireBarrier, true);
-                Encounters[2] = data; break;
-            case DATA_EREDAR_TWINS_EVENT:  Encounters[3] = data; break;
+                m_auiEncounter[2] = data; break;
+            case DATA_EREDAR_TWINS_EVENT:  m_auiEncounter[3] = data; break;
             case DATA_MURU_EVENT:
                 switch(data)
                 {
@@ -216,8 +214,8 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
                         HandleGameObject(MurusGate[1], false);
                         break;
                 }
-                Encounters[4] = data; break;
-            case DATA_KILJAEDEN_EVENT:     Encounters[5] = data; break;
+                m_auiEncounter[4] = data; break;
+            case DATA_KILJAEDEN_EVENT:     m_auiEncounter[5] = data; break;
         }
 
         if (data == DONE)
@@ -228,8 +226,8 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
     {
         OUT_SAVE_INST_DATA;
         std::ostringstream stream;
-        stream << Encounters[0] << " "  << Encounters[1] << " "  << Encounters[2] << " "  << Encounters[3] << " "
-            << Encounters[4] << " "  << Encounters[5];
+        stream << m_auiEncounter[0] << " "  << m_auiEncounter[1] << " "  << m_auiEncounter[2] << " "  << m_auiEncounter[3] << " "
+            << m_auiEncounter[4] << " "  << m_auiEncounter[5];
         char* out = new char[stream.str().length() + 1];
         strcpy(out, stream.str().c_str());
         if (out)
@@ -250,11 +248,11 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
 
         OUT_LOAD_INST_DATA(in);
         std::istringstream stream(in);
-        stream >> Encounters[0] >> Encounters[1] >> Encounters[2] >> Encounters[3]
-            >> Encounters[4] >> Encounters[5];
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
-            if (Encounters[i] == IN_PROGRESS)                // Do not load an encounter as "In Progress" - reset it instead.
-                Encounters[i] = NOT_STARTED;
+        stream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> m_auiEncounter[3]
+            >> m_auiEncounter[4] >> m_auiEncounter[5];
+        for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
+            if (m_auiEncounter[i] == IN_PROGRESS)                // Do not load an encounter as "In Progress" - reset it instead.
+                m_auiEncounter[i] = NOT_STARTED;
         OUT_LOAD_INST_DATA_COMPLETE;
     }
 };

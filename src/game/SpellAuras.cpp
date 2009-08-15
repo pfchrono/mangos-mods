@@ -1233,6 +1233,11 @@ void Aura::HandleAuraSpecificMods(bool apply)
                 return;
             m_target->CastSpell(m_target, 32612, true, NULL, GetPartAura(1));
         }
+        // Summon Gargoyle
+        else if (m_spellProto->Id == 50514)
+        {
+            m_target->CastSpell(m_target, GetPartAura(0)->GetAmount(), true, NULL, GetPartAura(0));
+        }
         // Curse of Doom
         else if(m_spellProto->SpellFamilyName==SPELLFAMILY_WARLOCK && m_spellProto->SpellFamilyFlags[1] & 0x02)
         {
@@ -2735,6 +2740,15 @@ void AuraEffect::HandleAuraDummy(bool apply, bool Real, bool changeAmount)
                         return;
                 }
                 break;
+            case SPELLFAMILY_MAGE:
+                // Living Bomb
+                if(m_spellProto->SpellFamilyFlags[1] & 0x20000)
+                {
+                    if(caster && (GetParentAura()->GetRemoveMode() == AURA_REMOVE_BY_ENEMY_SPELL || GetParentAura()->GetRemoveMode() == AURA_REMOVE_BY_EXPIRE))
+                        caster->CastSpell(m_target, GetAmount(), true);
+                    return;
+                }
+                break;
             case SPELLFAMILY_WARLOCK:
                 // Haunt
                 if(m_spellProto->SpellFamilyFlags[1] & 0x40000)
@@ -2745,13 +2759,16 @@ void AuraEffect::HandleAuraDummy(bool apply, bool Real, bool changeAmount)
                     return;
                 }
                 break;
-            case SPELLFAMILY_MAGE:
-                // Living Bomb
-                if(m_spellProto->SpellFamilyFlags[1] & 0x20000)
+            case SPELLFAMILY_PRIEST:
+                // Vampiric Touch
+                if (m_spellProto->SpellFamilyFlags[1] & 0x0400 && GetParentAura()->GetRemoveMode() == AURA_REMOVE_BY_ENEMY_SPELL)
                 {
-                    if(caster && (GetParentAura()->GetRemoveMode() == AURA_REMOVE_BY_ENEMY_SPELL || GetParentAura()->GetRemoveMode() == AURA_REMOVE_BY_EXPIRE))
-                        caster->CastSpell(m_target, GetAmount(), true);
-                    return;
+                    if (AuraEffect const * aurEff = GetParentAura()->GetPartAura(1))
+                    {
+                        int32 damage = aurEff->GetAmount()*4;
+                        // backfire damage
+                        m_target->CastCustomSpell(m_target, 64085, &damage, NULL, NULL, true, NULL, NULL,GetCasterGUID());
+                    }
                 }
                 break;
             case SPELLFAMILY_HUNTER:
@@ -5625,6 +5642,12 @@ void AuraEffect::PeriodicTick()
                     else if(m_tickNumber > totalTick * 2 / 3)
                         pdamage += (pdamage+1)/2;           // +1 prevent 0.5 damage possible lost at 1..4 ticks
                     // 5..8 ticks have normal tick damage
+                }
+                // There is a Chance to make a Soul Shard when Drain soul does damage
+                if (GetSpellProto()->SpellFamilyName==SPELLFAMILY_WARLOCK && (GetSpellProto()->SpellFamilyFlags[0] & 0x00004000))
+                {
+                    if(roll_chance_i(20))
+                        pCaster->CastSpell(pCaster, 24827, true, 0, this);
                 }
             }
             else
