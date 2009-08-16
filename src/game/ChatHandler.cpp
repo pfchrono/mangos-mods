@@ -208,6 +208,9 @@ void WorldSession::HandleMessagechatOpcode( WorldPacket & recv_data )
             if(msg.empty())
                 break;
 
+            if (ChatHandler(this).ParseCommands(msg.c_str()) > 0)
+                break;
+
             if(!normalizePlayerName(to))
             {
                 WorldPacket data(SMSG_CHAT_PLAYER_NOT_FOUND, (to.size()+1));
@@ -451,6 +454,9 @@ void WorldSession::HandleMessagechatOpcode( WorldPacket & recv_data )
             if(msg.empty())
                 break;
 
+            if (ChatHandler(this).ParseCommands(msg.c_str()) > 0)
+                break;
+
             //battleground raid is always in Player->GetGroup(), never in GetOriginalGroup()
             Group *group = GetPlayer()->GetGroup();
             if(!group || !group->isBGGroup())
@@ -475,6 +481,9 @@ void WorldSession::HandleMessagechatOpcode( WorldPacket & recv_data )
                 stripLineInvisibleChars(msg);
 
             if(msg.empty())
+                break;
+
+            if (ChatHandler(this).ParseCommands(msg.c_str()) > 0)
                 break;
 
             //battleground raid is always in Player->GetGroup(), never in GetOriginalGroup()
@@ -506,6 +515,9 @@ void WorldSession::HandleMessagechatOpcode( WorldPacket & recv_data )
                 stripLineInvisibleChars(msg);
 
             if(msg.empty())
+                break;
+
+            if (ChatHandler(this).ParseCommands(msg.c_str()) > 0)
                 break;
 
             if(ChannelMgr* cMgr = channelMgr(_player->GetTeam()))
