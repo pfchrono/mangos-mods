@@ -65,10 +65,10 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.props" Condition="exists('$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.props')" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.props" Condition="exists('$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.props')" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
     <Import Project="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.props" Condition="exists('$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.props')" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|X64'">
@@ -82,16 +82,16 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">TrinityScript</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.dll</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">..\..\..\..\bin\$(Platform)_$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">.\ScriptDev2__$(Platform)_$(Configuration)\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">TrinityScript</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">.dll</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\bin\$(Platform)_$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\ScriptDev2__$(Platform)_$(Configuration)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">TrinityScript</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.dll</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">..\..\..\..\bin\$(Platform)_$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">.\ScriptDev2__$(Platform)_$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">TrinityScript</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|X64'">..\..\..\..\bin\$(Platform)_$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|X64'">.\ScriptDev2__$(Platform)_$(Configuration)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|X64'">TrinityScript</TargetName>
@@ -116,7 +116,7 @@
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\dep\include\;..\..\..\shared\;..\..\..\framework\;..\..\..\game\;..\include\;..\..\..\..\dep\ACE_wrappers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\dep\include\;..\..\..\shared\;..\..\..\framework\;..\..\..\game\;..\include\;..\base\;..\..\..\..\dep\ACE_wrappers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;TRINITY_DEBUG;_WINDOWS;_USRDLL;SCRIPT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -139,45 +139,13 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
-    <PreBuildEvent>
-      <Command>copy ..\..\..\..\bin\$(Platform)_$(Configuration)\trinitycore.lib ..\..\..\..\win\VC100\trinitycore__$(Platform)_$(Configuration)\</Command>
-    </PreBuildEvent>
-    <Midl>
-      <TargetEnvironment>X64</TargetEnvironment>
-    </Midl>
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\dep\include\;..\..\..\shared\;..\..\..\framework\;..\..\..\game\;..\include\;..\..\..\..\dep\ACE_wrappers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;TRINITY_DEBUG;_WINDOWS;_USRDLL;SCRIPT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AdditionalDependencies>trinitycore.lib;aced.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\win\VC100\trinitycore__$(Platform)_$(Configuration);..\..\..\..\dep\lib\$(Platform)_$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)TrinityScript.pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <DataExecutionPrevention>
-      </DataExecutionPrevention>
-      <ImportLibrary>$(OutDir)TrinityScript.lib</ImportLibrary>
-      <TargetMachine>MachineX64</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
       <Command>copy ..\..\..\..\bin\$(Platform)_$(Configuration)\trinitycore.lib ..\..\..\..\win\VC100\trinitycore__$(Platform)_$(Configuration)\</Command>
     </PreBuildEvent>
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>..\..\..\..\dep\include\;..\..\..\shared\;..\..\..\framework\;..\..\..\game\;..\include\;..\..\..\..\dep\ACE_wrappers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\dep\include\;..\..\..\shared\;..\..\..\framework\;..\..\..\game\;..\include\;..\base\;..\..\..\..\dep\ACE_wrappers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SCRIPT;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -200,6 +168,38 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
+    <PreBuildEvent>
+      <Command>copy ..\..\..\..\bin\$(Platform)_$(Configuration)\trinitycore.lib ..\..\..\..\win\VC100\trinitycore__$(Platform)_$(Configuration)\</Command>
+    </PreBuildEvent>
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\dep\include\;..\..\..\shared\;..\..\..\framework\;..\..\..\game\;..\include\;..\base\;..\..\..\..\dep\ACE_wrappers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;TRINITY_DEBUG;_WINDOWS;_USRDLL;SCRIPT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>trinitycore.lib;aced.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\..\win\VC100\trinitycore__$(Platform)_$(Configuration);..\..\..\..\dep\lib\$(Platform)_$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)TrinityScript.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>$(OutDir)TrinityScript.lib</ImportLibrary>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|X64'">
     <PreBuildEvent>
       <Command>copy ..\..\..\..\bin\$(Platform)_$(Configuration)\trinitycore.lib ..\..\..\..\win\VC100\trinitycore__$(Platform)_$(Configuration)\
@@ -210,7 +210,7 @@
     </Midl>
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>..\..\..\..\dep\include\;..\..\..\shared\;..\..\..\framework\;..\..\..\game\;..\include\;..\..\..\..\dep\ACE_wrappers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\dep\include\;..\..\..\shared\;..\..\..\framework\;..\..\..\game\;..\include\;..\base\;..\..\..\..\dep\ACE_wrappers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SCRIPT;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -234,21 +234,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\base\escortAI.cpp" />
+    <ClCompile Include="..\base\guard_ai.cpp" />
+    <ClCompile Include="..\base\simple_ai.cpp" />
     <ClCompile Include="..\include\precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\include\sc_creature.cpp" />
     <ClCompile Include="..\ScriptMgr.cpp" />
-    <ClCompile Include="..\scripts\areatrigger\areatrigger_scripts.cpp" />
-    <ClCompile Include="..\scripts\boss\boss_emeriss.cpp" />
-    <ClCompile Include="..\scripts\boss\boss_lethon.cpp" />
-    <ClCompile Include="..\scripts\boss\boss_taerar.cpp" />
-    <ClCompile Include="..\scripts\boss\boss_ysondre.cpp" />
-    <ClCompile Include="..\scripts\creature\mob_generic_creature.cpp" />
-    <ClCompile Include="..\scripts\creature\simple_ai.cpp" />
     <ClCompile Include="..\scripts\custom\npc_acherus_taxi.cpp" />
     <ClCompile Include="..\scripts\custom\npc_teleport.cpp" />
     <ClCompile Include="..\scripts\custom\npc_wyrmresttempel_taxi.cpp" />
@@ -265,7 +261,9 @@
     <ClCompile Include="..\scripts\eastern_kingdoms\ghostlands.cpp" />
     <ClCompile Include="..\scripts\eastern_kingdoms\hinterlands.cpp" />
     <ClCompile Include="..\scripts\eastern_kingdoms\ironforge.cpp" />
+    <ClCompile Include="..\scripts\eastern_kingdoms\isle_of_queldanas.cpp" />
     <ClCompile Include="..\scripts\eastern_kingdoms\loch_modan.cpp" />
+    <ClCompile Include="..\scripts\eastern_kingdoms\scarlet_enclave\the_scarlet_enclave.cpp" />
     <ClCompile Include="..\scripts\eastern_kingdoms\searing_gorge.cpp" />
     <ClCompile Include="..\scripts\eastern_kingdoms\silvermoon_city.cpp" />
     <ClCompile Include="..\scripts\eastern_kingdoms\silverpine_forest.cpp" />
@@ -279,10 +277,6 @@
     <ClCompile Include="..\scripts\examples\example_escort.cpp" />
     <ClCompile Include="..\scripts\examples\example_gossip_codebox.cpp" />
     <ClCompile Include="..\scripts\examples\example_misc.cpp" />
-    <ClCompile Include="..\scripts\go\go_scripts.cpp" />
-    <ClCompile Include="..\scripts\guard\guards.cpp" />
-    <ClCompile Include="..\scripts\guard\guard_ai.cpp" />
-    <ClCompile Include="..\scripts\item\item_scripts.cpp" />
     <ClCompile Include="..\scripts\kalimdor\ashenvale.cpp" />
     <ClCompile Include="..\scripts\kalimdor\azshara.cpp" />
     <ClCompile Include="..\scripts\kalimdor\azuremyst_isle.cpp" />
@@ -310,22 +304,29 @@
     <ClCompile Include="..\scripts\northrend\icecrown.cpp" />
     <ClCompile Include="..\scripts\northrend\sholazar_basin.cpp" />
     <ClCompile Include="..\scripts\northrend\zuldrak.cpp" />
-    <ClCompile Include="..\scripts\npc\npcs_special.cpp" />
-    <ClCompile Include="..\scripts\npc\npc_escortAI.cpp" />
-    <ClCompile Include="..\scripts\npc\npc_innkeeper.cpp" />
-    <ClCompile Include="..\scripts\npc\npc_professions.cpp" />
-    <ClCompile Include="..\scripts\npc\npc_taxi.cpp" />
     <ClCompile Include="..\scripts\outland\blades_edge_mountains.cpp" />
     <ClCompile Include="..\scripts\outland\boss_doomlord_kazzak.cpp" />
     <ClCompile Include="..\scripts\outland\boss_doomwalker.cpp" />
     <ClCompile Include="..\scripts\outland\hellfire_peninsula.cpp" />
-    <ClCompile Include="..\scripts\outland\isle_of_queldanas.cpp" />
     <ClCompile Include="..\scripts\outland\nagrand.cpp" />
     <ClCompile Include="..\scripts\outland\netherstorm.cpp" />
     <ClCompile Include="..\scripts\outland\shadowmoon_valley.cpp" />
     <ClCompile Include="..\scripts\outland\shattrath_city.cpp" />
     <ClCompile Include="..\scripts\outland\terokkar_forest.cpp" />
     <ClCompile Include="..\scripts\outland\zangarmarsh.cpp" />
+    <ClCompile Include="..\scripts\world\areatrigger_scripts.cpp" />
+    <ClCompile Include="..\scripts\world\boss_emeriss.cpp" />
+    <ClCompile Include="..\scripts\world\boss_lethon.cpp" />
+    <ClCompile Include="..\scripts\world\boss_taerar.cpp" />
+    <ClCompile Include="..\scripts\world\boss_ysondre.cpp" />
+    <ClCompile Include="..\scripts\world\go_scripts.cpp" />
+    <ClCompile Include="..\scripts\world\guards.cpp" />
+    <ClCompile Include="..\scripts\world\item_scripts.cpp" />
+    <ClCompile Include="..\scripts\world\mob_generic_creature.cpp" />
+    <ClCompile Include="..\scripts\world\npcs_special.cpp" />
+    <ClCompile Include="..\scripts\world\npc_innkeeper.cpp" />
+    <ClCompile Include="..\scripts\world\npc_professions.cpp" />
+    <ClCompile Include="..\scripts\world\npc_taxi.cpp" />
     <ClCompile Include="..\scripts\zone\aunchindoun\auchenai_crypts\boss_exarch_maladaar.cpp" />
     <ClCompile Include="..\scripts\zone\aunchindoun\auchenai_crypts\boss_shirrak_the_dead_watcher.cpp" />
     <ClCompile Include="..\scripts\zone\aunchindoun\mana_tombs\boss_nexusprince_shaffar.cpp" />
@@ -437,7 +438,6 @@
     <ClCompile Include="..\scripts\zone\draktharon_keep\boss_tharon_ja.cpp" />
     <ClCompile Include="..\scripts\zone\draktharon_keep\boss_trollgore.cpp" />
     <ClCompile Include="..\scripts\zone\draktharon_keep\instance_drak_tharon_keep.cpp" />
-    <ClCompile Include="..\scripts\zone\eastern_plaguelands\the_scarlet_enclave.cpp" />
     <ClCompile Include="..\scripts\zone\gruuls_lair\boss_gruul.cpp" />
     <ClCompile Include="..\scripts\zone\gruuls_lair\boss_high_king_maulgar.cpp" />
     <ClCompile Include="..\scripts\zone\gruuls_lair\instance_gruuls_lair.cpp" />
@@ -691,8 +691,12 @@
     <ClCompile Include="..\scripts\zone\zulgurub\boss_wushoolay.cpp" />
     <ClCompile Include="..\scripts\zone\zulgurub\instance_zulgurub.cpp" />
     <ClCompile Include="..\system.cpp" />
+    <ClCompile Include="..\system\ScriptLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\base\escortAI.h" />
+    <ClInclude Include="..\base\guard_ai.h" />
+    <ClInclude Include="..\base\simple_ai.h" />
     <ClInclude Include="..\include\precompiled.h" />
     <ClInclude Include="..\include\sc_creature.h" />
     <ClInclude Include="..\include\sc_gossip.h" />
@@ -700,9 +704,6 @@
     <ClInclude Include="..\include\sc_item.h" />
     <ClInclude Include="..\include\sc_npc_teleport.h" />
     <ClInclude Include="..\ScriptMgr.h" />
-    <ClInclude Include="..\scripts\creature\simple_ai.h" />
-    <ClInclude Include="..\scripts\guard\guard_ai.h" />
-    <ClInclude Include="..\scripts\npc\npc_escortAI.h" />
     <ClInclude Include="..\scripts\zone\aunchindoun\sethekk_halls\def_sethekk_halls.h" />
     <ClInclude Include="..\scripts\zone\aunchindoun\shadow_labyrinth\def_shadow_labyrinth.h" />
     <ClInclude Include="..\scripts\zone\azjol_nerub\ahnkahet\def_ahnkahet.h" />
@@ -754,6 +755,7 @@
     <ClInclude Include="..\scripts\zone\wailing_caverns\def_wailing_caverns.h" />
     <ClInclude Include="..\scripts\zone\zulaman\def_zulaman.h" />
     <ClInclude Include="..\scripts\zone\zulgurub\def_zulgurub.h" />
+    <ClInclude Include="..\system\ScriptLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

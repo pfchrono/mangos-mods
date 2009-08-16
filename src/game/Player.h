@@ -1567,8 +1567,9 @@ class MANGOS_DLL_SPEC Player : public Unit
 
         ActionButton* addActionButton(uint8 button, uint32 action, uint8 type);
         void removeActionButton(uint8 button);
-        void SendInitialActionButtons() const { SendActionButtons(); }
-        void SendActionButtons() const;
+        void SendInitialActionButtons() const { SendActionButtons(1); }
+        void SendActionButtons(uint32 state) const;
+        void LoadSendActionButtons();
 
         PvPInfo pvpInfo;
         void UpdatePvPState(bool onlyFFA = false);
@@ -2204,6 +2205,9 @@ class MANGOS_DLL_SPEC Player : public Unit
 
         //bool isActiveObject() const { return true; }
         bool canSeeSpellClickOn(Creature const* creature) const;
+        uint32 GetChampioningFaction() const { return m_ChampioningFaction; }
+        void SetChampioningFaction(uint32 faction) { m_ChampioningFaction = faction; }
+
     protected:
 
         uint32 m_contestedPvPTimer;
@@ -2479,6 +2483,8 @@ class MANGOS_DLL_SPEC Player : public Unit
         ReputationMgr  m_reputationMgr;
 
         SpellCooldowns m_spellCooldowns;
+
+		uint32 m_ChampioningFaction;
 };
 
 void AddItemsSetItem(Player*player,Item *item);

@@ -597,6 +597,10 @@ ChatLogTimestamp = 0
 #        Staring level that have character at creating (in range 1 to MaxPlayerLevel)
 #        Default: 1
 #
+#    MinDualSpecLevel
+#        Min level at which players can use Dual Spec functionality
+#        Default: 40
+#
 #    StartHeroicPlayerLevel
 #        Staring level that have character of heroic class at creating (in range 1 to MaxPlayerLevel)
 #        Default: 55
@@ -756,6 +760,7 @@ MinLevelForHeroicCharacterCreating = 55
 SkipCinematics = 0
 MaxPlayerLevel = 80
 StartPlayerLevel = 1
+MinDualSpecLevel = 40
 StartHeroicPlayerLevel = 55
 StartPlayerMoney = 0
 MaxHonorPoints = 75000

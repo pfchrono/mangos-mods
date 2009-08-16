@@ -11188,9 +11188,8 @@ Unit* Creature::SelectVictim()
     // search nearby enemy before enter evade mode
     if(HasReactState(REACT_AGGRESSIVE))
     {
-        target = SelectNearestTarget();
-        if(target && !IsOutOfThreatArea(target))
-            return target;
+        if(target = SelectNearestTarget())
+			return target;
     }
 
     if(m_invisibilityMask)
@@ -14557,14 +14556,18 @@ void Unit::EnterVehicle(Vehicle *vehicle, int8 seatId)
     {
         if(m_Vehicle == vehicle)
         {
-            if(seatId >= 0)
-                ChangeSeat(seatId);
+            {
+                sLog.outDebug("EnterVehicle: %u leave vehicle %u seat %d and enter %d.", GetEntry(), m_Vehicle->GetEntry(), GetTransSeat(), seatId);
+                 ChangeSeat(seatId);
+            }
             return;
         }
         else
-            ExitVehicle();
+        {
+            sLog.outDebug("EnterVehicle: %u exit %u and enter %u.", GetEntry(), m_Vehicle->GetEntry(), vehicle->GetEntry());
+             ExitVehicle();
+        }
     }
-
     if(GetTypeId() == TYPEID_PLAYER)
     {
         ((Player*)this)->StopCastingCharm();
@@ -14640,6 +14643,7 @@ void Unit::ExitVehicle()
     {
         //((Player*)this)->SetClientControl(this, 1);
         ((Player*)this)->SendTeleportAckMsg();
+		((Player*)this)->SetFallInformation(0, GetPositionZ());
     }
     WorldPacket data;
     BuildHeartBeatMsg(&data);

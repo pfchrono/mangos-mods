@@ -479,6 +479,8 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
     m_isWorldObject = true;
 
     sWorld.IncreasePlayerCount();
+
+	m_ChampioningFaction = 0;
 }
 
 Player::~Player ()
@@ -757,10 +759,10 @@ bool Player::Create( uint32 guidlow, const std::string& name, uint8 race, uint8 
             {
                 switch(iProto->Spells[0].SpellCategory)
                 {
-                    case 11:                                // food
+                    case SPELL_CATEGORY_FOOD:
                         count = getClass()==CLASS_DEATH_KNIGHT ? 10 : 4;
                         break;
-                    case 59:                                // drink
+                    case SPELL_CATEGORY_DRINK:
                         count = 2;
                         break;
                 }
@@ -1324,7 +1326,6 @@ void Player::Update( uint32 p_time )
         if(p_time >= m_nextSave)
         {
             // m_nextSave reseted in SaveToDB call
-            SendActionButtons(); // -- Let's Update the bars at save intervals
             SaveToDB();
             sLog.outDetail("Player '%s' (GUID: %u) saved", GetName(), GetGUIDLow());
         }
@@ -2549,7 +2550,7 @@ void Player::InitTalentForLevel()
     }
     else
     {
-        if (level < 40 || m_specsCount == 0)
+        if (level < sWorld.getConfig(CONFIG_MIN_DUALSPEC_LEVEL) || m_specsCount == 0)
         {
             m_specsCount = 1;
             m_activeSpec = 0;
@@ -5746,13 +5747,13 @@ int16 Player::GetSkillTempBonusValue(uint32 skill) const
     return 0;
 }
 
-void Player::SendActionButtons() const
+void Player::SendActionButtons(uint32 state) const
 {
     uint32 spec = m_activeSpec;
     sLog.outDetail( "Sending Action Buttons for '%u' spec '%u'", GetGUIDLow(), spec );
 
     WorldPacket data(SMSG_ACTION_BUTTONS, 1+(MAX_ACTION_BUTTONS*4));
-    data << uint8(spec);                                       // can be 0, 1, 2 (talent spec)
+    data << uint8(state);                                       // can be 0, 1, 2 (talent spec)
     for(int button = 0; button < MAX_ACTION_BUTTONS; ++button)
     {
         ActionButtonList::const_iterator itr = m_actionButtons.find(button);
@@ -5763,7 +5764,19 @@ void Player::SendActionButtons() const
     }
 
     GetSession()->SendPacket( &data );
-    sLog.outDetail( "Action Buttons for '%u' spec '%u' Sent", GetGUIDLow(), spec );
+    sLog.outDetail( "Action Buttons for '%u' spec '%u' Sent", GetGUIDLow(), m_activeSpec );
+}
+
+
+void Player::LoadSendActionButtons()
+{
+	m_actionButtons.clear();
+    QueryResult *result = CharacterDatabase.PQuery("SELECT button,action,type FROM character_action WHERE guid = '%u' AND spec = '%u' ORDER BY button", GetGUIDLow(), m_activeSpec);
+    if (result)    
+    {
+        _LoadActions(result);
+    }
+    SendActionButtons(1);
 }
 
 ActionButton* Player::addActionButton(uint8 button, uint32 action, uint8 type)
@@ -6086,11 +6099,35 @@ void Player::RewardReputation(Unit *pVictim, float rate)
     if(!Rep)
         return;
 
+    uint32 ChampioningFaction = 0;
+
+    if(GetChampioningFaction())
+    {
+        // support for: Championing - http://www.wowwiki.com/Championing
+
+        Map const *pMap = GetMap();
+        if(pMap && pMap->IsDungeon())
+        {
+            bool Heroic = pMap->IsHeroic();
+
+            InstanceTemplate const *pInstance = objmgr.GetInstanceTemplate(pMap->GetId());
+            if(pInstance)
+            {
+                AccessRequirement const *pAccessRequirement = objmgr.GetAccessRequirement(pInstance->access_id);
+                if(pAccessRequirement)
+                {
+                    if(!pMap->IsRaid() && ((!Heroic && pAccessRequirement->levelMin == 80) || (Heroic && pAccessRequirement->heroicLevelMin == 80)))
+                        ChampioningFaction = GetChampioningFaction();
+                }
+            }
+        }
+    }
+
     if(Rep->repfaction1 && (!Rep->team_dependent || GetTeam()==ALLIANCE))
     {
-        int32 donerep1 = CalculateReputationGain(pVictim->getLevel(), Rep->repvalue1, Rep->repfaction1, false);
+        int32 donerep1 = CalculateReputationGain(pVictim->getLevel(), Rep->repvalue1, ChampioningFaction ? ChampioningFaction : Rep->repfaction1, false);
         donerep1 = int32(donerep1*rate);
-        FactionEntry const *factionEntry1 = sFactionStore.LookupEntry(Rep->repfaction1);
+        FactionEntry const *factionEntry1 = sFactionStore.LookupEntry(ChampioningFaction ? ChampioningFaction : Rep->repfaction1);
         uint32 current_reputation_rank1 = GetReputationMgr().GetRank(factionEntry1);
         if (factionEntry1 && current_reputation_rank1 <= Rep->reputation_max_cap1)
             GetReputationMgr().ModifyReputation(factionEntry1, donerep1);
@@ -6106,9 +6143,9 @@ void Player::RewardReputation(Unit *pVictim, float rate)
 
     if(Rep->repfaction2 && (!Rep->team_dependent || GetTeam()==HORDE))
     {
-        int32 donerep2 = CalculateReputationGain(pVictim->getLevel(), Rep->repvalue2, Rep->repfaction2, false);
+        int32 donerep2 = CalculateReputationGain(pVictim->getLevel(), Rep->repvalue2, ChampioningFaction ? ChampioningFaction : Rep->repfaction2, false);
         donerep2 = int32(donerep2*rate);
-        FactionEntry const *factionEntry2 = sFactionStore.LookupEntry(Rep->repfaction2);
+        FactionEntry const *factionEntry2 = sFactionStore.LookupEntry(ChampioningFaction ? ChampioningFaction : Rep->repfaction2);
         uint32 current_reputation_rank2 = GetReputationMgr().GetRank(factionEntry2);
         if (factionEntry2 && current_reputation_rank2 <= Rep->reputation_max_cap2)
             GetReputationMgr().ModifyReputation(factionEntry2, donerep2);
@@ -14620,13 +14657,6 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
         return false;
     }
 
-    m_specsCount = fields[42].GetUInt32();
-    m_activeSpec = fields[43].GetUInt32();
-
-    // sanity check
-    if (m_specsCount < 2) // Maybe better to check MAX_TALENT_SPECS?
-        m_activeSpec = 0;
-
     Object::_Create( guid, 0, HIGHGUID_PLAYER );
 
     m_name = fields[3].GetCppString();
@@ -15001,8 +15031,6 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     if(m_deathExpireTime > now+MAX_DEATH_COUNT*DEATH_EXPIRE_STEP)
         m_deathExpireTime = now+MAX_DEATH_COUNT*DEATH_EXPIRE_STEP-1;
 
-    delete result;
-
     // clear channel spell data (if saved at channel spell casting)
     SetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT, 0);
     SetUInt32Value(UNIT_CHANNEL_SPELL,0);
@@ -15047,6 +15075,18 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     //mails are loaded only when needed ;-) - when player in game click on mailbox.
     //_LoadMail();
 
+    m_specsCount = fields[42].GetUInt32();
+    m_activeSpec = fields[43].GetUInt32();
+    delete result;
+
+    // sanity check
+    if (m_specsCount > MAX_TALENT_SPECS || m_activeSpec > MAX_TALENT_SPEC ||
+        m_specsCount < MIN_TALENT_SPECS || m_activeSpec < MIN_TALENT_SPEC ) // if (m_specsCount < 2) is not logical
+    {
+        m_activeSpec = 0;
+        sLog.outError("Player %s(GUID: %u) has SpecCount = %u and ActiveSpec = %u.", GetName(), GetGUIDLow(), m_specsCount, m_activeSpec);
+    }
+  
     _LoadTalents(holder->GetResult(PLAYER_LOGIN_QUERY_LOADTALENTS));
     _LoadSpells(holder->GetResult(PLAYER_LOGIN_QUERY_LOADSPELLS));
 
@@ -15204,10 +15244,6 @@ bool Player::isAllowedToLoot(Creature* creature)
 
 void Player::_LoadActions(QueryResult *result)
 {
-    m_actionButtons.clear();
-
-    //QueryResult *result = CharacterDatabase.PQuery("SELECT button,action,type FROM character_action WHERE guid = '%u' ORDER BY button",GetGUIDLow());
-
     if(result)
     {
         do
@@ -16356,7 +16392,7 @@ void Player::_SaveActions()
                 ++itr;
                 break;
             case ACTIONBUTTON_DELETED:
-                CharacterDatabase.PExecute("DELETE FROM character_action WHERE guid = '%u' and button = '%u'", GetGUIDLow(), (uint32)itr->first );
+                CharacterDatabase.PExecute("DELETE FROM character_action WHERE guid = '%u' and button = '%u' and spec = '%u'", GetGUIDLow(), (uint32)itr->first, (uint32)m_activeSpec );
                 m_actionButtons.erase(itr++);
                 break;
             default:
@@ -19150,7 +19186,7 @@ void Player::SendInitialPacketsBeforeAddToMap()
     data << uint32(0);                                      // count, for(count) uint32;
     GetSession()->SendPacket(&data);
 
-    SendActionButtons(); // -- Testing
+    LoadSendActionButtons(); // -- Testing
     m_reputationMgr.SendInitialReputations();
     m_achievementMgr.SendAllAchievementData();
 
@@ -19204,7 +19240,6 @@ void Player::SendInitialPacketsAfterAddToMap()
         SendMessageToSet(&data2,true);
     }
 
-    SendActionButtons();
     SendAurasForTarget(this);
     SendEnchantmentDurations();                             // must be after add to map
     SendItemDurations();                                    // must be after add to map
@@ -21678,14 +21713,15 @@ void Player::UpdateSpecCount(uint32 count)
     if(GetSpecsCount() == count)
         return;
 
-    if(count == 1)
+    if(count == MIN_TALENT_SPECS)
     {
         _SaveActions(); // make sure the button list is cleaned up
         // active spec becomes only spec?
         CharacterDatabase.PExecute("DELETE FROM character_action WHERE spec<>'%u' AND guid='%u'",m_activeSpec, GetGUIDLow());
-        CharacterDatabase.PExecute("UPDATE character_action SET spec='%u' WHERE guid='%u'", m_activeSpec, GetGUIDLow());
+        CharacterDatabase.PExecute("UPDATE character_action SET spec='0' WHERE guid='%u'", GetGUIDLow());
+        m_activeSpec = 0;
     }
-    else if (count == 2)
+    else if (count == MAX_TALENT_SPECS)
     {
         _SaveActions(); // make sure the button list is cleaned up
         for(ActionButtonList::iterator itr = m_actionButtons.begin(); itr != m_actionButtons.end(); ++itr)
@@ -21711,6 +21747,8 @@ void Player::ActivateSpec(uint32 spec)
 
     if(GetSpecsCount() != MAX_TALENT_SPECS)
         return;
+
+    _SaveActions();
 
     uint32 const* talentTabIds = GetTalentTabPages(getClass());
     
@@ -21754,6 +21792,7 @@ void Player::ActivateSpec(uint32 spec)
     }
 
     SetActiveSpec(spec);
+	uint32 spentTalents = 0;
 
     for(uint32 i = 0; i < 3; ++i)
     {
@@ -21776,6 +21815,7 @@ void Player::ActivateSpec(uint32 spec)
                 if(talentInfo->RankID[k] && HasTalent(talentInfo->RankID[k], m_activeSpec))
                 {
                     learnSpell(talentInfo->RankID[k], false);
+					spentTalents += k+1;
                 }
             }
         }
@@ -21796,17 +21836,12 @@ void Player::ActivateSpec(uint32 spec)
         SetGlyph(slot, glyph);
     }
 
-    //m_usedTalentCount = (uint32)(sizeof(m_talents[spec]) / sizeof(m_talents[spec][0])); // This is not right, not factoring in talent ranks :(
+    m_usedTalentCount = spentTalents;
     InitTalentForLevel();
 
-    QueryResult *result = CharacterDatabase.PQuery("SELECT button,action,type FROM character_action WHERE guid = '%u' AND spec = '%u' ORDER BY button", GetGUIDLow(), m_activeSpec);
-    if (result)    
-    {
-        _LoadActions(result);
-    }
-
     UnsummonPetTemporaryIfAny();
-    SendActionButtons();
-    SetPower(getPowerType(), 0);
+	AutoUnequipOffhandIfNeed();
+	LoadSendActionButtons();
+	SetPower(getPowerType(), 0);
     this->SaveToDB();
 }

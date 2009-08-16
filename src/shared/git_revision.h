@@ -4,10 +4,10 @@
 #define GIT_REVISION_H
 
 static const char * BUILD_TAG = "RS-FUNSERVER";
-static int BUILD_REVISION = 63;
+static int BUILD_REVISION = 72;
 
-#define BUILD_USER "Grevin"
-#define BUILD_WORKSTATION "CHRONO"
+#define BUILD_USER "Midnight"
+#define BUILD_WORKSTATION "CHRONOTOSIS"
 #define GIT_DATE "Wednesday, August 5, 2009"
 
 #define BUILD_TIME "03:41PM (UTC)"
