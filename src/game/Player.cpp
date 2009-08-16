@@ -5777,6 +5777,7 @@ void Player::LoadSendActionButtons()
         _LoadActions(result);
     }
     SendActionButtons(1);
+    SaveToDB();
 }
 
 ActionButton* Player::addActionButton(uint8 button, uint32 action, uint8 type)
@@ -15244,6 +15245,7 @@ bool Player::isAllowedToLoot(Creature* creature)
 
 void Player::_LoadActions(QueryResult *result)
 {
+    m_actionButtons.clear(); // -- Clear again just to be safe
     if(result)
     {
         do
@@ -19186,7 +19188,7 @@ void Player::SendInitialPacketsBeforeAddToMap()
     data << uint32(0);                                      // count, for(count) uint32;
     GetSession()->SendPacket(&data);
 
-    LoadSendActionButtons(); // -- Testing
+    LoadSendActionButtons(); // This should be needed as SendInitialPacketsBeforeAddToMap is called when login or rezone
     m_reputationMgr.SendInitialReputations();
     m_achievementMgr.SendAllAchievementData();
 

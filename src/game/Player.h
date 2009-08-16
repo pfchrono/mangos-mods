@@ -1567,7 +1567,6 @@ class MANGOS_DLL_SPEC Player : public Unit
 
         ActionButton* addActionButton(uint8 button, uint32 action, uint8 type);
         void removeActionButton(uint8 button);
-        void SendInitialActionButtons() const { SendActionButtons(1); }
         void SendActionButtons(uint32 state) const;
         void LoadSendActionButtons();
 
