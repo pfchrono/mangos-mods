@@ -5776,7 +5776,10 @@ void Player::LoadSendActionButtons()
     {
         _LoadActions(result);
     }
-    SendActionButtons(1);
+    if (m_specsCount == 1)
+        SendActionButtons(0);
+    else
+        SendActionButtons(1);
     SaveToDB();
 }
 
