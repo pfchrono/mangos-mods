@@ -3564,6 +3564,13 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
         }
     }
 
+    
+    if(spell_id == 46917 && m_canTitanGrip)
+        SetCanTitanGrip(false);
+
+    if(sWorld.getConfig(CONFIG_OFFHAND_CHECK_AT_SPELL_UNLEARN))
+        AutoUnequipOffhandIfNeed();
+ 
     // remove from spell book if not replaced by lesser rank
     if(!prev_activate)
     {
@@ -3809,7 +3816,7 @@ bool Player::resetTalents(bool no_cost)
     if(m_canTitanGrip)
     {
         m_canTitanGrip = false;
-        if(sWorld.getConfig(CONFIG_OFFHAND_CHECK_AT_TALENTS_RESET))
+        if(sWorld.getConfig(CONFIG_OFFHAND_CHECK_AT_SPELL_UNLEARN))
             AutoUnequipOffhandIfNeed();
     }
 
@@ -5774,12 +5781,9 @@ void Player::LoadSendActionButtons()
     QueryResult *result = CharacterDatabase.PQuery("SELECT button,action,type FROM character_action WHERE guid = '%u' AND spec = '%u' ORDER BY button", GetGUIDLow(), m_activeSpec);
     if (result)    
     {
-        _LoadActions(result);
+        _LoadActions(result, false);
     }
-    if (m_specsCount == 1)
-        SendActionButtons(0);
-    else
-        SendActionButtons(1);
+    SendActionButtons(1);
     SaveToDB();
 }
 
@@ -5839,6 +5843,12 @@ void Player::removeActionButton(uint8 button)
     ActionButtonList::iterator buttonItr = m_actionButtons.find(button);
     if (buttonItr==m_actionButtons.end())
         return;
+
+    if (!buttonItr->second.canRemoveByClient)
+    {
+        buttonItr->second.canRemoveByClient = true;    
+        return;
+    }    
 
     if(buttonItr->second.uState==ACTIONBUTTON_NEW)
         m_actionButtons.erase(buttonItr);                   // new and not saved
@@ -6086,7 +6096,7 @@ int32 Player::CalculateReputationGain(uint32 creatureOrQuestLevel, int32 rep, in
     if (percent <= 0.0f)
         return 0;
 
-    return int32(rep*percent)/100;
+    return int32(rep * percent / 100);
 }
 
 //Calculates how many reputation points player gains in victim's enemy factions
@@ -7322,6 +7332,18 @@ void Player::CastItemCombatSpell(Unit *target, WeaponAttackType attType, uint32 
 
             if(spellData.SpellPPMRate)
             {
+                if(spellData.SpellId == 52781) // Persuasive Strike
+                {
+                    switch(target->GetEntry())
+                    {
+                        default:
+                            return;
+                        case 28939:
+                        case 28940:
+                        case 28610:
+                            break;
+                    }
+                }
                 uint32 WeaponSpeed = GetAttackTime(attType);
                 chance = GetPPMProcChance(WeaponSpeed, spellData.SpellPPMRate, spellInfo);
             }
@@ -7371,10 +7393,13 @@ void Player::CastItemCombatSpell(Unit *target, WeaponAttackType attType, uint32 
 
             float chance = pEnchant->amount[s] != 0 ? float(pEnchant->amount[s]) : GetWeaponProcChance();
 
-            if (entry && entry->PPMChance)
-                chance = GetPPMProcChance(proto->Delay, entry->PPMChance, spellInfo);
-            else if (entry && entry->customChance)
-                chance = entry->customChance;
+            if (entry)
+            {
+                if(entry->PPMChance)
+                    chance = GetPPMProcChance(proto->Delay, entry->PPMChance, spellInfo);
+                else if(entry->customChance)
+                    chance = entry->customChance;
+            }
 
             // Apply spell mods
             ApplySpellMod(pEnchant->spellid[s],SPELLMOD_CHANCE_OF_SUCCESS,chance);
@@ -15117,7 +15142,7 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     // update items with duration and realtime
     UpdateItemDuration(time_diff, true);
 
-    _LoadActions(holder->GetResult(PLAYER_LOGIN_QUERY_LOADACTIONS));
+    _LoadActions(holder->GetResult(PLAYER_LOGIN_QUERY_LOADACTIONS), true);
 
     // unread mails and next delivery time, actual mails not loaded
     _LoadMailInit(holder->GetResult(PLAYER_LOGIN_QUERY_LOADMAILCOUNT), holder->GetResult(PLAYER_LOGIN_QUERY_LOADMAILDATE));
@@ -15246,7 +15271,7 @@ bool Player::isAllowedToLoot(Creature* creature)
         return !creature->hasLootRecipient();
 }
 
-void Player::_LoadActions(QueryResult *result)
+void Player::_LoadActions(QueryResult *result, bool startup)
 {
     m_actionButtons.clear(); // -- Clear again just to be safe
     if(result)
@@ -15260,7 +15285,11 @@ void Player::_LoadActions(QueryResult *result)
             uint8 type = fields[2].GetUInt8();
 
             if(ActionButton* ab = addActionButton(button, action, type))
-                ab->uState = ACTIONBUTTON_UNCHANGED;
+            {
+                 ab->uState = ACTIONBUTTON_UNCHANGED;
+                if(!startup) // Switching specs
+                    ab->canRemoveByClient = false;
+            }
             else
             {
                 sLog.outError( "  ...at loading, and will deleted in DB also");
@@ -21280,7 +21309,7 @@ bool Player::canSeeSpellClickOn(Creature const *c) const
         return true;
 
     for(SpellClickInfoMap::const_iterator itr = clickPair.first; itr != clickPair.second; ++itr)
-        if(itr->second.IsFitToRequirements(this))
+        if(itr->second.IsFitToRequirements(this, c))
             return true;
 
     return false;
@@ -21845,7 +21874,6 @@ void Player::ActivateSpec(uint32 spec)
     InitTalentForLevel();
 
     UnsummonPetTemporaryIfAny();
-	AutoUnequipOffhandIfNeed();
 	LoadSendActionButtons();
 	SetPower(getPowerType(), 0);
     this->SaveToDB();

@@ -9,7 +9,6 @@
 #define SC_SCRIPTMGR_H
 
 #include "Common.h"
-#include "system/ScriptLoader.h"
 #include "Platform/CompilerDefs.h"
 #include "DBCStructure.h"
 
