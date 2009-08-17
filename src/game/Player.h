@@ -1053,6 +1053,7 @@ class MANGOS_DLL_SPEC Player : public Unit
         Pet* SummonPet(uint32 entry, float x, float y, float z, float ang, PetType petType, uint32 despwtime);
         void RemovePet(Pet* pet, PetSaveMode mode, bool returnreagent = false);
         uint32 GetPhaseMaskForSpawn() const;                // used for proper set phase for DB at GM-mode creature/GO spawn
+		bool HasOrphan();
 
         void Say(const std::string& text, const uint32 language);
         void Yell(const std::string& text, const uint32 language);

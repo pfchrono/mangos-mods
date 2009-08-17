@@ -21878,3 +21878,29 @@ void Player::ActivateSpec(uint32 spec)
 	SetPower(getPowerType(), 0);
     this->SaveToDB();
 }
+
+bool Player::HasOrphan()
+{
+	if (Pet* pet = GetPet())
+	{
+		bool hasOrphan = false;
+
+		switch (pet->GetCreatureInfo()->Entry)
+		{
+			case 33532:	//wolvar
+			case 14444:	//orc
+			case 33533:	//oracle
+			case 14305:	//human
+			case 22818:	//draenei
+			case 22817:	//bloodelf
+				{
+					hasOrphan = true;
+				}break;
+		}
+
+		if (hasOrphan)
+			return true;
+	}
+		return false;
+
+}

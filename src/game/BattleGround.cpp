@@ -761,7 +761,7 @@ void BattleGround::EndBattleGround(uint32 winner)
                 loser_arena_team->MemberLost(plr,winner_rating);
 
                 // Arena lost => reset the win_rated_arena having the "no_loose" condition
-                plr->GetAchievementMgr().ResetAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_RATED_ARENA, ACHIEVEMENT_CRITERIA_CONDITION_NO_LOOSE);
+                plr->GetAchievementMgr().ResetAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_RATED_ARENA, ACHIEVEMENT_CRITERIA_CONDITION_NO_LOSE);
             }
         }
 
