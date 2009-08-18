@@ -142,7 +142,7 @@ UPDATE `quest_template` SET `PrevQuestId`=12751 WHERE `entry`=12754;
 
 update spell_area set quest_end = 12756 where spell=53081;
 
-ALTER TABLE `channels` DROP `m_ownerGUID`;
+-- ALTER TABLE `channels` DROP `m_ownerGUID`; This needs to be done in characters db
 DELETE FROM `spell_area` where spell in (40216,42016);
 
 DELETE FROM `spell_linked_spell` WHERE spell_trigger = 40214;
