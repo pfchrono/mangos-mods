@@ -2042,6 +2042,9 @@ void Player::RegenerateAll()
 
 void Player::Regenerate(Powers power)
 {
+    // TODO: possible use of miscvalueb instead of amount
+    if (HasAuraTypeWithValue(SPELL_AURA_PREVENT_REGENERATE_POWER, power))
+        return;
     uint32 curValue = GetPower(power);
     uint32 maxValue = GetMaxPower(power);
 
@@ -7094,7 +7097,7 @@ void Player::_ApplyItemBonuses(ItemPrototype const *proto, uint8 slot, bool appl
 
 void Player::_ApplyWeaponDependentAuraMods(Item *item,WeaponAttackType attackType,bool apply)
 {
-    AuraEffectList const& auraCritList = GetAurasByType(SPELL_AURA_MOD_CRIT_PERCENT);
+    AuraEffectList const& auraCritList = GetAurasByType(SPELL_AURA_MOD_WEAPON_CRIT_PERCENT);
     for(AuraEffectList::const_iterator itr = auraCritList.begin(); itr!=auraCritList.end();++itr)
         _ApplyWeaponDependentAuraCritMod(item,attackType,*itr,apply);
 

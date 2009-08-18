@@ -81,7 +81,9 @@ INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comm
 ( 34471, 24397, 2, 'The Beast Within'),
 ( 34471, 26592, 2, 'The Beast Within'),
 (-59907,     7, 0, 'Lightwell Charges - Suicide'),
-
+-- Quest
+( 40214, 40216, 2, 'Dragonmaw Illusion'),
+( 40214, 42016, 2, 'Dragonmaw Illusion'),
 -- Creature
 ( 36574, 36650, 0, 'Apply Phase Slip Vulnerability'),
 -- instance
@@ -1528,7 +1530,8 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 ( 50033, 0x00,  15, 0x00000010, 0x00020000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Death Rune Mastery
 ( 50034, 0x00,  15, 0x00000010, 0x00020000, 0x00000000, 0x00000000, 0x00000000,   0,   0,   0), -- Death Rune Mastery
 ( 63373, 0x00,  11, 0x80000000, 0x00000000, 0x00000000, 0x00010000, 0x00000000,   0,   0,   0), -- Frozen Power (Rank 1)
-( 63374, 0x00,  11, 0x80000000, 0x00000000, 0x00000000, 0x00010000, 0x00000000,   0,   0,   0); -- Frozen Power (Rank 2)
+( 63374, 0x00,  11, 0x80000000, 0x00000000, 0x00000000, 0x00010000, 0x00000000,   0,   0,   0), -- Frozen Power (Rank 2)
+( 54821, 0x00,   7, 0x00001000, 0x00000000, 0x00000000, 0x00000010, 0x00000000,   0,   0,   0); -- Glyph of Rake
 
 -- --------
 -- ENCHANT PROC
@@ -1981,7 +1984,8 @@ INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`) VALUES
 (52479, 1, 28822),
 (52576, 1, 28834), -- Electro-magnetic Pulse
 (52576, 1, 28886),
-(53110, 1, 28940); -- Devour Humanoid
+(53110, 1, 29102),
+(53110, 1, 29103); -- Devour Humanoid
 
 -- Eye of Acherus
 DELETE FROM `spell_target_position` WHERE `id`=51852;
@@ -2016,6 +2020,28 @@ INSERT INTO `npc_spellclick_spells` (npc_entry, spell_id, quest_start, quest_sta
 (31897, 60123, 0, 0, 0, 0x2, 0, 7001, 2);
 
 update item_template set spellppmRate_1 = 1 where entry = 39371; -- persuader
+
+DELETE FROM `creature_questrelation` WHERE `quest` = 12754; 
+INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (28914, 12754); 
+DELETE FROM `creature_involvedrelation` WHERE `quest` = 12754; 
+INSERT INTO `creature_involvedrelation` (`id`, `quest`) VALUES (28914, 12754); 
+DELETE FROM `creature_questrelation` WHERE `quest` = 12755; 
+INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (28914, 12755);
+DELETE FROM `creature_involvedrelation` WHERE `quest` = 12755; 
+INSERT INTO `creature_involvedrelation` (`id`, `quest`) VALUES (29077, 12755);
+DELETE FROM `creature_questrelation` WHERE `quest` = 12756; 
+INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (29077, 12756);
+DELETE FROM `creature_involvedrelation` WHERE `quest` = 12756; 
+INSERT INTO `creature_involvedrelation` (`id`, `quest`) VALUES (28914, 12756); 
+DELETE FROM `creature_questrelation` WHERE `quest` = 12757; 
+INSERT INTO `creature_questrelation` (`id`, `quest`) VALUES (28914, 12757);
+
+UPDATE `quest_template` SET `PrevQuestId`=12751 WHERE `entry`=12754;
+
+update spell_area set quest_end = 12756 where spell=53081;
+
+update creature_template set spell1=53117 where entry=29104;
+update creature_template set spell1=53348,killcredit1=29150 where entry IN (29102,29103);
 
 -- --------
 -- NAXXARAMAS
@@ -2062,6 +2088,8 @@ INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`) VALUES
 (27929, 1, 16060), # To Anchor 2 - Gothik
 (27935, 1, 16060), # To Anchor 1 - Gothik
 (27936, 1, 16060); # To Anchor 2 - Gothik
+
+
 
 -- --------
 -- ULDUAR
