@@ -926,6 +926,7 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|x64"
+				ExcludedFromBuild="true"
 				>
 				<Tool
 					Name="VCCustomBuildTool"
@@ -948,6 +949,7 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug_NoPCH|x64"
+				ExcludedFromBuild="true"
 				>
 				<Tool
 					Name="VCCustomBuildTool"

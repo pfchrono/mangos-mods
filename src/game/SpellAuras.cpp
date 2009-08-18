@@ -6874,6 +6874,26 @@ void AuraEffect::HandleAuraModCritPct(bool apply, bool Real, bool changeAmount)
     ((Player*)m_target)->HandleBaseModValue(RANGED_CRIT_PERCENTAGE,  FLAT_MOD, float (m_amount), apply);
 }
 
+void AuraEffect::HandleAuraLinked(bool apply, bool Real, bool /*changeAmount*/)
+{
+    if (!Real)
+        return;
+
+    if (apply)
+    {
+        Unit * caster = GetCaster();
+        if (!caster)
+            return;
+        // If amount avalible cast with basepoints (Crypt Fever for example)
+        if (m_amount)
+            caster->CastCustomSpell(m_target, m_spellProto->EffectTriggerSpell[m_effIndex], &m_amount, NULL, NULL, true, NULL, this);
+        else
+            caster->CastSpell(m_target, m_spellProto->EffectTriggerSpell[m_effIndex],true, NULL, this);
+    }
+    else
+        m_target->RemoveAura(m_spellProto->EffectTriggerSpell[m_effIndex], GetCasterGUID(), AuraRemoveMode(GetParentAura()->GetRemoveMode()));
+}
+
 int32 AuraEffect::CalculateCrowdControlAuraAmount(Unit * caster)
 {
     // Damage cap for CC effects
