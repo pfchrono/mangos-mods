@@ -1774,7 +1774,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     else
     {
         if(getClass() == CLASS_DEATH_KNIGHT && GetMapId() == 609 && !isGameMaster()
-            && !IsActiveQuest(13165))
+            && !HasSpell(SPELL_ID_DEATH_GATE))
             return false;
 
         // far teleport to another map
@@ -13173,7 +13173,7 @@ void Player::RewardQuest( Quest const *pQuest, uint32 reward, Object* questGiver
     // handle SPELL_AURA_MOD_XP_QUEST_PCT auras
     Unit::AuraEffectList const& ModXPPctAuras = GetAurasByType(SPELL_AURA_MOD_XP_QUEST_PCT);
     for(Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin();i != ModXPPctAuras.end(); ++i)
-        XP = uint32(XP*(100.0f + (*i)->GetAmount() / 100.0f));
+        XP = uint32(XP*(1.0f + (*i)->GetAmount() / 100.0f));
 
 
     if (getLevel() < sWorld.getConfig(CONFIG_MAX_PLAYER_LEVEL))
@@ -18828,6 +18828,15 @@ void Player::ReportedAfkBy(Player* reporter)
     }
 }
 
+WorldLocation Player::GetStartPosition() const
+{
+    PlayerInfo const *info = objmgr.GetPlayerInfo(getRace(), getClass());
+    uint32 mapId = info->mapId;
+    if(getClass() == CLASS_DEATH_KNIGHT && HasSpell(SPELL_ID_DEATH_GATE))
+        mapId = 0;
+    return WorldLocation(mapId, info->positionX, info->positionY, info->positionZ, 0);
+}
+
 bool Player::canSeeOrDetect(Unit const* u, bool detect, bool inVisibleList, bool is3dDistance) const
 {
     // Always can see self
@@ -20045,7 +20054,7 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
                         // handle SPELL_AURA_MOD_XP_PCT auras
                         Unit::AuraEffectList const& ModXPPctAuras = GetAurasByType(SPELL_AURA_MOD_XP_PCT);
                         for(Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin();i != ModXPPctAuras.end(); ++i)
-                            itr_xp = uint32(itr_xp*(100.0f + (*i)->GetAmount() / 100.0f));
+                            itr_xp = uint32(itr_xp*(1.0f + (*i)->GetAmount() / 100.0f));
 
                         pGroupGuy->GiveXP(itr_xp, pVictim);
                         if(Pet* pet = pGroupGuy->GetPet())
@@ -20079,7 +20088,7 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
             // handle SPELL_AURA_MOD_XP_PCT auras
             Unit::AuraEffectList const& ModXPPctAuras = GetAurasByType(SPELL_AURA_MOD_XP_PCT);
             for(Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin();i != ModXPPctAuras.end(); ++i)
-                xp = uint32(xp*(100.0f + (*i)->GetAmount() / 100.0f));
+                xp = uint32(xp*(1.0f + (*i)->GetAmount() / 100.0f));
 
             GiveXP(xp, pVictim);
 

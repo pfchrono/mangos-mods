@@ -8561,7 +8561,9 @@ void Unit::SetMinion(Minion *minion, bool apply)
                 //Check if there is another minion
                 for(ControlList::iterator itr = m_Controlled.begin(); itr != m_Controlled.end(); ++itr)
                 {
-                    if(GetCharmGUID() == (*itr)->GetGUID())
+                    // do not use this check, creature do not have charm guid
+                    //if(GetCharmGUID() == (*itr)->GetGUID())
+                    if(GetGUID() == (*itr)->GetCharmerGUID())
                         continue;
 
                     //assert((*itr)->GetOwnerGUID() == GetGUID());
@@ -10445,7 +10447,8 @@ void Unit::ClearInCombat()
         if(Unit *owner = GetOwner())
         {
             for(uint8 i = 0; i < MAX_MOVE_TYPE; ++i)
-                SetSpeed(UnitMoveType(i), owner->GetSpeedRate(UnitMoveType(i)), true);
+                if(owner->GetSpeedRate(UnitMoveType(i)) > GetSpeedRate(UnitMoveType(i)))
+                    SetSpeed(UnitMoveType(i), owner->GetSpeedRate(UnitMoveType(i)), true);
         }
     }
     else if(!isCharmed())
