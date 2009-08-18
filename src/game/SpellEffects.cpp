@@ -2026,7 +2026,7 @@ void Spell::EffectForceCast(uint32 i)
     unitTarget->CastSpell(unitTarget, spellInfo, true, NULL, NULL, m_originalCasterGUID);
 }
 
-void Spell::EffectTriggerSpell(uint32 i)
+void Spell::EffectTriggerSpell(uint32 effIndex)
 {
     // only unit case known
     if (!unitTarget)
@@ -2036,7 +2036,7 @@ void Spell::EffectTriggerSpell(uint32 i)
         return;
     }
 
-    uint32 triggered_spell_id = m_spellInfo->EffectTriggerSpell[i];
+    uint32 triggered_spell_id = m_spellInfo->EffectTriggerSpell[effIndex];
 
     // special cases
     switch(triggered_spell_id)
@@ -2182,7 +2182,11 @@ void Spell::EffectTriggerSpell(uint32 i)
         && m_spellInfo->Category == spellInfo->Category)
         ((Player*)m_caster)->RemoveSpellCooldown(spellInfo->Id);
 
-    m_caster->CastSpell(unitTarget,spellInfo,true,NULL,NULL,m_originalCasterGUID);
+    // Note: not exist spells with weapon req. and IsSpellHaveCasterSourceTargets == true
+    // so this just for speedup places in else
+    Unit *caster = IsSpellWithCasterSourceTargetsOnly(spellInfo) ? unitTarget : m_caster;
+
+    caster->CastSpell(unitTarget,spellInfo,true,NULL,NULL,m_originalCasterGUID);
 }
 
 void Spell::EffectTriggerMissileSpell(uint32 effect_idx)
@@ -2634,6 +2638,10 @@ void Spell::EffectHealPct( uint32 /*i*/ )
 
         // Skip if m_originalCaster not available
         if (!caster)
+            return;
+
+        // Rune Tap - Party
+        if (m_spellInfo->Id == 59754 && unitTarget == m_caster)
             return;
 
         uint32 addhealth = unitTarget->GetMaxHealth() * damage / 100;
@@ -6261,6 +6269,22 @@ void Spell::EffectKnockBack(uint32 i)
 {
     if(!unitTarget)
         return;
+
+    // Typhoon
+    if (m_spellInfo->SpellFamilyName == SPELLFAMILY_DRUID && m_spellInfo->SpellFamilyFlags[1] & 0x01000000)
+    {
+        // Glyph of Typhoon
+        if (m_caster->HasAura(62135))
+            return;
+    }
+
+    // Thunderstorm
+    if (m_spellInfo->SpellFamilyName == SPELLFAMILY_SHAMAN && m_spellInfo->SpellFamilyFlags[1] & 0x00002000)
+    {
+        // Glyph of Thunderstorm
+        if (m_caster->HasAura(62132))
+            return;
+    }
 
     float x, y;
     if(m_targets.m_targetMask & TARGET_FLAG_DEST_LOCATION)

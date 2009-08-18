@@ -318,7 +318,7 @@ enum
     SAY_DUEL_I                  = -1609088,
 
     SPELL_DUEL                  = 52996,
-    SPELL_DUEL_TRIGGERED        = 52990,
+    //SPELL_DUEL_TRIGGERED        = 52990,
     SPELL_DUEL_VICTORY          = 52994,
     SPELL_DUEL_FLAG             = 52991,
 
@@ -358,7 +358,7 @@ struct TRINITY_DLL_DECL npc_death_knight_initiateAI : public SpellAI
 
     void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
     {
-        if (!m_bIsDuelInProgress && pSpell->Id == SPELL_DUEL_TRIGGERED)
+        if (!m_bIsDuelInProgress && pSpell->Id == SPELL_DUEL)
         {
             m_uiDuelerGUID = pCaster->GetGUID();
             m_bIsDuelInProgress = true;
@@ -472,7 +472,7 @@ bool GossipSelect_npc_death_knight_initiate(Player* pPlayer, Creature* pCreature
         int32 uiSayId = rand()% (sizeof(m_auiRandomSay)/sizeof(int32));
         DoScriptText(m_auiRandomSay[uiSayId], pCreature, pPlayer);
 
-        pCreature->CastSpell(pPlayer, SPELL_DUEL, false);
+        pPlayer->CastSpell(pCreature, SPELL_DUEL, false);
         pPlayer->CastSpell(pPlayer, SPELL_DUEL_FLAG, true);
     }
     return true;

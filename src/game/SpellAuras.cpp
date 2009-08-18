@@ -337,7 +337,7 @@ pAuraHandler AuraHandler[TOTAL_AURAS]=
     &Aura::HandleNoImmediateEffect,                         //281 SPELL_AURA_MOD_HONOR_GAIN_PCT implemented in Player::RewardHonor
     &Aura::HandleAuraIncreaseBaseHealthPercent,             //282 SPELL_AURA_INCREASE_BASE_HEALTH_PERCENT
     &Aura::HandleNoImmediateEffect,                         //283 SPELL_AURA_MOD_HEALING_RECEIVED       implemented in Unit::SpellHealingBonus
-    &Aura::HandleNULL,                                      //284 SPELL_AURA_LINKED
+    &Aura::HandleAuraLinked,                                //284 SPELL_AURA_LINKED
     &Aura::HandleAuraModAttackPowerOfArmor,                 //285 SPELL_AURA_MOD_ATTACK_POWER_OF_ARMOR  implemented in Player::UpdateAttackPowerAndDamage
     &Aura::HandleNoImmediateEffect,                         //286 SPELL_AURA_ABILITY_PERIODIC_CRIT implemented in AuraEffect::PeriodicTick
     &Aura::HandleNoImmediateEffect,                         //287 SPELL_AURA_DEFLECT_SPELLS             implemented in Unit::MagicSpellHitResult and Unit::MeleeSpellHitResult
@@ -979,10 +979,6 @@ void Aura::HandleAuraSpecificMods(bool apply)
             }
         }
 
-        // Buffeting Winds of Susurrus
-        if(GetId()==32474 && m_target->GetTypeId()==TYPEID_PLAYER)
-            ((Player*)m_target)->ActivateTaxiPathTo(506,GetId());
-
         if (m_spellProto->SpellFamilyName == SPELLFAMILY_MAGE)
         {
             if (m_spellProto->SpellFamilyFlags[0] & 0x00000001 && m_spellProto->SpellFamilyFlags[2] & 0x00000008)
@@ -1017,23 +1013,36 @@ void Aura::HandleAuraSpecificMods(bool apply)
                 }
             }
         }
-        // Gronn Lord's Grasp, becomes stoned
-        else if (GetId() == 33572)
+        // Sprint (skip non player casted spells by category)
+        else if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_ROGUE)
         {
-            if (GetStackAmount() >= 5 && !m_target->HasAura(33652))
-                m_target->CastSpell(m_target, 33652, true);
+            if(GetSpellProto()->SpellFamilyFlags[0] & 0x40 && GetSpellProto()->Category == 44)
+                // in official maybe there is only one icon?
+                if(m_target->HasAura(58039)) // Glyph of Blurred Speed
+                    m_target->CastSpell(m_target, 61922, true); // Sprint (waterwalk)
         }
-        // Heroic Fury (remove Intercept cooldown)
-        else if(GetId() == 60970 && m_target->GetTypeId() == TYPEID_PLAYER )
+        else
         {
-            ((Player*)m_target)->RemoveSpellCooldown(20252, true);
-        }
-        // Demonic Circle
-        else if (GetId() == 48020 && m_target->GetTypeId() == TYPEID_PLAYER )
-        {
-            GameObject* obj = m_target->GetGameObject(48018);
-            if (obj)
-                ((Player*)m_target)->TeleportTo(obj->GetMapId(),obj->GetPositionX(),obj->GetPositionY(),obj->GetPositionZ(),obj->GetOrientation());
+            switch(GetId())
+            {
+                case 32474: // Buffeting Winds of Susurrus
+                    if(m_target->GetTypeId() == TYPEID_PLAYER)
+                        ((Player*)m_target)->ActivateTaxiPathTo(506, GetId());
+                    break;
+                case 33572: // Gronn Lord's Grasp, becomes stoned
+                    if(GetStackAmount() >= 5 && !m_target->HasAura(33652))
+                        m_target->CastSpell(m_target, 33652, true);
+                    break;
+                case 48020: // Demonic Circle
+                    if(m_target->GetTypeId() == TYPEID_PLAYER)
+                        if(GameObject* obj = m_target->GetGameObject(48018))
+                            ((Player*)m_target)->TeleportTo(obj->GetMapId(),obj->GetPositionX(),obj->GetPositionY(),obj->GetPositionZ(),obj->GetOrientation());
+                    break;
+                case 60970: // Heroic Fury (remove Intercept cooldown)
+                    if(m_target->GetTypeId() == TYPEID_PLAYER)
+                        ((Player*)m_target)->RemoveSpellCooldown(20252, true);
+                    break;
+            }
         }
     }
 
@@ -2728,6 +2737,21 @@ void AuraEffect::HandleAuraDummy(bool apply, bool Real, bool changeAmount)
                             if(BattleGround *bg = ((Player*)m_target)->GetBattleGround())
                                 bg->RemovePlayerFromResurrectQueue(m_target->GetGUID());
                         return;
+                    case 36730:                                     // Flame Strike
+                    {
+                        m_target->CastSpell(m_target, 36731, true, NULL, this);
+                        return;
+                    }
+                    case 44191:                                     // Flame Strike
+                    {
+                        if (m_target->GetMap()->IsDungeon())
+                        {
+                            uint32 spellId = m_target->GetMap()->IsHeroic() ? 46163 : 44190;
+
+                            m_target->CastSpell(m_target, spellId, true, NULL, this);
+                        }
+                        return;
+                    }
                     case 42783: // Wrath of the Astromancer
                         m_target->CastSpell(m_target,m_amount,true,NULL,this);
                         return;
@@ -3155,8 +3179,12 @@ void AuraEffect::HandleAuraFeatherFall(bool apply, bool Real, bool /*changeAmoun
     else
         data.Initialize(SMSG_MOVE_NORMAL_FALL, 8+4);
     data.append(m_target->GetPackGUID());
-    data << (uint32)0;
-    m_target->SendMessageToSet(&data,true);
+    data << uint32(0);
+    m_target->SendMessageToSet(&data, true);
+
+    // start fall from current height
+    if(!apply && m_target->GetTypeId() == TYPEID_PLAYER)
+        ((Player*)m_target)->SetFallInformation(0, m_target->GetPositionZ());
 }
 
 void AuraEffect::HandleAuraHover(bool apply, bool Real, bool /*changeAmount*/)
