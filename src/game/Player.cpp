@@ -2431,11 +2431,6 @@ void Player::GiveXP(uint32 xp, Unit* victim)
     if(level >= sWorld.getConfig(CONFIG_MAX_PLAYER_LEVEL))
         return;
 
-    // handle SPELL_AURA_MOD_XP_PCT auras
-    Unit::AuraEffectList const& ModXPPctAuras = GetAurasByType(SPELL_AURA_MOD_XP_PCT);
-    for(Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin();i != ModXPPctAuras.end(); ++i)
-        xp = uint32(xp*(1.0f + (*i)->GetAmount() / 100.0f));
-
     // XP resting bonus for kill
     uint32 rested_bonus_xp = victim ? GetXPRestBonus(xp) : 0;
 
@@ -13172,6 +13167,12 @@ void Player::RewardQuest( Quest const *pQuest, uint32 reward, Object* questGiver
     // Not give XP in case already completed once repeatable quest
     uint32 XP = q_status.m_rewarded ? 0 : uint32(pQuest->XPValue( this )*sWorld.getRate(RATE_XP_QUEST));
 
+    // handle SPELL_AURA_MOD_XP_QUEST_PCT auras
+    Unit::AuraEffectList const& ModXPPctAuras = GetAurasByType(SPELL_AURA_MOD_XP_QUEST_PCT);
+    for(Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin();i != ModXPPctAuras.end(); ++i)
+        XP = uint32(XP*(100.0f + (*i)->GetAmount() / 100.0f));
+
+
     if (getLevel() < sWorld.getConfig(CONFIG_MAX_PLAYER_LEVEL))
         GiveXP( XP , NULL );
     else
@@ -20035,6 +20036,11 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
                     {
                         uint32 itr_xp = (member_with_max_level == not_gray_member_with_max_level) ? uint32(xp*rate) : uint32((xp*rate/2)+1);
 
+                        // handle SPELL_AURA_MOD_XP_PCT auras
+                        Unit::AuraEffectList const& ModXPPctAuras = GetAurasByType(SPELL_AURA_MOD_XP_PCT);
+                        for(Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin();i != ModXPPctAuras.end(); ++i)
+                            itr_xp = uint32(itr_xp*(100.0f + (*i)->GetAmount() / 100.0f));
+
                         pGroupGuy->GiveXP(itr_xp, pVictim);
                         if(Pet* pet = pGroupGuy->GetPet())
                             pet->GivePetXP(itr_xp/2);
@@ -20063,6 +20069,12 @@ bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim)
         if(!PvP)
         {
             RewardReputation(pVictim,1);
+
+            // handle SPELL_AURA_MOD_XP_PCT auras
+            Unit::AuraEffectList const& ModXPPctAuras = GetAurasByType(SPELL_AURA_MOD_XP_PCT);
+            for(Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin();i != ModXPPctAuras.end(); ++i)
+                xp = uint32(xp*(100.0f + (*i)->GetAmount() / 100.0f));
+
             GiveXP(xp, pVictim);
 
             if(Pet* pet = GetPet())
@@ -21875,7 +21887,12 @@ void Player::ActivateSpec(uint32 spec)
 
     UnsummonPetTemporaryIfAny();
 	LoadSendActionButtons();
-	SetPower(getPowerType(), 0);
+
+    Powers pw = getPowerType();
+    if(pw != POWER_MANA)
+        SetPower(POWER_MANA, 0);
+    
+    SetPower(pw, 0);
     this->SaveToDB();
 }
 

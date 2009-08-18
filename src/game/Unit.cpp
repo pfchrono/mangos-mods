@@ -1396,6 +1396,8 @@ void Unit::CalculateMeleeDamage(Unit *pVictim, uint32 damage, CalcDamageInfo *da
                 damageInfo->TargetState = VICTIMSTATE_BLOCKS;
                 damageInfo->blocked_amount = damageInfo->damage;
             }
+            else
+                damageInfo->procEx |= PROC_EX_NORMAL_HIT;
             damageInfo->damage      -= damageInfo->blocked_amount;
             damageInfo->cleanDamage += damageInfo->blocked_amount;
             break;
@@ -2149,7 +2151,7 @@ void Unit::CalcAbsorbResist(Unit *pVictim,SpellSchoolMask schoolMask, DamageEffe
         }
     }
 
-    *absorb = damage - RemainingDamage - *resist;
+    *absorb = RemainingDamage > 0 ? (damage - RemainingDamage - *resist) : (damage - *resist);
 
     if (*absorb)
     {
@@ -6468,6 +6470,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
             // Frozen Power
             if (dummySpell->SpellIconID == 3780)
             {
+                if (this->GetDistance(target) < 15.0f)
+                    return false;
                 float chance = triggerAmount;
                 if (!roll_chance_f(chance))
                     return false;
