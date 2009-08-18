@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="ACE_Wrappers"
 	ProjectGUID="{BD537C9A-FECA-1BAD-6757-8A6348EA12C8}"
 	RootNamespace="ACE"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -3034,11 +3035,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_errno.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\OS_Errno.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\OS_Errno.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_errno.h"
 				>
 			</File>
 			<File
@@ -3418,11 +3419,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\OS_String.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_string.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_string.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\OS_String.h"
 				>
 			</File>
 			<File
@@ -3466,11 +3467,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\sys\os_time.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_time.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_time.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\sys\os_time.h"
 				>
 			</File>
 			<File

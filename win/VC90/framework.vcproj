@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="framework"
 	ProjectGUID="{BF6F5D0E-33A5-4E23-9E7D-DD481B7B5B9E}"
 	RootNamespace="framework"
