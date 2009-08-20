@@ -493,8 +493,8 @@ void WorldSession::HandleSetSelectionOpcode( WorldPacket & recv_data )
 
 void WorldSession::HandleStandStateChangeOpcode( WorldPacket & recv_data )
 {
-    sLog.outDebug( "WORLD: Received CMSG_STAND_STATE_CHANGE"  );
-    uint8 animstate;
+    // sLog.outDebug( "WORLD: Received CMSG_STANDSTATECHANGE"  ); -- too many spam in log at lags/debug stop
+    uint32 animstate;
     recv_data >> animstate;
 
     _player->SetStandState(animstate);
@@ -1033,11 +1033,12 @@ void WorldSession::HandleNextCinematicCamera( WorldPacket & /*recv_data*/ )
     DEBUG_LOG( "WORLD: Which movie to play" );
 }
 
-void WorldSession::HandleMoveTimeSkippedOpcode( WorldPacket & /*recv_data*/ )
+void WorldSession::HandleMoveTimeSkippedOpcode( WorldPacket & recv_data )
 {
     /*  WorldSession::Update( getMSTime() );*/
     DEBUG_LOG( "WORLD: Time Lag/Synchronization Resent/Update" );
 
+    recv_data.read_skip2<uint64,uint32>();
     /*
         uint64 guid;
         uint32 time_skipped;
@@ -1058,68 +1059,52 @@ void WorldSession::HandleFeatherFallAck(WorldPacket &/*recv_data*/)
     DEBUG_LOG("WORLD: CMSG_MOVE_FEATHER_FALL_ACK");
 }
 
-void WorldSession::HandleMoveUnRootAck(WorldPacket&/* recv_data*/)
+void WorldSession::HandleMoveUnRootAck(WorldPacket& recv_data)
 {
-    /*
-        sLog.outDebug( "WORLD: CMSG_FORCE_MOVE_UNROOT_ACK" );
-        recv_data.hexlike();
-        uint64 guid;
-        uint64 unknown1;
-        uint32 unknown2;
-        float PositionX;
-        float PositionY;
-        float PositionZ;
-        float Orientation;
+    // no used
+    recv_data.rpos(recv_data.wpos());                       // prevent warnings spam
+/*
+    uint64 guid;
+    recv_data >> guid;
 
-        recv_data >> guid;
-        recv_data >> unknown1;
-        recv_data >> unknown2;
-        recv_data >> PositionX;
-        recv_data >> PositionY;
-        recv_data >> PositionZ;
-        recv_data >> Orientation;
+    // now can skip not our packet
+    if(_player->GetGUID() != guid)
+    {
+        recv_data.rpos(recv_data.wpos());                   // prevent warnings spam
+        return;
+    }
 
-        // TODO for later may be we can use for anticheat
-        DEBUG_LOG("Guid " UI64FMTD,guid);
-        DEBUG_LOG("unknown1 " UI64FMTD,unknown1);
-        DEBUG_LOG("unknown2 %u",unknown2);
-        DEBUG_LOG("X %f",PositionX);
-        DEBUG_LOG("Y %f",PositionY);
-        DEBUG_LOG("Z %f",PositionZ);
-        DEBUG_LOG("O %f",Orientation);
-    */
+    sLog.outDebug( "WORLD: CMSG_FORCE_MOVE_UNROOT_ACK" );
+
+    recv_data.read_skip<uint32>();                          // unk
+
+    MovementInfo movementInfo;
+    ReadMovementInfo(recv_data, &movementInfo);
+*/
 }
 
-void WorldSession::HandleMoveRootAck(WorldPacket&/* recv_data*/)
+void WorldSession::HandleMoveRootAck(WorldPacket& recv_data)
 {
-    /*
-        sLog.outDebug( "WORLD: CMSG_FORCE_MOVE_ROOT_ACK" );
-        recv_data.hexlike();
-        uint64 guid;
-        uint64 unknown1;
-        uint32 unknown2;
-        float PositionX;
-        float PositionY;
-        float PositionZ;
-        float Orientation;
+    // no used
+    recv_data.rpos(recv_data.wpos());                       // prevent warnings spam
+/*
+    uint64 guid;
+    recv_data >> guid;
 
-        recv_data >> guid;
-        recv_data >> unknown1;
-        recv_data >> unknown2;
-        recv_data >> PositionX;
-        recv_data >> PositionY;
-        recv_data >> PositionZ;
-        recv_data >> Orientation;
+    // now can skip not our packet
+    if(_player->GetGUID() != guid)
+    {
+        recv_data.rpos(recv_data.wpos());                   // prevent warnings spam
+        return;
+    }
 
-        // for later may be we can use for anticheat
-        DEBUG_LOG("Guid " UI64FMTD,guid);
-        DEBUG_LOG("unknown1 " UI64FMTD,unknown1);
-        DEBUG_LOG("unknown1 %u",unknown2);
-        DEBUG_LOG("X %f",PositionX);
-        DEBUG_LOG("Y %f",PositionY);
-        DEBUG_LOG("Z %f",PositionZ);
-        DEBUG_LOG("O %f",Orientation);
-    */
+    sLog.outDebug( "WORLD: CMSG_FORCE_MOVE_ROOT_ACK" );
+
+    recv_data.read_skip<uint32>();                          // unk
+
+    MovementInfo movementInfo;
+    ReadMovementInfo(recv_data, &movementInfo);
+*/
 }
 
 void WorldSession::HandleSetActionBarToggles(WorldPacket& recv_data)
@@ -1138,8 +1123,9 @@ void WorldSession::HandleSetActionBarToggles(WorldPacket& recv_data)
     GetPlayer()->SetByteValue(PLAYER_FIELD_BYTES, 2, ActionBar);
 }
 
-void WorldSession::HandleWardenDataOpcode(WorldPacket& /*recv_data*/)
+void WorldSession::HandleWardenDataOpcode(WorldPacket& recv_data)
 {
+    recv_data.read_skip<uint8>();
     /*
         uint8 tmp;
         recv_data >> tmp;

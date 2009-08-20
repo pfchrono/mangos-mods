@@ -617,7 +617,6 @@ void WorldSession::HandleAreaSpiritHealerQueueOpcode( WorldPacket & recv_data )
 void WorldSession::HandleBattlemasterJoinArena( WorldPacket & recv_data )
 {
     sLog.outDebug("WORLD: CMSG_BATTLEMASTER_JOIN_ARENA");
-    recv_data.hexlike();
 
     // ignore if we already in BG or BG queue
     if (_player->InBattleGround())
@@ -630,6 +629,10 @@ void WorldSession::HandleBattlemasterJoinArena( WorldPacket & recv_data )
     Group * grp;
 
     recv_data >> guid >> arenaslot >> asGroup >> isRated;
+
+    // ignore if we already in BG or BG queue
+    if (_player->InBattleGround())
+        return;
 
     Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
     if (!unit)
