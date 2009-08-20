@@ -488,10 +488,6 @@ Player::~Player ()
     // it must be unloaded already in PlayerLogout and accessed only for loggined player
     //m_social = NULL;
 
-    // Player may still set map - remove it to correctly unload instances
-    if (FindMap())
-        ResetMap();
-
     // Note: buy back item already deleted from DB when player was saved
     for(uint8 i = 0; i < PLAYER_SLOTS_COUNT; ++i)
     {
@@ -3779,6 +3775,37 @@ bool Player::resetTalents(bool no_cost)
         // to prevent unexpected lost normal learned spell skip another class talents
         if( (getClassMask() & talentTabInfo->ClassMask) == 0 )
             continue;
+
+        for (int j = 0; j < MAX_TALENT_RANK; j++)
+        {
+            for(PlayerSpellMap::iterator itr = GetSpellMap().begin(); itr != GetSpellMap().end();)
+            {
+                if(itr->second->state == PLAYERSPELL_REMOVED || itr->second->disabled)
+                {
+                    ++itr;
+                    continue;
+                }
+
+                // remove learned spells (all ranks)
+                uint32 itrFirstId = spellmgr.GetFirstSpellInChain(itr->first);
+
+                // unlearn if first rank is talent or learned by talent
+                if (itrFirstId == talentInfo->RankID[j])
+                {
+                    removeSpell(itr->first,!IsPassiveSpell(itr->first),false);
+                    itr = GetSpellMap().begin();
+                    continue;
+                }
+                else if (spellmgr.IsSpellLearnToSpell(talentInfo->RankID[j],itrFirstId))
+                {
+                    removeSpell(itr->first,!IsPassiveSpell(itr->first));
+                    itr = GetSpellMap().begin();
+                    continue;
+                }
+                else
+                    ++itr;
+            }
+        }
 
         PlayerTalentMap::iterator itr2 = m_talents[m_activeSpec]->begin();
         for (; itr2 != m_talents[m_activeSpec]->end(); ++itr2)
@@ -17777,13 +17804,15 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
         if( m_ShapeShiftFormSpellId && m_form != FORM_BATTLESTANCE && m_form != FORM_BERSERKERSTANCE && m_form != FORM_DEFENSIVESTANCE && m_form != FORM_SHADOW )
             RemoveAurasDueToSpell(m_ShapeShiftFormSpellId);
 
-        if(m_currentSpells[CURRENT_GENERIC_SPELL] && m_currentSpells[CURRENT_GENERIC_SPELL]->m_spellInfo->Id != spellid)
-            InterruptSpell(CURRENT_GENERIC_SPELL,false);
+        if (Spell* spell = GetCurrentSpell(CURRENT_GENERIC_SPELL))
+            if (spell->m_spellInfo->Id != spellid)
+                InterruptSpell(CURRENT_GENERIC_SPELL,false);
 
         InterruptSpell(CURRENT_AUTOREPEAT_SPELL,false);
 
-        if(m_currentSpells[CURRENT_CHANNELED_SPELL] && m_currentSpells[CURRENT_CHANNELED_SPELL]->m_spellInfo->Id != spellid)
-            InterruptSpell(CURRENT_CHANNELED_SPELL,true);
+        if (Spell* spell = GetCurrentSpell(CURRENT_CHANNELED_SPELL))
+            if (spell->m_spellInfo->Id != spellid)
+                InterruptSpell(CURRENT_CHANNELED_SPELL,true);
     }
 
     uint32 sourcenode = nodes[0];
@@ -19926,12 +19955,10 @@ void Player::RemoveItemDependentAurasAndCasts( Item * pItem )
     }
 
     // currently casted spells can be dependent from item
-    for (uint32 i = 0; i < CURRENT_MAX_SPELL; i++)
-    {
-        if( m_currentSpells[i] && m_currentSpells[i]->getState()!=SPELL_STATE_DELAYED &&
-            !HasItemFitToSpellReqirements(m_currentSpells[i]->m_spellInfo,pItem) )
-            InterruptSpell(i);
-    }
+    for (uint32 i = 0; i < CURRENT_MAX_SPELL; ++i)
+        if (Spell* spell = GetCurrentSpell(CurrentSpellTypes(i)))
+            if (spell->getState()!=SPELL_STATE_DELAYED && !HasItemFitToSpellReqirements(spell->m_spellInfo,pItem) )
+                InterruptSpell(CurrentSpellTypes(i));
 }
 
 uint32 Player::GetResurrectionSpellId()

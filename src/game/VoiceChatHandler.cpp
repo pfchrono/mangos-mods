@@ -28,6 +28,8 @@ void WorldSession::HandleVoiceSessionEnableOpcode( WorldPacket & recv_data )
 {
     sLog.outDebug("WORLD: CMSG_VOICE_SESSION_ENABLE");
     // uint8 isVoiceEnabled, uint8 isMicrophoneEnabled
+    recv_data.read_skip<uint8>();
+    recv_data.read_skip<uint8>();
     recv_data.hexlike();
 }
 
@@ -42,6 +44,8 @@ void WorldSession::HandleSetActiveVoiceChannel( WorldPacket & recv_data )
 {
     sLog.outDebug("WORLD: CMSG_SET_ACTIVE_VOICE_CHANNEL");
     // uint32, string
+    recv_data.read_skip<uint32>();
+    recv_data.read_skip<char*>();
     recv_data.hexlike();
 }
 
