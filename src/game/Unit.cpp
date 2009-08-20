@@ -5690,6 +5690,9 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 case 47570:
                 case 47569:
                 {
+                    if (!roll_chance_i(triggerAmount))
+                        return false;
+
                     RemoveMovementImpairingAuras();
                     break;
                 }
