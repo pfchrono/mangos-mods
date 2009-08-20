@@ -488,10 +488,6 @@ Player::~Player ()
     // it must be unloaded already in PlayerLogout and accessed only for loggined player
     //m_social = NULL;
 
-    // Player may still set map - remove it to correctly unload instances
-    if (FindMap())
-        ResetMap();
-
     // Note: buy back item already deleted from DB when player was saved
     for(uint8 i = 0; i < PLAYER_SLOTS_COUNT; ++i)
     {
@@ -3779,6 +3775,37 @@ bool Player::resetTalents(bool no_cost)
         // to prevent unexpected lost normal learned spell skip another class talents
         if( (getClassMask() & talentTabInfo->ClassMask) == 0 )
             continue;
+
+        for (int j = 0; j < MAX_TALENT_RANK; j++)
+        {
+            for(PlayerSpellMap::iterator itr = GetSpellMap().begin(); itr != GetSpellMap().end();)
+            {
+                if(itr->second->state == PLAYERSPELL_REMOVED || itr->second->disabled)
+                {
+                    ++itr;
+                    continue;
+                }
+
+                // remove learned spells (all ranks)
+                uint32 itrFirstId = spellmgr.GetFirstSpellInChain(itr->first);
+
+                // unlearn if first rank is talent or learned by talent
+                if (itrFirstId == talentInfo->RankID[j])
+                {
+                    removeSpell(itr->first,!IsPassiveSpell(itr->first),false);
+                    itr = GetSpellMap().begin();
+                    continue;
+                }
+                else if (spellmgr.IsSpellLearnToSpell(talentInfo->RankID[j],itrFirstId))
+                {
+                    removeSpell(itr->first,!IsPassiveSpell(itr->first));
+                    itr = GetSpellMap().begin();
+                    continue;
+                }
+                else
+                    ++itr;
+            }
+        }
 
         PlayerTalentMap::iterator itr2 = m_talents[m_activeSpec]->begin();
         for (; itr2 != m_talents[m_activeSpec]->end(); ++itr2)
