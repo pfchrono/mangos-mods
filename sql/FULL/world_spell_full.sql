@@ -2043,6 +2043,16 @@ update spell_area set quest_end = 12756 where spell=53081;
 update creature_template set spell1=53117 where entry=29104;
 update creature_template set spell1=53348,killcredit1=29150 where entry IN (29102,29103);
 
+
+DELETE FROM `spell_script_target` WHERE `entry` in (53658, 53679, 53701, 53705, 53706, 53677, 53685);
+-- insert into spell_script_target values (53658, 1, 29173);
+insert into spell_script_target values (53679, 1, 29183);
+insert into spell_script_target values (53701, 1, 29175);
+insert into spell_script_target values (53705, 1, 29183);
+insert into spell_script_target values (53706, 1, 29183);
+insert into spell_script_target values (53677, 1, 29227);
+insert into spell_script_target values (53685, 1, 29175);
+
 -- --------
 -- NAXXARAMAS
 -- --------

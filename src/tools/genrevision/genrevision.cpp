@@ -15,14 +15,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
+#if WIN32
+#define _CRT_SECURE_NO_WARNINGS 1
+#define WIN32_LEAN_AND_MEAN 1
+#include <stdlib.h>
+#include <windows.h>
+#pragma warning(disable:4996)
+char build_user[100];
+char build_host[100];
+#endif
 #include <fstream>
 #include <sstream>
-#include <time.h>
+//#include <time.h>
 #include <stdio.h>
 #include <string.h>
-
-#pragma warning(disable:4996)
+#include <cstdio>
+#include <ctype.h>
+#include <ctime>
 
 struct RawData
 {
@@ -190,15 +199,27 @@ bool extractDataFromGit(std::string filename, std::string path, bool url, RawDat
     return true;
 }
 
+#define SIZE 256
+
 std::string generateHeader(char const* rev_str, char const* date_str, char const* time_str, char const* hash_str)
 {
+#if WIN32
+    DWORD len = 100;
+    GetComputerName(build_host, &len);
+    len = 100;
+    GetUserName(build_user, &len);
+#endif
     std::ostringstream newData;
     newData << "#ifndef __REVISION_H__" << std::endl;
     newData << "#define __REVISION_H__"  << std::endl;
-    newData << " #define _REVISION \"" << rev_str << "\"" << std::endl;
-    newData << " #define _HASH \"" << hash_str << "\"" << std::endl;
-    newData << " #define _REVISION_DATE \"" << date_str << "\"" << std::endl;
-    newData << " #define _REVISION_TIME \"" << time_str << "\""<< std::endl;
+    newData << "#define _REVISION \"" << rev_str << "\"" << std::endl;
+    newData << "#define _HASH \"" << hash_str << "\"" << std::endl;
+    newData << "#define _REVISION_DATE \"" << date_str << "\"" << std::endl;
+    newData << "#define _REVISION_TIME \"" << time_str << "\""<< std::endl;
+#if WIN32
+    newData << "#define BUILD_USER \"" << build_user << "\"" << std::endl;
+    newData << "#define BUILD_WORKSTATION \"" << build_host << "\"" << std::endl;
+#endif
     newData << "#endif // __REVISION_H__" << std::endl;
     return newData.str();
 }

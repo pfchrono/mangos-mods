@@ -18,7 +18,7 @@
  */
 
 #include "Common.h"
-#include "git_revision.h"
+#include "revision.h"
 
 #include "CrashHandler.h"
 #include "Log.h"
@@ -360,7 +360,7 @@ int __cdecl HandleCrash(PEXCEPTION_POINTERS pExceptPtrs)
 	(void*)mname++;	 // Remove the last 
 
 	sprintf(filename, "CrashDumps\\dump-%s-%u-%u-%u-%u-%u-%u-%u-%u.dmp",
-		mname, BUILD_REVISION, pTime->tm_year+1900, pTime->tm_mon+1, pTime->tm_mday,
+		mname, _REVISION, pTime->tm_year+1900, pTime->tm_mon+1, pTime->tm_mday,
 		pTime->tm_hour, pTime->tm_min, pTime->tm_sec, GetCurrentThreadId());
 	
 
