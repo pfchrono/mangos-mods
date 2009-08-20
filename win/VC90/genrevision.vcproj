@@ -24,7 +24,7 @@
 			OutputDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			IntermediateDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -96,7 +96,7 @@
 			OutputDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			IntermediateDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -169,7 +169,7 @@
 			OutputDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			IntermediateDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -244,7 +244,7 @@
 			OutputDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			IntermediateDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -320,7 +320,7 @@
 			OutputDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			IntermediateDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -393,7 +393,7 @@
 			OutputDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			IntermediateDirectory=".\genrevision__$(PlatformName)_$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"

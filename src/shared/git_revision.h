@@ -8,7 +8,7 @@ static int BUILD_REVISION = 72;
 
 #define BUILD_USER "Midnight"
 #define BUILD_WORKSTATION "CHRONOTOSIS"
-#define GIT_DATE "Wednesday, August 5, 2009"
+#define GIT_DATE _REVISION_DATE
 
 #define BUILD_TIME "03:41PM (UTC)"
 #define BUILD_DATE "Aug 5, 2009"
