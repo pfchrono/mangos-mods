@@ -208,7 +208,8 @@ bool WorldSession::Update(uint32 /*diff*/)
                         // lag can cause STATUS_LOGGEDIN opcodes to arrive after the player started a transfer
                         break;
                     case STATUS_TRANSFER:
-                        if(!_player)                            logUnexpectedOpcode(packet, "the player has not logged in yet");
+                        if(!_player)
+                            LogUnexpectedOpcode(packet, "the player has not logged in yet");
                         else if(_player->IsInWorld())
                             LogUnexpectedOpcode(packet, "the player is still in world");
                         else
