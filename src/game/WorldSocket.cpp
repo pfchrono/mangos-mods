@@ -655,7 +655,7 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
             }
         }
     }
-    catch(ByteBufferException &exception)
+    catch(ByteBufferException &)
     {
         return HandlePing (*new_pct);
         sLog.outError("WorldSocket::ProcessIncoming ByteBufferException occured while parsing an instant handled packet (opcode: %u) from client %s, accountid=%i. Disconnected client.",
