@@ -263,6 +263,7 @@ struct TRINITY_DLL_DECL npc_threshwackonatorAI : public FollowerAI
     void MoveInLineOfSight(Unit* pWho)
     {
         FollowerAI::MoveInLineOfSight(pWho);
+
         if (!m_creature->getVictim() && !IsFollowComplete() && pWho->GetEntry() == NPC_GELKAK)
         {
             if (m_creature->IsWithinDistInMap(pWho, 10.0f))
@@ -279,6 +280,7 @@ struct TRINITY_DLL_DECL npc_threshwackonatorAI : public FollowerAI
 
         if (Player* pHolder = GetLeaderForFollower())
             me->AI()->AttackStart(pHolder);
+
         SetFollowComplete();
     }
 };
@@ -323,7 +325,8 @@ void AddSC_darkshore()
     newscript->pQuestAccept = &QuestAccept_npc_kerlonian;
     newscript->RegisterSelf();
 
-    newscript = new Script;    newscript->Name = "npc_prospector_remtravel";
+    newscript = new Script;
+    newscript->Name = "npc_prospector_remtravel";
     newscript->GetAI = &GetAI_npc_prospector_remtravel;
     newscript->pQuestAccept = &QuestAccept_npc_prospector_remtravel;
     newscript->RegisterSelf();
