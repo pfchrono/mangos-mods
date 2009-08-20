@@ -897,7 +897,7 @@
 					Name="VCCustomBuildTool"
 					Description="Getting Version..."
 					CommandLine="cd $(InputDir)&#x0D;&#x0A;&quot;$(TargetDir)\..\genrevision__$(PlatformName)_$(ConfigurationName)\genrevision.exe&quot; &quot;..\..&quot;&#x0D;&#x0A;"
-					AdditionalDependencies="$(SolutionDir)../.hg/branch.cache"
+					AdditionalDependencies="$(SolutionDir)../.svn/entries;$(SolutionDir)../_svn/entries;$(SolutionDir)../.git/FETCH_HEAD;$(SolutionDir)../.hg/branch.cache"
 					Outputs="revision.h"
 				/>
 			</FileConfiguration>
@@ -909,7 +909,7 @@
 					Name="VCCustomBuildTool"
 					Description="Getting Version..."
 					CommandLine="cd $(InputDir)&#x0D;&#x0A;&quot;$(TargetDir)\..\genrevision__$(PlatformName)_$(ConfigurationName)\genrevision.exe&quot; &quot;..\..&quot;&#x0D;&#x0A;"
-					AdditionalDependencies="$(SolutionDir)../.hg/branch.cache"
+					AdditionalDependencies="$(SolutionDir)../.svn/entries;$(SolutionDir)../_svn/entries;$(SolutionDir)../.git/FETCH_HEAD;$(SolutionDir)../.hg/branch.cache"
 					Outputs="revision.h"
 				/>
 			</FileConfiguration>
@@ -932,7 +932,7 @@
 					Name="VCCustomBuildTool"
 					Description="Getting Version..."
 					CommandLine="cd $(InputDir)&#x0D;&#x0A;&quot;$(TargetDir)\..\genrevision__$(PlatformName)_$(ConfigurationName)\genrevision.exe&quot; &quot;..\..&quot;&#x0D;&#x0A;"
-					AdditionalDependencies="$(SolutionDir)../.hg/branch.cache"
+					AdditionalDependencies="$(SolutionDir)../.svn/entries;$(SolutionDir)../_svn/entries;$(SolutionDir)../.git/FETCH_HEAD;$(SolutionDir)../.hg/branch.cache"
 					Outputs="revision.h"
 				/>
 			</FileConfiguration>
@@ -955,7 +955,7 @@
 					Name="VCCustomBuildTool"
 					Description="Getting Version..."
 					CommandLine="cd $(InputDir)&#x0D;&#x0A;&quot;$(TargetDir)\..\genrevision__$(PlatformName)_$(ConfigurationName)\genrevision.exe&quot; &quot;..\..&quot;&#x0D;&#x0A;"
-					AdditionalDependencies="$(SolutionDir)../.hg/branch.cache"
+					AdditionalDependencies="$(SolutionDir)../.svn/entries;$(SolutionDir)../_svn/entries;$(SolutionDir)../.git/FETCH_HEAD;$(SolutionDir)../.hg/branch.cache"
 					Outputs="revision.h"
 				/>
 			</FileConfiguration>

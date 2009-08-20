@@ -33,9 +33,21 @@ enum CreatureEntry
 
 const TeamPair CreatureEntryPair[] =
 {
-    {30739, 30740},
-    //{30400, 30499},
-    {0,0}
+    {32307, 32308}, // Guards
+    {30739, 30740}, // Champions
+    //{30400, 30499}, // Engineers
+    {30870, 30869}, // Flight Masters
+    {31101, 31051}, // Hoodoo Master & Sorceress
+    {31102, 31052}, // Vieron Blazefeather & Bowyer
+    {32296, 32294}, // Quartermaster
+    {31107, 31109}, // Lieutenant & Senior Demolitionist
+    {31151, 31153}, // Tactical Officer
+    {31106, 31108}, // Siegesmith & Siege Master
+    {31053, 31054}, // Primalist & Anchorite
+    {31091, 31036}, // Commander
+    {32615, 32626}, // Warbringer & Brigadier General
+    //{31841, 31842), // Spirit Guide
+     {0,0}
 };
 
 const TeamPair GODisplayPair[] =
@@ -693,6 +705,21 @@ void OPvPWintergrasp::StartBattle()
             (*itr)->CastSpell(*itr, SPELL_RECRUIT, true);
         }
     }
+}
+
+
+uint32 OPvPWintergrasp::GetData(uint32 id)
+{
+    for(OutdoorPvP::OPvPCapturePointMap::iterator itr = m_capturePoints.begin(); itr != m_capturePoints.end(); ++itr)
+        if(SiegeWorkshop *workshop = dynamic_cast<SiegeWorkshop*>(itr->second))
+            if(workshop->m_engGuid == id)
+                return itr->first;
+    return 0;
+}
+
+void OPvPWintergrasp::SetData(uint32 id, uint32 value)
+{
+
 }
 
 void OPvPWintergrasp::EndBattle()
