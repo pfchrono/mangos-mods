@@ -152,7 +152,7 @@ Map* MapInstanced::CreateInstance(const uint32 mapId, Player * player, uint32 in
         if(!instanceId)
             instanceId = MapManager::Instance().GenerateInstanceId();
 
-        return CreateInstance(instanceId, NULL, player->GetDifficulty());
+        return CreateInstance(instanceId, NULL, player->GetDungeonDifficulty());
     }
 
     return NULL;
@@ -178,7 +178,7 @@ InstanceMap* MapInstanced::CreateInstance(uint32 InstanceId, InstanceSave *save,
     }
 
     // some instances only have one difficulty
-    if (entry && !entry->SupportsHeroicMode()) difficulty = DIFFICULTY_NORMAL;
+    if (entry && !entry->SupportsHeroicMode()) difficulty = DUNGEON_DIFFICULTY_NORMAL;
 
     sLog.outDebug("MapInstanced::CreateInstance: %s map instance %d for %d created with difficulty %s", save?"":"new ", InstanceId, GetId(), difficulty?"heroic":"normal");
 

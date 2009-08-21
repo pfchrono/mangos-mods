@@ -3784,7 +3784,7 @@ void Spell::EffectEnchantItemPerm(uint32 effect_idx)
     else
     {
         // do not increase skill if vellum used
-        if (!(m_CastItem && m_CastItem->GetProto()->Flags & ITEM_FLAGS_TRIGGERED_CAST))
+        if (!(m_CastItem && m_CastItem->GetProto()->Flags & ITEM_FLAGS_ENCHANT_SCROLL))
             p_caster->UpdateCraftSkill(m_spellInfo->Id);
 
         uint32 enchant_id = m_spellInfo->EffectMiscValue[effect_idx];
@@ -5991,9 +5991,6 @@ void Spell::EffectSummonObject(uint32 i)
     m_caster->AddGameObject(pGameObj);
 
     map->Add(pGameObj);
-    WorldPacket data(SMSG_GAMEOBJECT_SPAWN_ANIM_OBSOLETE, 8);
-    data << uint64(pGameObj->GetGUID());
-    m_caster->SendMessageToSet(&data, true);
 
     m_caster->m_ObjectSlot[slot] = pGameObj->GetGUID();
 }
@@ -6601,10 +6598,6 @@ void Spell::EffectTransmitted(uint32 effIndex)
     //m_ObjToDel.push_back(pGameObj);
 
     cMap->Add(pGameObj);
-
-    WorldPacket data(SMSG_GAMEOBJECT_SPAWN_ANIM_OBSOLETE, 8);
-    data << uint64(pGameObj->GetGUID());
-    m_caster->SendMessageToSet(&data,true);
 
     if(uint32 linkedEntry = pGameObj->GetGOInfo()->GetLinkedGameObjectEntry())
     {

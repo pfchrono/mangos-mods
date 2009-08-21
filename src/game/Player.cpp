@@ -419,7 +419,8 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
 
     m_HomebindTimer = 0;
     m_InstanceValid = true;
-    m_dungeonDifficulty = DIFFICULTY_NORMAL;
+    m_dungeonDifficulty = DUNGEON_DIFFICULTY_NORMAL;
+    m_raidDifficulty = RAID_DIFFICULTY_10MAN_NORMAL;
 
     m_lastPotionId = 0;
 
@@ -535,7 +536,7 @@ void Player::CleanupsBeforeDelete()
         m_transport->RemovePassenger(this);
 
     // clean up player-instance binds, may unload some instance saves
-    for(uint8 i = 0; i < TOTAL_DIFFICULTIES; ++i)
+    for(uint8 i = 0; i < TOTAL_DUNGEON_DIFFICULTIES; ++i)
         for(BoundInstancesMap::iterator itr = m_boundInstances[i].begin(); itr != m_boundInstances[i].end(); ++itr)
             itr->second.save->RemovePlayer(this);
 }
@@ -1519,6 +1520,7 @@ bool Player::BuildEnumData( QueryResult * result, WorldPacket * p_data )
     // character customize (flags?)
     *p_data << uint32(atLoginFlags & AT_LOGIN_CUSTOMIZE ? 1 : 0);
     *p_data << uint8(1);                                    // unknown
+	*p_data << uint8(0);                                    // 3.2
 
     // Pets info
     {
@@ -5816,7 +5818,7 @@ ActionButton* Player::addActionButton(uint8 button, uint32 action, uint8 type)
 {
     if(button >= MAX_ACTION_BUTTONS)
     {
-        sLog.outError( "Action %u not added into button %u for player %s: button must be < 132", action, button, GetName() );
+        sLog.outError( "Action %u not added into button %u for player %s: button must be < 144", action, button, GetName() );
         return NULL;
     }
 
@@ -14513,7 +14515,7 @@ void Player::_LoadDeclinedNames(QueryResult* result)
 void Player::_LoadArenaTeamInfo(QueryResult *result)
 {
     // arenateamid, played_week, played_season, personal_rating
-    memset((void*)&m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1], 0, sizeof(uint32)*18);
+    memset((void*)&m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1], 0, sizeof(uint32) * MAX_ARENA_SLOT * ARENA_TEAM_END);
     if (!result)
         return;
 
@@ -14524,7 +14526,8 @@ void Player::_LoadArenaTeamInfo(QueryResult *result)
         uint32 arenateamid     = fields[0].GetUInt32();
         uint32 played_week     = fields[1].GetUInt32();
         uint32 played_season   = fields[2].GetUInt32();
-        uint32 personal_rating = fields[3].GetUInt32();
+		uint32 wons_season     = fields[3].GetUInt32();
+        uint32 personal_rating = fields[4].GetUInt32();
 
         ArenaTeam* aTeam = objmgr.GetArenaTeamById(arenateamid);
         if(!aTeam)
@@ -14534,13 +14537,14 @@ void Player::_LoadArenaTeamInfo(QueryResult *result)
         }
         uint8  arenaSlot = aTeam->GetSlot();
 
-        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + arenaSlot * 6]     = arenateamid;      // TeamID
-        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + arenaSlot * 6 + 1] = ((aTeam->GetCaptain() == GetGUID()) ? (uint32)0 : (uint32)1); // Captain 0, member 1
-        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + arenaSlot * 6 + 2] = played_week;      // Played Week
-        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + arenaSlot * 6 + 3] = played_season;    // Played Season
-        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + arenaSlot * 6 + 4] = 0;                // Unk
-        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + arenaSlot * 6 + 5] = personal_rating;  // Personal Rating
-
+        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (arenaSlot * ARENA_TEAM_END) + ARENA_TEAM_ID]                 = arenateamid;      // TeamID
+        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (arenaSlot * ARENA_TEAM_END) + ARENA_TEAM_MEMBER]             = ((aTeam->GetCaptain() == GetGUID()) ? (uint32)0 : (uint32)1); // Captain 0, member 1
+        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (arenaSlot * ARENA_TEAM_END) + ARENA_TEAM_GAMES_WEEK]         = played_week;      // Played Week
+        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (arenaSlot * ARENA_TEAM_END) + ARENA_TEAM_GAMES_SEASON]       = played_season;    // Played Season
+        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (arenaSlot * ARENA_TEAM_END) + ARENA_TEAM_WINS_SEASON]        = wons_season;      // wins season
+        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (arenaSlot * ARENA_TEAM_END) + ARENA_TEAM_PERSONAL_RATING]    = personal_rating;  // Personal Rating
+        m_uint32Values[PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (arenaSlot * ARENA_TEAM_END) + ARENA_TEAM_UNK2]               = 0;                // unk 3.2
+ 
     }while (result->NextRow());
     delete result;
 }
@@ -14802,7 +14806,7 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
     Relocate(fields[13].GetFloat(),fields[14].GetFloat(),fields[15].GetFloat(),fields[17].GetFloat());
     uint32 mapId = fields[16].GetUInt32();
     uint32 instanceId = fields[41].GetFloat();
-    SetDifficulty(fields[39].GetUInt32());                  // may be changed in _LoadGroup
+    SetDungeonDifficulty(fields[39].GetUInt32());           // may be changed in _LoadGroup
     std::string taxi_nodes = fields[38].GetCppString();
 
 #define RelocateToHomebind() mapId = m_homebindMapId; instanceId = 0; Relocate(m_homebindX, m_homebindY, m_homebindZ)
@@ -14829,9 +14833,9 @@ bool Player::LoadFromDB( uint32 guid, SqlQueryHolder *holder )
                 continue;
 
         // arena team not exist or not member, cleanup fields
-        for(int j =0; j < 6; ++j)
-            SetUInt32Value(PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + arena_slot * 6 + j, 0);
-    }
+        for(int j = 0; j < ARENA_TEAM_END; ++j)
+            SetUInt32Value(PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (arena_slot * ARENA_TEAM_END) + j, 0);
+     }
 
     _LoadBoundInstances(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));
     _LoadBGData(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBGDATA));
@@ -15931,7 +15935,7 @@ void Player::_LoadGroup(QueryResult *result)
             if(getLevel() >= LEVELREQUIREMENT_HEROIC)
             {
                 // the group leader may change the instance difficulty while the player is offline
-                SetDifficulty(group->GetDifficulty());
+                SetDungeonDifficulty(group->GetDungeonDifficulty());
             }
         }
     }
@@ -15939,7 +15943,7 @@ void Player::_LoadGroup(QueryResult *result)
 
 void Player::_LoadBoundInstances(QueryResult *result)
 {
-    for(uint8 i = 0; i < TOTAL_DIFFICULTIES; i++)
+    for(uint8 i = 0; i < TOTAL_DUNGEON_DIFFICULTIES; i++)
         m_boundInstances[i].clear();
 
     Group *group = GetGroup();
@@ -15986,7 +15990,7 @@ InstancePlayerBind* Player::GetBoundInstance(uint32 mapid, uint8 difficulty)
 {
     // some instances only have one difficulty
     const MapEntry* entry = sMapStore.LookupEntry(mapid);
-    if(!entry || !entry->SupportsHeroicMode()) difficulty = DIFFICULTY_NORMAL;
+    if(!entry || !entry->SupportsHeroicMode()) difficulty = DUNGEON_DIFFICULTY_NORMAL;
 
     BoundInstancesMap::iterator itr = m_boundInstances[difficulty].find(mapid);
     if(itr != m_boundInstances[difficulty].end())
@@ -15997,12 +16001,12 @@ InstancePlayerBind* Player::GetBoundInstance(uint32 mapid, uint8 difficulty)
 
 InstanceSave * Player::GetInstanceSave(uint32 mapid)
 {
-    InstancePlayerBind *pBind = GetBoundInstance(mapid, GetDifficulty());
+    InstancePlayerBind *pBind = GetBoundInstance(mapid, GetDungeonDifficulty());
     InstanceSave *pSave = pBind ? pBind->save : NULL;
     if(!pBind || !pBind->perm)
     {
         if(Group *group = GetGroup())
-            if(InstanceGroupBind *groupBind = group->GetBoundInstance(mapid, GetDifficulty()))
+            if(InstanceGroupBind *groupBind = group->GetBoundInstance(mapid, GetDungeonDifficulty()))
                 pSave = groupBind->save;
     }
     return pSave;
@@ -16066,7 +16070,7 @@ void Player::SendRaidInfo()
 
     time_t now = time(NULL);
 
-    for(uint8 i = 0; i < TOTAL_DIFFICULTIES; ++i)
+    for(uint8 i = 0; i < TOTAL_DUNGEON_DIFFICULTIES; ++i)
     {
         for (BoundInstancesMap::iterator itr = m_boundInstances[i].begin(); itr != m_boundInstances[i].end(); ++itr)
         {
@@ -16076,8 +16080,10 @@ void Player::SendRaidInfo()
                 data << uint32(save->GetMapId());           // map id
                 data << uint32(save->GetDifficulty());      // difficulty
                 data << uint64(save->GetInstanceId());      // instance id
+				data << uint8(0);
+				data << uint8(0);
                 data << uint32(save->GetResetTime() - now); // reset time
-                data << uint32(0);                          // is extended
+                //data << uint32(0);                          // is extended
                 ++counter;
             }
         }
@@ -16094,7 +16100,7 @@ void Player::SendSavedInstances()
     bool hasBeenSaved = false;
     WorldPacket data;
 
-    for(uint8 i = 0; i < TOTAL_DIFFICULTIES; i++)
+    for(uint8 i = 0; i < TOTAL_DUNGEON_DIFFICULTIES; i++)
     {
         for (BoundInstancesMap::iterator itr = m_boundInstances[i].begin(); itr != m_boundInstances[i].end(); ++itr)
         {
@@ -16114,7 +16120,7 @@ void Player::SendSavedInstances()
     if(!hasBeenSaved)
         return;
 
-    for(uint8 i = 0; i < TOTAL_DIFFICULTIES; i++)
+    for(uint8 i = 0; i < TOTAL_DUNGEON_DIFFICULTIES; i++)
     {
         for (BoundInstancesMap::iterator itr = m_boundInstances[i].begin(); itr != m_boundInstances[i].end(); ++itr)
         {
@@ -16142,7 +16148,7 @@ void Player::ConvertInstancesToGroup(Player *player, Group *group, uint64 player
 
     if(player)
     {
-        for(uint8 i = 0; i < TOTAL_DIFFICULTIES; i++)
+        for(uint8 i = 0; i < TOTAL_DUNGEON_DIFFICULTIES; i++)
         {
             for (BoundInstancesMap::iterator itr = player->m_boundInstances[i].begin(); itr != player->m_boundInstances[i].end();)
             {
@@ -16177,7 +16183,7 @@ bool Player::Satisfy(AccessRequirement const *ar, uint32 target_map, bool report
         {
             if(ar->levelMin && getLevel() < ar->levelMin)
                 LevelMin = ar->levelMin;
-            if(ar->heroicLevelMin && GetDifficulty() == DIFFICULTY_HEROIC && getLevel() < ar->heroicLevelMin)
+            if(ar->heroicLevelMin && GetDungeonDifficulty() == DUNGEON_DIFFICULTY_HEROIC && getLevel() < ar->heroicLevelMin)
                 LevelMin = ar->heroicLevelMin;
             if(ar->levelMax && getLevel() > ar->levelMax)
                 LevelMax = ar->levelMax;
@@ -16195,7 +16201,7 @@ bool Player::Satisfy(AccessRequirement const *ar, uint32 target_map, bool report
 
         uint32 missingKey = 0;
         uint32 missingHeroicQuest = 0;
-        if(GetDifficulty() == DIFFICULTY_HEROIC)
+        if(GetDungeonDifficulty() == DUNGEON_DIFFICULTY_HEROIC)
         {
             if(ar->heroicKey)
             {
@@ -16338,7 +16344,7 @@ void Player::SaveToDB()
     {
         ss << GetMapId() << ", "
         << (uint32)GetInstanceId() << ", "
-        << (uint32)GetDifficulty() << ", "
+        << (uint32)GetDungeonDifficulty() << ", "
         << finiteAlways(GetPositionX()) << ", "
         << finiteAlways(GetPositionY()) << ", "
         << finiteAlways(GetPositionZ()) << ", "
@@ -16348,7 +16354,7 @@ void Player::SaveToDB()
     {
         ss << GetTeleportDest().mapid << ", "
         << (uint32)0 << ", "
-        << (uint32)GetDifficulty() << ", "
+        << (uint32)GetDungeonDifficulty() << ", "
         << finiteAlways(GetTeleportDest().coord_x) << ", "
         << finiteAlways(GetTeleportDest().coord_y) << ", "
         << finiteAlways(GetTeleportDest().coord_z) << ", "
@@ -16898,7 +16904,17 @@ void Player::SendDungeonDifficulty(bool IsInGroup)
 {
     uint8 val = 0x00000001;
     WorldPacket data(MSG_SET_DUNGEON_DIFFICULTY, 12);
-    data << (uint32)GetDifficulty();
+    data << uint32(GetDungeonDifficulty());
+    data << uint32(val);
+    data << uint32(IsInGroup);
+    GetSession()->SendPacket(&data);
+}
+
+void Player::SendRaidDifficulty(bool IsInGroup)
+{
+    uint8 val = 0x00000001;
+    WorldPacket data(MSG_SET_RAID_DIFFICULTY, 12);
+    data << uint32(GetRaidDifficulty());
     data << uint32(val);
     data << uint32(IsInGroup);
     GetSession()->SendPacket(&data);
@@ -16917,7 +16933,7 @@ void Player::ResetInstances(uint8 method)
     // method can be INSTANCE_RESET_ALL, INSTANCE_RESET_CHANGE_DIFFICULTY, INSTANCE_RESET_GROUP_JOIN
 
     // we assume that when the difficulty changes, all instances that can be reset will be
-    uint8 dif = GetDifficulty();
+    uint8 dif = GetDungeonDifficulty();
 
     for (BoundInstancesMap::iterator itr = m_boundInstances[dif].begin(); itr != m_boundInstances[dif].end();)
     {
@@ -16932,7 +16948,7 @@ void Player::ResetInstances(uint8 method)
         if(method == INSTANCE_RESET_ALL)
         {
             // the "reset all instances" method can only reset normal maps
-            if(dif == DIFFICULTY_HEROIC || entry->map_type == MAP_RAID)
+            if(dif == DUNGEON_DIFFICULTY_HEROIC || entry->map_type == MAP_RAID)
             {
                 ++itr;
                 continue;
@@ -18277,10 +18293,10 @@ bool Player::BuyItemFromVendor(uint64 vendorguid, uint32 item, uint8 count, uint
             uint32 new_count = pCreature->UpdateVendorItemCurrentCount(crItem,pProto->BuyCount * count);
 
             WorldPacket data(SMSG_BUY_ITEM, (8+4+4+4));
-            data << pCreature->GetGUID();
-            data << (uint32)(vendor_slot+1);                // numbered from 1 at client
-            data << (uint32)(crItem->maxcount > 0 ? new_count : 0xFFFFFFFF);
-            data << (uint32)count;
+            data << uint64(pCreature->GetGUID());
+            data << uint32(vendor_slot+1);                  // numbered from 1 at client
+            data << uint32(crItem->maxcount > 0 ? new_count : 0xFFFFFFFF);
+            data << uint32(count);
             GetSession()->SendPacket(&data);
 
             SendNewItem(it, pProto->BuyCount*count, true, false, false);
@@ -18322,10 +18338,10 @@ bool Player::BuyItemFromVendor(uint64 vendorguid, uint32 item, uint8 count, uint
             uint32 new_count = pCreature->UpdateVendorItemCurrentCount(crItem,pProto->BuyCount * count);
 
             WorldPacket data(SMSG_BUY_ITEM, (8+4+4+4));
-            data << pCreature->GetGUID();
-            data << (uint32)(vendor_slot+1);                // numbered from 1 at client
-            data << (uint32)(crItem->maxcount > 0 ? new_count : 0xFFFFFFFF);
-            data << (uint32)count;
+            data << uint64(pCreature->GetGUID());
+            data << uint32(vendor_slot + 1);                // numbered from 1 at client
+            data << uint32(crItem->maxcount > 0 ? new_count : 0xFFFFFFFF);
+            data << uint32(count);
             GetSession()->SendPacket(&data);
 
             SendNewItem(it, pProto->BuyCount*count, true, false, false);
@@ -18352,7 +18368,7 @@ uint32 Player::GetMaxPersonalArenaRatingRequirement()
     {
         if(ArenaTeam * at = objmgr.GetArenaTeamById(GetArenaTeamId(i)))
         {
-            uint32 p_rating = GetUInt32Value(PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (i * 6) + 5);
+            uint32 p_rating = GetUInt32Value(PLAYER_FIELD_ARENA_TEAM_INFO_1_1 + (i * ARENA_TEAM_END) + ARENA_TEAM_PERSONAL_RATING);
             uint32 t_rating = at->GetRating();
             p_rating = p_rating<t_rating? p_rating : t_rating;
             if(max_personal_rating < p_rating)
@@ -18394,7 +18410,7 @@ void Player::UpdateHomebindTime(uint32 time)
         m_HomebindTimer = 60000;
         // send message to player
         WorldPacket data(SMSG_RAID_GROUP_ONLY, 4+4);
-        data << m_HomebindTimer;
+        data << uint32(m_HomebindTimer);
         data << uint32(1);
         GetSession()->SendPacket(&data);
         sLog.outDebug("PLAYER: Player '%s' (GUID: %u) will be teleported to homebind in 60 seconds", GetName(),GetGUIDLow());
@@ -18563,8 +18579,8 @@ void Player::SendCooldownEvent(SpellEntry const *spellInfo, uint32 itemId, Spell
 
     // Send activate cooldown timer (possible 0) at client side
     WorldPacket data(SMSG_COOLDOWN_EVENT, (4+8));
-    data << spellInfo->Id;
-    data << GetGUID();
+    data << uint32(spellInfo->Id);
+    data << uint64(GetGUID());
     SendDirectMessage(&data);
 }
 
@@ -19249,14 +19265,10 @@ void Player::SetGroup(Group *group, int8 subgroup)
 
 void Player::SendInitialPacketsBeforeAddToMap()
 {
-    WorldPacket data(SMSG_SET_REST_START_OBSOLETE, 4);
-    data << uint32(0);                                      // unknown, may be rest state time or experience
-    GetSession()->SendPacket(&data);
-
     GetSocial()->SendSocialList();
 
     // Homebind
-    data.Initialize(SMSG_BINDPOINTUPDATE, 5*4);
+    WorldPacket data(SMSG_BINDPOINTUPDATE, 5*4);
     data << m_homebindX << m_homebindY << m_homebindZ;
     data << (uint32) m_homebindMapId;
     data << (uint32) m_homebindZoneId;
@@ -21704,6 +21716,13 @@ void Player::SendClearCooldown( uint32 spell_id, Unit* target )
     data << uint32(spell_id);
     data << uint64(target->GetGUID());
     SendDirectMessage(&data);
+}
+
+void Player::SendDuelCountdown(uint32 counter)
+{
+    WorldPacket data(SMSG_DUEL_COUNTDOWN, 4);
+    data << uint32(counter);                                // seconds
+    GetSession()->SendPacket(&data);
 }
 
 void Player::ResetMap()

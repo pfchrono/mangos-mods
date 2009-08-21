@@ -346,9 +346,21 @@ pAuraHandler AuraHandler[TOTAL_AURAS]=
     &Aura::HandleAuraModCritPct,                            //290 SPELL_AURA_MOD_CRIT_PCT
     &Aura::HandleNoImmediateEffect,                         //291 SPELL_AURA_MOD_XP_QUEST_PCT  implemented in Player::RewardQuest
     &Aura::HandleNULL,                                      //292 call stabled pet
-    &Aura::HandleNULL,                                      //293 2 test spells
-    &Aura::HandleNoImmediateEffect                          //294 SPELL_AURA_PREVENT_REGENERATE_POWER implemented in Player::Regenerate(Powers power)
-};
+    &Aura::HandleNULL,                                      //293 3 spells
+    &Aura::HandleNULL,                                      //294 2 spells, possible prevent mana regen
+    &Aura::HandleNULL,                                      //295 unused
+    &Aura::HandleNULL,                                      //296 2 spells
+    &Aura::HandleNULL,                                      //297 1 spell (counter spell school?)
+    &Aura::HandleNULL,                                      //298 unused
+    &Aura::HandleNULL,                                      //299 unused
+    &Aura::HandleNULL,                                      //300 3 spells (share damage?)
+    &Aura::HandleNULL,                                      //301 5 spells
+    &Aura::HandleNULL,                                      //302 unused
+    &Aura::HandleNULL,                                      //303 17 spells
+    &Aura::HandleNULL,                                      //304 2 spells (alcohol effect?)
+    &Aura::HandleNULL,                                      //305 2 spells
+    &Aura::HandleNULL                                       //306 1 spell
+ };
 #undef Aura
 
 Aura::Aura(SpellEntry const* spellproto, uint32 effMask, int32 *currentBasePoints, Unit *target, WorldObject *source, Unit *caster, Item* castItem) :
