@@ -595,7 +595,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
     data << uint8(1);
     for(int i = 0; i < NUM_ACCOUNT_DATA_TYPES; ++i)
         data << uint32(GetAccountData(i)->Time);            // also unix time
-    SendPacket(&data)
+    SendPacket(&data);
 
     data.Initialize(SMSG_FEATURE_SYSTEM_STATUS, 2);         // added in 2.2.0
     data << uint8(2);                                       // unknown value
