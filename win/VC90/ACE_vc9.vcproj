@@ -3035,11 +3035,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\OS_Errno.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_errno.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_errno.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\OS_Errno.h"
 				>
 			</File>
 			<File
@@ -3419,11 +3419,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_string.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\OS_String.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\OS_String.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_string.h"
 				>
 			</File>
 			<File
@@ -3467,11 +3467,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_time.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\sys\os_time.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\sys\os_time.h"
+				RelativePath="..\..\dep\ACE_wrappers\ace\os_include\os_time.h"
 				>
 			</File>
 			<File
