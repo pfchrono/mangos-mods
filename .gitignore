@@ -24,6 +24,8 @@ contrib/*/*.ncb
 contrib/*/*.exe
 contrib/*/*.user
 contrib/*/*.suo
+dep/lib/win32*/ACE*
+dep/lib/x64*/ACE*
 win/*.opensdf
 win/*.sdf
 win/*.ncb
