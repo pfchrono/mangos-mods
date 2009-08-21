@@ -526,15 +526,13 @@ bool AuthSocket::_HandleLogonProof()
 
     ///- Check if the client has one of the expected version numbers
     bool valid_version = false;
-    int accepted_versions[] = EXPECTED_TRINITY_CLIENT_BUILD;
-    for(int i = 0; accepted_versions[i]; ++i)
-    {
-        if(_build == accepted_versions[i])
-        {
-            valid_version = true;
-            break;
-        }
-    }
+    int MinBuild = sConfig.GetIntDefault("MinBuild", 10192);
+	int MaxBuild = sConfig.GetIntDefault("MaxBuild", 10192);
+
+	if(_build >= MinBuild && _build <= MaxBuild)
+		valid_version = true;
+	else
+		valid_version = false;
 
     /// <ul><li> If the client has no valid version
     if(!valid_version)

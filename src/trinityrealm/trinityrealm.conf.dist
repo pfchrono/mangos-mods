@@ -120,3 +120,5 @@ WrongPass.BanType = 0
 LogColors = ""
 EnableLogDB = 0
 DBLogLevel = 1
+MinBuild = 10192
+MaxBuild = 10192
